@@ -48,6 +48,31 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .chips{display:flex;flex-wrap:wrap;gap:8px;width:100%;justify-content:center}
 .chips button{padding:10px 16px;border-radius:20px;background:var(--sf);border:1.5px solid transparent;font-size:13px;cursor:pointer;font-family:inherit;color:var(--tx)}
 .chips button.sel{border-color:var(--pr);background:var(--sf2)}
+.ac{padding:14px 12px;border-radius:14px;background:var(--sf);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
+.ac:active{border-color:var(--pr)}
+.tc{padding:14px;border-radius:14px;background:var(--sf);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
+.tc:active{border-color:var(--pr)}
+.hi{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--sf);cursor:pointer;margin-bottom:8px}
+.hi:active{opacity:.8}
+.hi .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--mu);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.hi.dn .ck{background:var(--pr);border-color:var(--pr)}
+.hi.dn .ck::after{content:'\2713';color:#0B1020;font-size:12px;font-weight:700}
+.si{display:flex;align-items:center;gap:10px;padding:12px;background:var(--sf);margin-bottom:1px;cursor:pointer;transition:background .15s}
+.si:first-child{border-radius:12px 12px 2px 2px}
+.si:last-child{border-radius:2px 2px 12px 12px}
+.si:only-child{border-radius:12px}
+.si:active{background:var(--sf2)}
+.m{max-width:82%;padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.55}
+.m.u{align-self:flex-end;background:var(--pr);color:#0B1020;border-bottom-right-radius:4px}
+.m.a{align-self:flex-start;background:var(--sf);border-bottom-left-radius:4px}
+.tp{display:flex;gap:4px;padding:11px 14px;background:var(--sf);border-radius:14px;align-self:flex-start;width:fit-content}
+.tp span{width:6px;height:6px;border-radius:50%;background:var(--mu);animation:an 1.2s infinite}
+.tp span:nth-child(2){animation-delay:.15s}
+.tp span:nth-child(3){animation-delay:.3s}
+.cBtn{padding:8px 16px;border-radius:20px;background:var(--sf);border:1.5px solid var(--bd);color:var(--tx);font-size:13px;cursor:pointer;font-family:inherit;transition:border-color .15s}
+.cBtn.sel{border-color:var(--pr);color:var(--pr)}
+@keyframes an{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+.det{position:absolute;inset:0;background:var(--bg);z-index:20;display:flex;flex-direction:column}
 </style>
 </head>
 <body>
@@ -55,7 +80,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 <script>
 (function(){
 var A=document.getElementById('A');
-var K='loiva_v3';
+var K='loiva_v4';
 var busy=0;
 
 function $(id){return document.getElementById(id)}
@@ -74,30 +99,15 @@ window.goScreen=goScreen;
 
 function enterApp(){
 if(busy)return;busy=1;
-try{
-localStorage.setItem(K,'1');
-buildMain();
-}catch(e){
-A.innerHTML='<div style="padding:20px;color:white"><h2>Error in buildMain</h2><pre>'+esc(e.message)+'\n'+esc(e.stack)+'</pre></div>';
-}
-}
+try{localStorage.setItem(K,'1');buildMain();}catch(e){
+A.innerHTML='<div style="padding:20px;color:white"><h2>Error</h2><pre>'+esc(e.message)+'</pre></div>';
+}}
 window.enterApp=enterApp;
 
 function buildMain(){
 A.innerHTML='';
 var w=document.createElement('div');
 w.style.cssText='display:flex;flex-direction:column;height:100%;position:relative';
-
-/* TABS */
-var tabs=['home','chat','tech','calm','prog','set'];
-var tabData={
-home:'<div style="padding:16px"><h3 style="font-size:18px;margin-bottom:12px">Что полезно сейчас?</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px"><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😰</div><div style="font-size:12px;font-weight:600">Тревожно</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😰</div><div style="font-size:12px;font-weight:600">Стресс</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😔</div><div style="font-size:12px;font-weight:600">Тяжело</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">🗣</div><div style="font-size:12px;font-weight:600">Выговориться</div></div><div class="ac" onclick="mSw(\'tech\')"><div style="font-size:22px;margin-bottom:4px">🧘</div><div style="font-size:12px;font-weight:600">Практика</div></div><div class="ac" onclick="mSw(\'calm\')"><div style="font-size:22px;margin-bottom:4px">🌙</div><div style="font-size:12px;font-weight:600">Calm Room</div></div></div><div style="padding:14px;border-radius:14px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin-bottom:12px"><div style="font-size:13px;font-weight:600;color:var(--dn)">🆘 Нужна помощь?</div><div style="font-size:12px;color:var(--tx2);margin-top:4px">Позвони: <a href="tel:8-800-2000-122" style="color:var(--dn)">8-800-2000-122</a></div></div></div>',
-chat:'<div style="display:flex;flex-direction:column;height:100%"><div style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px" id="mMsgs"><div style="text-align:center;color:var(--tx2);padding:40px 20px"><div style="font-size:36px;margin-bottom:8px;opacity:.5">💬</div><p style="font-size:13px">Начни диалог с Loiva</p></div></div><div style="padding:8px 12px;border-top:1px solid var(--bd);display:flex;gap:8px"><input id="mInp" style="flex:1;padding:11px 14px;border-radius:22px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-size:14px;outline:none;font-family:inherit" placeholder="Напиши..."><button onclick="mSend()" style="width:38px;height:38px;border-radius:50%;background:var(--pr);border:none;color:#0B1020;font-size:18px;cursor:pointer;font-weight:700">↑</button></div></div>',
-tech:'<div style="padding:12px;display:flex;flex-direction:column;gap:8px" id="mTech"></div>',
-calm:'<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center"><div id="mBreath" style="width:140px;height:140px;border-radius:50%;border:3px solid var(--pr);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:transform 4s"><span id="mBrT" style="color:var(--pr);font-weight:600">Готов</span></div><div id="mTimer" style="font-size:42px;font-weight:700;color:var(--tx2);margin-bottom:16px">5:00</div><div style="display:flex;gap:8px;margin-bottom:16px"><button class="cBtn" onclick="mDur(this,1)">1 мин</button><button class="cBtn" onclick="mDur(this,3)">3 мин</button><button class="cBtn sel" onclick="mDur(this,5)">5 мин</button><button class="cBtn" onclick="mDur(this,10)">10 мин</button></div><div style="display:flex;gap:12px"><button id="mStart" onclick="mStartCalm()" style="padding:12px 28px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--pr);color:#0B1020;cursor:pointer">Начать</button><button id="mStop" onclick="mStopCalm()" style="padding:12px 28px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Стоп</button></div></div>',
-prog:'<div style="padding:16px"><div style="padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--sf),var(--sf2));text-align:center;margin-bottom:16px"><div style="font-size:48px;font-weight:700;color:var(--pr)">7</div><div style="font-size:12px;color:var(--tx2)">дней подряд</div></div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Привычки</div><div id="mHab"></div></div>',
-set:'<div style="padding:16px"><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Общие</div><div class="si">🌍 Язык <span style="color:var(--mu)">Русский ›</span></div><div class="si">🏳 Страна <span style="color:var(--mu)">Россия ›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">AI</div><div class="si">🤖 Режим <span style="color:var(--mu)">Listen ›</span></div><div class="si">🧠 Память <span style="color:var(--mu)">Вкл ›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Данные</div><div class="si" onclick="localStorage.removeItem(\''+K+'\');location.reload()">🔄 Повторить онбординг <span style="color:var(--mu)">›</span></div></div></div>'
-};
 
 var tb=document.createElement('div');
 tb.style.cssText='padding:12px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.04)';
@@ -107,36 +117,22 @@ w.appendChild(tb);
 var ta=document.createElement('div');
 ta.style.cssText='flex:1;overflow:hidden;position:relative';
 
-tabs.forEach(function(t){
-var d=document.createElement('div');
-d.id='mt-'+t;
-d.style.cssText='position:absolute;inset:0;overflow-y:auto;padding-bottom:80px';
-d.hidden=true;
-d.innerHTML=tabData[t]||'';
-ta.appendChild(d);
-});
+/* === HOME === */
+var tH=document.createElement('div');tH.id='mt-home';tH.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px';
+tH.innerHTML='<h3 style="font-size:18px;margin-bottom:12px">Что полезно сейчас?</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px"><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😰</div><div style="font-size:12px;font-weight:600">Тревожно</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😰</div><div style="font-size:12px;font-weight:600">Стресс</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😔</div><div style="font-size:12px;font-weight:600">Тяжело</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">🗣</div><div style="font-size:12px;font-weight:600">Выговориться</div></div><div class="ac" onclick="mSw(\'tech\')"><div style="font-size:22px;margin-bottom:4px">🧘</div><div style="font-size:12px;font-weight:600">Практика</div></div><div class="ac" onclick="mSw(\'calm\')"><div style="font-size:22px;margin-bottom:4px">🌙</div><div style="font-size:12px;font-weight:600">Calm Room</div></div></div><div style="padding:14px;border-radius:14px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin-bottom:12px"><div style="font-size:13px;font-weight:600;color:var(--dn)">🆘 Нужна помощь?</div><div style="font-size:12px;color:var(--tx2);margin-top:4px">Позвони: <a href="tel:8-800-2000-122" style="color:var(--dn)">8-800-2000-122</a></div></div>';
+ta.appendChild(tH);
 
-w.appendChild(ta);
+/* === CHAT === */
+var tC=document.createElement('div');tC.id='mt-chat';tC.style.cssText='position:absolute;inset:0;display:none;flex-direction:column';
+tC.innerHTML='<div style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px" id="mMsgs"><div style="text-align:center;color:var(--tx2);padding:40px 20px"><div style="font-size:36px;margin-bottom:8px;opacity:.5">💬</div><p style="font-size:13px">Начни диалог с Loiva</p></div></div><div style="padding:8px 12px;border-top:1px solid var(--bd);display:flex;gap:8px"><input id="mInp" style="flex:1;padding:11px 14px;border-radius:22px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-size:14px;outline:none;font-family:inherit" placeholder="Напиши..."><button onclick="mSend()" style="width:38px;height:38px;border-radius:50%;background:var(--pr);border:none;color:#0B1020;font-size:18px;cursor:pointer;font-weight:700">↑</button></div>';
+ta.appendChild(tC);
 
-var bn=document.createElement('div');
-bn.style.cssText='flex-shrink:0;height:64px;background:var(--sf);border-top:1px solid rgba(255,255,255,.06);display:flex';
-var navItems=[['home','🏠','Главная'],['chat','💬','Чат'],['tech','🧘','Практики'],['calm','🌙','Calm'],['prog','📊','Динамика'],['set','⚙️','Настройки']];
-navItems.forEach(function(n,i){
-var bi=document.createElement('div');
-bi.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;flex:1';
-bi.dataset.tab=n[0];
-bi.innerHTML='<span style="font-size:20px;opacity:'+(i===0?'1':'.4')+'">'+n[1]+'</span><span style="font-size:9px;color:'+(i===0?'var(--pr)':'var(--mu)')+';font-weight:'+(i===0?'600':'500')+'">'+n[2]+'</span>';
-bi.onclick=function(){mSw(n[0])};
-bn.appendChild(bi);
-});
-w.appendChild(bn);
-A.appendChild(w);
-
-/* Populate technique list */
+/* === TECH === */
+var tT=document.createElement('div');tT.id='mt-tech';tT.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:12px;display:none';
 var techData=[
 {cat:'Тревожные мысли',items:[
 {icon:'🧊',name:'5-4-3-2-1 Заземление',dur:'3-5 мин',desc:'Вернись в момент через органы чувств.',caution:'Не закрывай глаза если это усиливает тревогу.',steps:['Назови 5 вещей которые ВИДИШЬ','Назови 4 вещи которые можешь ПОТРОГАТЬ','Назови 3 вещи которые СЛЫШИШЬ','Назови 2 вещи которые можешь ЗАПАХНУТЬ','Назови 1 вещь на ВКУС']},
-{icon:'📝',name:'Факты и предположения',dur:'5-7 мин',desc:'Отдели известное от предположений.',caution:null,steps:['Запиши ситуацию одним предложением','Что знаешь НАВЕРНЯКА?','Что ПРЕДПОЛАГАЕШЬ?','Есть ли альтернативы?','Какая мысль более реалистичная?']},
+{icon:'📝',name:'Факты и предположения',dur:'5-7 мин',desc:'Отдели известное от предположений.',caution:null,steps:['Запиши ситуацию одним предложением','Что знаешь НАВЕРНЯКА?','Что ПРЕДПОЛАГАЕШЬ?','Есть ли альтернативы?']},
 {icon:'🎯',name:'Зона контроля',dur:'3-5 мин',desc:'Что зависит от тебя, а что нет.',caution:null,steps:['Напиши ситуацию','Раздели: МОЁ / НЕ МОЁ','Для МОЁ - одно действие','Для НЕ МОЁ - принять']}
 ]},
 {cat:'Стресс',items:[
@@ -151,58 +147,79 @@ var techData=[
 {icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Быстрая помощь при панике.',caution:'При реальной опасности звони 112.',steps:['Скажи: это паника, она пройдёт','Возьми холодный предмет','Назови где ты, какой день','Не помогает? Звони 8-800-2000-122']}
 ]}
 ];
-
-var techEl=$('mTech');
-if(techEl){
+var thtml='';
 techData.forEach(function(cat){
-var hd=document.createElement('div');
-hd.style.cssText='font-size:12px;font-weight:700;color:var(--pr);text-transform:uppercase;letter-spacing:.8px;padding:8px 2px 4px';
-hd.textContent=cat.cat;
-techEl.appendChild(hd);
+thtml+='<div style="font-size:12px;font-weight:700;color:var(--pr);text-transform:uppercase;letter-spacing:.8px;padding:8px 2px 4px">'+cat.cat+'</div>';
 cat.items.forEach(function(t){
-var card=document.createElement('div');
-card.className='tc';
-card.innerHTML='<h4 style="font-size:14px;font-weight:600;margin-bottom:3px">'+t.icon+' '+t.name+'</h4><p style="font-size:12px;color:var(--tx2);line-height:1.4">'+t.desc+'</p><div style="font-size:11px;color:var(--mu);margin-top:4px">⏱ '+t.dur+'</div>';
-card.onclick=function(){openDetail(t)};
-techEl.appendChild(card);
+thtml+='<div class="tc" onclick="openDetail(\''+esc(t.name).replace(/'/g,"\\'")+'\')"><h4 style="font-size:14px;font-weight:600;margin-bottom:3px">'+t.icon+' '+t.name+'</h4><p style="font-size:12px;color:var(--tx2);line-height:1.4">'+t.desc+'</p><div style="font-size:11px;color:var(--mu);margin-top:4px">⏱ '+t.dur+'</div></div>';
 });
 });
-}
+tT.innerHTML=thtml;
+ta.appendChild(tT);
+
+/* === CALM === */
+var tCa=document.createElement('div');tCa.id='mt-calm';tCa.style.cssText='position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center';
+tCa.innerHTML='<div id="mBreath" style="width:140px;height:140px;border-radius:50%;border:3px solid var(--pr);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:transform 4s"><span id="mBrT" style="color:var(--pr);font-weight:600">Готов</span></div><div id="mTimer" style="font-size:42px;font-weight:700;color:var(--tx2);margin-bottom:12px">5:00</div><div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><button class="cBtn" onclick="mDur(this,1)">1</button><button class="cBtn" onclick="mDur(this,3)">3</button><button class="cBtn sel" onclick="mDur(this,5)">5</button><button class="cBtn" onclick="mDur(this,10)">10</button><span style="color:var(--tx2);font-size:13px">мин</span><input id="mCustom" type="number" min="1" max="120" placeholder=" svoe" style="width:52px;padding:6px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-size:13px;text-align:center;font-family:inherit" oninput="mCustomDur(this.value)"></div><div style="display:flex;gap:10px"><button id="mStart" onclick="mStartCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--pr);color:#0B1020;cursor:pointer">Старт</button><button id="mStop" onclick="mStopCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Стоп</button><button id="mReset" onclick="mResetCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Сброс</button></div>';
+ta.appendChild(tCa);
+
+/* === PROGRESS === */
+var tP=document.createElement('div');tP.id='mt-prog';tP.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
+var calD='';for(var i=1;i<=28;i++){var r=Math.random();calD+='<div style="width:100%;aspect-ratio:1;border-radius:6px;background:'+(r>.7?'var(--pr)':r>.4?'rgba(121,199,195,.3)':'var(--sf)')+';display:flex;align-items:center;justify-content:center;font-size:10px;color:'+(r>.7?'#0B1020':'var(--tx2)')+'">'+i+'</div>'}
+tP.innerHTML='<div style="padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--sf),var(--sf2));text-align:center;margin-bottom:16px"><div style="font-size:48px;font-weight:700;color:var(--pr)">7</div><div style="font-size:12px;color:var(--tx2)">дней подряд</div></div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Активность за месяц</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px">'+calD+'</div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Привычки</div><div id="mHab"></div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin:16px 0 8px">Статистика</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--pr)">23</div><div style="font-size:10px;color:var(--tx2)">Дней</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--ac)">47</div><div style="font-size:10px;color:var(--tx2)">Диалогов</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--sc)">12</div><div style="font-size:10px;color:var(--tx2)">Техник</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--wn)">85%</div><div style="font-size:10px;color:var(--tx2)">Выполнение</div></div></div>';
+ta.appendChild(tP);
+
+/* === SETTINGS === */
+var tS=document.createElement('div');tS.id='mt-set';tS.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
+tS.innerHTML='<div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Общие</div><div class="si">🌍 Язык <span style="color:var(--mu);margin-left:auto">Русский ›</span></div><div class="si">🏳 Страна <span style="color:var(--mu);margin-left:auto">Россия ›</span></div><div class="si">💬 Длина ответа <span style="color:var(--mu);margin-left:auto">Средне ›</span></div><div class="si">🎭 Тон <span style="color:var(--mu);margin-left:auto">Мягко ›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">AI</div><div class="si">🤖 Режим <span style="color:var(--mu);margin-left:auto">Listen ›</span></div><div class="si">🧠 Память <span style="color:var(--mu);margin-left:auto">Вкл ›</span></div><div class="si">🔑 API ключи <span style="color:var(--mu);margin-left:auto">›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Уведомления</div><div class="si">🔔 Check-in <span style="color:var(--mu);margin-left:auto">Вкл ›</span></div><div class="si">🕐 Тихие часы <span style="color:var(--mu);margin-left:auto">22-08 ›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Внешний вид</div><div class="si">🎨 Тема <span style="color:var(--mu);margin-left:auto">Системная ›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Данные</div><div class="si">💾 Экспорт <span style="color:var(--mu);margin-left:auto">›</span></div><div class="si" onclick="localStorage.removeItem(\''+K+'\');location.reload()">🔄 Повторить онбординг <span style="color:var(--mu);margin-left:auto">›</span></div></div><div><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">О приложении</div><div class="si">📱 Версия <span style="color:var(--mu);margin-left:auto">0.1.0</span></div></div>';
+ta.appendChild(tP);ta.appendChild(tS);
+
+w.appendChild(ta);
+
+/* BOTTOM NAV */
+var bn=document.createElement('div');
+bn.style.cssText='flex-shrink:0;height:64px;background:var(--sf);border-top:1px solid rgba(255,255,255,.06);display:flex';
+var navItems=[['home','🏠','Главная'],['chat','💬','Чат'],['tech','🧘','Практики'],['calm','🌙','Calm'],['prog','📊','Динамика'],['set','⚙️','Настройки']];
+navItems.forEach(function(n,i){
+var bi=document.createElement('div');
+bi.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;flex:1';
+bi.dataset.tab=n[0];
+bi.innerHTML='<span style="font-size:20px;opacity:'+(i===0?'1':'.4')+'">'+n[1]+'</span><span style="font-size:9px;color:'+(i===0?'var(--pr)':'var(--mu)')+';font-weight:'+(i===0?'600':'500')+'">'+n[2]+'</span>';
+bi.onclick=function(){mSw(n[0])};
+bn.appendChild(bi);
+});
+w.appendChild(bn);
+A.appendChild(w);
 
 /* Habits */
 var habEl=$('mHab');
 if(habEl){
-var habits=[{name:'Утренняя медитация',done:true},{name:'Дыхательная практика',done:true},{name:'Журнал благодарности',done:false},{name:'Вечерний возврат',done:false}];
-habits.forEach(function(h){
-var d=document.createElement('div');
-d.className='hi'+(h.done?' dn':'');
+[{name:'Утренняя медитация',done:true},{name:'Дыхательная практика',done:true},{name:'Журнал благодарности',done:false},{name:'Вечерний возврат',done:false}].forEach(function(h){
+var d=document.createElement('div');d.className='hi'+(h.done?' dn':'');
 d.innerHTML='<div class="ck"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">'+h.name+'</div></div>';
 d.onclick=function(){this.classList.toggle('dn')};
 habEl.appendChild(d);
 });
 }
 
-/* Chat responses */
+/* Chat */
 var aiResp=['Я тебя слышу. Расскажи подробнее.','Спасибо, что делишься.','Это нормально чувствовать так.','Я здесь рядом.','Хочешь попробовать заземление?','Как давно ты так себя чувствуешь?','Это смело — говорить об этом.','Давай сделаем вдох вместе.','Что бы ты хотела сделать сейчас?'];
 var chatStarted=false;
 window.mSend=function(){
-var inp=$('mInp');if(!inp)return;
-var msg=inp.value.trim();if(!msg)return;
+var inp=$('mInp');if(!inp)return;var msg=inp.value.trim();if(!msg)return;
 if(!chatStarted){var e=$('mMsgs');if(e)e.innerHTML='';chatStarted=true}
 var box=$('mMsgs');
 box.insertAdjacentHTML('beforeend','<div class="m u">'+esc(msg)+'</div>');
 inp.value='';
-box.insertAdjacentHTML('beforeend','<div class="tp" id="mt"><span></span><span></span><span></span></div>');
+box.insertAdjacentHTML('beforeend','<div class="tp" id="mtyp"><span></span><span></span><span></span></div>');
 box.scrollTop=box.scrollHeight;
-setTimeout(function(){var t=$('mt');if(t)t.remove();var r=aiResp[Math.floor(Math.random()*aiResp.length)];box.insertAdjacentHTML('beforeend','<div class="m a"><div style="font-size:9px;color:var(--pr);font-weight:700;text-transform:uppercase;margin-bottom:3px">listen</div>'+r+'</div>');box.scrollTop=box.scrollHeight},1200);
+setTimeout(function(){var t=$('mtyp');if(t)t.remove();var r=aiResp[Math.floor(Math.random()*aiResp.length)];box.insertAdjacentHTML('beforeend','<div class="m a"><div style="font-size:9px;color:var(--pr);font-weight:700;text-transform:uppercase;margin-bottom:3px">listen</div>'+r+'</div>');box.scrollTop=box.scrollHeight},1200);
 };
 if($('mInp'))$('mInp').onkeypress=function(e){if(e.key==='Enter')mSend()};
 
 /* Tab switching */
 window.mSw=function(id){
-var allTabs=A.querySelectorAll('[id^="mt-"]');
-for(var i=0;i<allTabs.length;i++)allTabs[i].hidden=true;
-var target=$('mt-'+id);if(target)target.hidden=false;
+var tabs=['home','chat','tech','calm','prog','set'];
+tabs.forEach(function(t){var el=$('mt-'+t);if(el)el.style.display=(t===id)?'block':'none'});
 var bis=bn.querySelectorAll('[data-tab]');
 for(var i=0;i<bis.length;i++){
 var active=bis[i].dataset.tab===id;
@@ -214,97 +231,110 @@ bis[i].children[1].style.fontWeight=active?'600':'500';
 }
 
 /* Technique detail */
-function openDetail(t){
+var techLookup={};
+function openDetail(name){
+var t=techLookup[name];if(!t)return;
 var overlay=document.createElement('div');
-overlay.style.cssText='position:absolute;inset:0;background:var(--bg);z-index:20;display:flex;flex-direction:column';
+overlay.className='det';
+overlay.id='detOverlay';
 var hdr=document.createElement('div');
-hdr.style.cssText='padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04)';
-hdr.innerHTML='<button onclick="this.closest(\'div[style]\').remove()" style="background:none;border:none;color:var(--tx);font-size:22px;cursor:pointer">←</button><h2 style="font-size:16px;font-weight:600;flex:1">'+t.icon+' '+t.name+'</h2>';
+hdr.style.cssText='padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04);flex-shrink:0';
+hdr.innerHTML='<button id="detBack" style="background:none;border:none;color:var(--tx);font-size:22px;cursor:pointer;padding:4px">←</button><h2 style="font-size:16px;font-weight:600;flex:1">'+t.icon+' '+name+'</h2>';
 overlay.appendChild(hdr);
 var body=document.createElement('div');
 body.style.cssText='flex:1;overflow-y:auto;padding:16px';
 var html='<div style="font-size:12px;color:var(--tx2);margin-bottom:12px">⏱ '+t.dur+'</div><p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:14px">'+t.desc+'</p>';
-if(t.caution)html+='<div style="padding:12px;border-radius:12px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin:12px 0;font-size:12px;color:var(--dn);line-height:1.5">⚠️ '+t.caution+'</div>';
+if(t.caution)html+='<div style="padding:12px;border-radius:12px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin:12px 0;font-size:12px;color:var(--dn);line-height:1.5">⚠ '+t.caution+'</div>';
 t.steps.forEach(function(s,i){html+='<div style="padding:12px;border-radius:12px;background:var(--sf);margin-bottom:8px;display:flex;gap:10px"><div style="width:26px;height:26px;border-radius:50%;background:var(--pr);color:#0B1020;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">'+(i+1)+'</div><div style="font-size:13px;line-height:1.5">'+s+'</div></div>'});
-html+='<div style="margin-top:16px"><button class="btn b1" onclick="this.closest(\'div[style]\').remove()">Завершить</button></div>';
+html+='<div style="margin-top:16px"><button class="btn b1" id="detDone">Завершить</button></div>';
 body.innerHTML=html;
 overlay.appendChild(body);
 A.appendChild(overlay);
+$('detBack').onclick=function(){overlay.remove()};
+$('detDone').onclick=function(){overlay.remove()};
 }
 window.openDetail=openDetail;
 
 /* Calm Room */
-var calmSec=300,calmIv=null,breathIv=null;
+var calmSec=300,calmIv=null,breathIv=null,calmRunning=false;
 window.mDur=function(el,m){
-var p=el.parentElement;for(var i=0;i<p.children.length;i++)p.children[i].classList.remove('sel');
+var p=el.parentElement;for(var i=0;i<p.children.length;i++){if(p.children[i].tagName==='BUTTON')p.children[i].classList.remove('sel')}
 el.classList.add('sel');calmSec=m*60;uTimer();
+var ci=$('mCustom');if(ci)ci.value='';
 };
+window.mCustomDur=function(v){
+var n=parseInt(v);if(n>0&&n<=120){calmSec=n*60;uTimer();
+var btns=$('mt-calm').querySelectorAll('.cBtn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('sel');
+}};
 function uTimer(){var m=Math.floor(calmSec/60),s=calmSec%60;var el=$('mTimer');if(el)el.textContent=m+':'+(s<10?'0':'')+s}
 window.mStartCalm=function(){
-var ms=$('mStart'),msp=$('mStop');if(ms)ms.style.display='none';if(msp)msp.style.display='';
+if(calmRunning)return;calmRunning=true;
+var ms=$('mStart'),msp=$('mStop'),mrs=$('mReset');
+if(ms)ms.style.display='none';if(msp)msp.style.display='';if(mrs)mrs.style.display='';
 breathIv=setInterval(function(){var b=$('mBreath'),t=$('mBrT');if(!b)return;if(b.style.transform==='scale(1.3)'){b.style.transform='scale(1)';if(t)t.textContent='Выдох...'}else{b.style.transform='scale(1.3)';if(t)t.textContent='Вдох...'}},4000);
 calmIv=setInterval(function(){if(calmSec<=0){mStopCalm();return}calmSec--;uTimer()},1000);
 };
 window.mStopCalm=function(){
-clearInterval(calmIv);clearInterval(breathIv);
-var ms=$('mStart'),msp=$('mStop'),b=$('mBreath'),t=$('mBrT');
-if(ms)ms.style.display='';if(msp)msp.style.display='none';
+clearInterval(calmIv);clearInterval(breathIv);calmRunning=false;
+var ms=$('mStart'),msp=$('mStop'),mrs=$('mReset'),b=$('mBreath'),t=$('mBrT');
+if(ms)ms.style.display='';if(msp)msp.style.display='none';if(mrs)mrs.style.display='';
 if(b)b.style.transform='scale(1)';if(t)t.textContent='Готов';
-uTimer();
+};
+window.mResetCalm=function(){
+mStopCalm();calmSec=300;uTimer();
+var btns=$('mt-calm').querySelectorAll('.cBtn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('sel');
+if(btns[2])btns[2].classList.add('sel');
+var ci=$('mCustom');if(ci)ci.value='';
 };
 
-/* ONBOARDING */
+/* Store tech lookup for openDetail */
+(function(){
+var techData2=[
+{icon:'🧊',name:'5-4-3-2-1 Заземление',dur:'3-5 мин',desc:'Вернись в момент через органы чувств.',caution:'Не закрывай глаза если это усиливает тревогу.',steps:['Назови 5 вещей которые ВИДИШЬ','Назови 4 вещи которые можешь ПОТРОГАТЬ','Назови 3 вещи которые СЛЫШИШЬ','Назови 2 вещи которые можешь ЗАПАХНУТЬ','Назови 1 вещь на ВКУС']},
+{icon:'📝',name:'Факты и предположения',dur:'5-7 мин',desc:'Отдели известное от предположений.',caution:null,steps:['Запиши ситуацию одним предложением','Что знаешь НАВЕРНЯКА?','Что ПРЕДПОЛАГАЕШЬ?','Есть ли альтернативы?']},
+{icon:'🎯',name:'Зона контроля',dur:'3-5 мин',desc:'Что зависит от тебя, а что нет.',caution:null,steps:['Напиши ситуацию','Раздели: МОЁ / НЕ МОЁ','Для МОЁ - одно действие','Для НЕ МОЁ - принять']},
+{icon:'🫁',name:'Мягкое дыхание',dur:'2-3 мин',desc:'Плавно замедли дыхание.',caution:'Не задерживай дыхание принудительно.',steps:['Сядь удобно','Дыши обычно 30 сек','Удлиняй выдох на 1-2 счёта','Продолжай 2-3 минуты']},
+{icon:'📦',name:'Следующий шаг',dur:'2-5 мин',desc:'Самое маленькое действие сейчас.',caution:null,steps:['Что можно за 2 минуты?','Это реалистично?','Готов? Сделай.']},
+{icon:'💛',name:'Маленький шаг',dur:'2-5 мин',desc:'Минимальное действие.',caution:null,steps:['Что полезно?','Мало энергии?','Сделай.']},
+{icon:'🤝',name:'Самосострадание',dur:'3-5 мин',desc:'Доброта к себе как к другу.',caution:null,steps:['Что бы сказал другу?','Скажи себе.']},
+{icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Быстрая помощь при панике.',caution:'При реальной опасности звони 112.',steps:['Скажи: это паника, она пройдёт','Возьми холодный предмет','Назови где ты, какой день','Не помогает? Звони 8-800-2000-122']}
+];
+techData2.forEach(function(t){techLookup[t.name]=t});
+})();
+
+/* INIT */
+try{localStorage.removeItem('loiva_done')}catch(e){}
+try{
+if(localStorage.getItem(K)){buildMain();mSw('home')}else{buildOnboard()}
+}catch(e){
+A.innerHTML='<div style="padding:20px;color:white"><h2>Error</h2><pre>'+esc(e.message)+'</pre></div>';
+}
+})();
+
 function buildOnboard(){
+var A=document.getElementById('A');
 A.innerHTML='';
 var screens=[
 {id:'s0',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🧠</div><h1>LOIVA</h1><p>Поддержка в вашем темпе.<br>AI-гид по эмоциональной самопомощи.</p><button class="btn b1" onclick="goScreen(\'s1\')">Начать</button><div class="dt"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>'},
-{id:'s1',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🎂</div><h2>Возраст</h2><p>Loiva предназначена только для пользователей 18 лет и старше.</p><div class="ab"><button onclick="goScreen(\'s2\')"><span class="e">✅</span>Мне есть 18</button><button onclick="alert(\'Loiva 18+\')"><span class="e">🚫</span>Мне нет 18</button></div><div class="dt"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s0'},
+{id:'s1',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🎂</div><h2>Возраст</h2><p>Loiva предназначена только для 18+.</p><div class="ab"><button onclick="goScreen(\'s2\')"><span class="e">✅</span>Мне есть 18</button><button onclick="alert(\'Loiva 18+\')"><span class="e">🚫</span>Мне нет 18</button></div><div class="dt"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s0'},
 {id:'s2',html:'<div class="w"><h2>Выбери язык</h2><div class="lg"><button class="sel" onclick="sel(this)"><span class="f">🇷🇺</span><span style="font-size:13px;font-weight:500">Русский</span></button><button onclick="sel(this)"><span class="f">🇬🇧</span><span style="font-size:13px;font-weight:500">English</span></button></div><button class="btn b1" onclick="goScreen(\'s3\')">Далее</button><div class="dt"><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s1'},
 {id:'s3',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🌍</div><h2>Страна</h2><p>Для кризисных контактов</p><div class="cl" id="mCl"></div><button class="btn b1" onclick="goScreen(\'s4\')">Далее</button><div class="dt"><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s2'},
-{id:'s4',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">ℹ️</div><h2>Что такое Loiva</h2><p>Loiva — ИИ-инструмент самопомощи.<br><br>✅ Помогает остановиться, выразить чувства<br>❌ Не заменяет психолога<br>❌ Не является кризисной службой</p><button class="btn b1" onclick="goScreen(\'s5\')" style="margin-bottom:8px">Я понимаю</button><button class="btn b2" onclick="goScreen(\'s5\')">Пропустить</button><div class="dt"><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i></div></div>',back:'s3'},
+{id:'s4',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">ℹ️</div><h2>Что такое Loiva</h2><p>ИИ-инструмент самопомощи.<br><br>✅ Помогает остановиться, выразить чувства<br>❌ Не заменяет психолога<br>❌ Не является кризисной службой</p><button class="btn b1" onclick="goScreen(\'s5\')" style="margin-bottom:8px">Я понимаю</button><button class="btn b2" onclick="goScreen(\'s5\')">Пропустить</button><div class="dt"><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i></div></div>',back:'s3'},
 {id:'s5',html:'<div class="w"><h2>Приватность</h2><div style="width:100%"><div class="tr"><span>Хранить историю</span><div class="tg on" onclick="tgl(this)"></div></div><div class="tr"><span>AI-память</span><div class="tg on" onclick="tgl(this)"></div></div><div class="tr"><span>Аналитика</span><div class="tg" onclick="tgl(this)"></div></div><div class="tr"><span>Уведомления</span><div class="tg" onclick="tgl(this)"></div></div></div><button class="btn b1" onclick="goScreen(\'s6\')" style="margin-top:16px">Далее</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i></div></div>',back:'s4'},
 {id:'s6',html:'<div class="w"><h2>Стиль общения</h2><div style="width:100%"><div style="margin-bottom:14px"><div style="font-size:12px;color:var(--tx2);margin-bottom:6px">Длина ответа</div><div class="chips"><button onclick="sel(this)">Коротко</button><button class="sel" onclick="sel(this)">Средне</button><button onclick="sel(this)">Подробно</button></div></div><div style="margin-bottom:14px"><div style="font-size:12px;color:var(--tx2);margin-bottom:6px">Тон</div><div class="chips"><button class="sel" onclick="sel(this)">Мягко</button><button onclick="sel(this)">Нейтрально</button></div></div><div><div style="font-size:12px;color:var(--tx2);margin-bottom:6px">Обращение</div><div class="chips"><button class="sel" onclick="sel(this)">На вы</button><button onclick="sel(this)">На ты</button></div></div></div><button class="btn b1" onclick="goScreen(\'s7\')" style="margin-top:16px">Далее</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i></div></div>',back:'s5'},
 {id:'s7',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🛡️</div><h2>Безопасность</h2><p>Loiva не контролируется человеком и не может вызвать помощь за вас.</p><button class="btn b1" onclick="goScreen(\'s8\')">Понятно</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i></div></div>',back:'s6'},
 {id:'s8',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🎯</div><h2>Что привело?</h2><div class="ab"><button onclick="enterApp()"><span class="e">😰</span>Стресс</button><button onclick="enterApp()"><span class="e">💭</span>Тревога</button><button onclick="enterApp()"><span class="e">😔</span>Настроение</button><button onclick="enterApp()"><span class="e">🗣</span>Выговориться</button><button onclick="enterApp()"><span class="e">🧘</span>Практики</button><button onclick="enterApp()"><span class="e">🤷</span>Пока не знаю</button></div><button class="btn b1" onclick="enterApp()" style="margin-top:12px">Войти в Loiva</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i></div></div>',back:'s7'}
 ];
-
 screens.forEach(function(s){
-var el=document.createElement('div');
-el.className='scr ob';
-el.id=s.id;
-el.innerHTML=s.html;
-if(s.back){
-var bk=document.createElement('button');
-bk.className='bk';
-bk.textContent='←';
-bk.onclick=function(){goScreen(s.back)};
-el.appendChild(bk);
-}
+var el=document.createElement('div');el.className='scr ob';el.id=s.id;el.innerHTML=s.html;
+if(s.back){var bk=document.createElement('button');bk.className='bk';bk.textContent='←';bk.onclick=function(){goScreen(s.back)};el.appendChild(bk)}
 A.appendChild(el);
 });
-
 var countries=['🇷🇺 Россия','🇺🇦 Украина','🇰🇿 Казахстан','🇧🇾 Беларусь','🇬🇪 Грузия','🇺🇸 США','🇬🇧 Великобритания','🇩🇪 Германия','🇫🇷 Франция','🇮🇱 Израиль','🇰🇷 Южная Корея','🇯🇵 Япония'];
-var cl=$('mCl');
-if(cl){
-countries.forEach(function(c){
-var d=document.createElement('div');
-d.textContent=c;
-d.onclick=function(){var items=cl.children;for(var i=0;i<items.length;i++)items[i].classList.remove('sel');d.classList.add('sel')};
-cl.appendChild(d);
-});
-}
-
+var cl=document.getElementById('mCl');
+if(cl)countries.forEach(function(c){var d=document.createElement('div');d.textContent=c;d.onclick=function(){var items=cl.children;for(var i=0;i<items.length;i++)items[i].classList.remove('sel');d.classList.add('sel')};cl.appendChild(d)});
 goScreen('s0');
 }
-
-/* INIT */
-try{localStorage.removeItem('loiva_done')}catch(e){}
-try{
-if(localStorage.getItem(K)){buildMain()}else{buildOnboard()}
-}catch(e){
-A.innerHTML='<div style="padding:20px;color:white"><h2>Init Error</h2><pre>'+esc(e.message)+'</pre></div>';
-}
-})();
 </script>
 </body>
 </html>
