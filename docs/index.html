@@ -159,18 +159,69 @@ ta.appendChild(tT);
 
 /* === CALM === */
 var tCa=document.createElement('div');tCa.id='mt-calm';tCa.style.cssText='position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center';
-tCa.innerHTML='<div id="mBreath" style="width:140px;height:140px;border-radius:50%;border:3px solid var(--pr);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:transform 4s"><span id="mBrT" style="color:var(--pr);font-weight:600">Готов</span></div><div id="mTimer" style="font-size:42px;font-weight:700;color:var(--tx2);margin-bottom:12px">5:00</div><div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><button class="cBtn" onclick="mDur(this,1)">1</button><button class="cBtn" onclick="mDur(this,3)">3</button><button class="cBtn sel" onclick="mDur(this,5)">5</button><button class="cBtn" onclick="mDur(this,10)">10</button><span style="color:var(--tx2);font-size:13px">мин</span><input id="mCustom" type="number" min="1" max="120" placeholder=" svoe" style="width:52px;padding:6px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-size:13px;text-align:center;font-family:inherit" oninput="mCustomDur(this.value)"></div><div style="display:flex;gap:10px"><button id="mStart" onclick="mStartCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--pr);color:#0B1020;cursor:pointer">Старт</button><button id="mStop" onclick="mStopCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Стоп</button><button id="mReset" onclick="mResetCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Сброс</button></div>';
+tCa.innerHTML='<div id="mBreath" style="width:140px;height:140px;border-radius:50%;border:3px solid var(--pr);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:transform 4s"><span id="mBrT" style="color:var(--pr);font-weight:600">Готов</span></div><div id="mTimer" style="font-size:42px;font-weight:700;color:var(--tx2);margin-bottom:12px">5:00</div><div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><button class="cBtn" onclick="mDur(this,1)">1</button><button class="cBtn" onclick="mDur(this,3)">3</button><button class="cBtn sel" onclick="mDur(this,5)">5</button><button class="cBtn" onclick="mDur(this,10)">10</button><span style="color:var(--tx2);font-size:13px">мин</span><input id="mCustom" type="number" min="1" max="120" placeholder="своё" style="width:52px;padding:6px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-size:13px;text-align:center;font-family:inherit" oninput="mCustomDur(this.value)"></div><div style="display:flex;gap:10px"><button id="mStart" onclick="mStartCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--pr);color:#0B1020;cursor:pointer">Старт</button><button id="mStop" onclick="mStopCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Стоп</button><button id="mReset" onclick="mResetCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Сброс</button></div>';
 ta.appendChild(tCa);
 
 /* === PROGRESS === */
 var tP=document.createElement('div');tP.id='mt-prog';tP.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
-var calD='';for(var i=1;i<=28;i++){var r=Math.random();calD+='<div style="width:100%;aspect-ratio:1;border-radius:6px;background:'+(r>.7?'var(--pr)':r>.4?'rgba(121,199,195,.3)':'var(--sf)')+';display:flex;align-items:center;justify-content:center;font-size:10px;color:'+(r>.7?'#0B1020':'var(--tx2)')+'">'+i+'</div>'}
-tP.innerHTML='<div style="padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--sf),var(--sf2));text-align:center;margin-bottom:16px"><div style="font-size:48px;font-weight:700;color:var(--pr)">7</div><div style="font-size:12px;color:var(--tx2)">дней подряд</div></div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Активность за месяц</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px">'+calD+'</div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Привычки</div><div id="mHab"></div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin:16px 0 8px">Статистика</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--pr)">23</div><div style="font-size:10px;color:var(--tx2)">Дней</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--ac)">47</div><div style="font-size:10px;color:var(--tx2)">Диалогов</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--sc)">12</div><div style="font-size:10px;color:var(--tx2)">Техник</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--wn)">85%</div><div style="font-size:10px;color:var(--tx2)">Выполнение</div></div></div>';
+var today=new Date().getDate();var calD='';for(var i=1;i<=28;i++){var isToday=i===today;var r=Math.random();var bg=isToday?'var(--pr)':r>.7?'var(--pr)':r>.4?'rgba(121,199,195,.3)':'var(--sf)';var clr=isToday?'#0B1020':r>.7?'#0B1020':'var(--tx2)';var brd=isToday?'border:2px solid var(--tx)':'';calD+='<div style="width:100%;aspect-ratio:1;border-radius:6px;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:10px;color:'+clr+';'+brd+'">'+i+'</div>'}
+tP.innerHTML='<div style="padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--sf),var(--sf2));text-align:center;margin-bottom:16px"><div style="font-size:48px;font-weight:700;color:var(--pr)">7</div><div style="font-size:12px;color:var(--tx2)">дней подряд</div></div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Активность за месяц</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px">'+calD+'</div><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:13px;font-weight:600;color:var(--tx2)">Привычки</div><button onclick="addHabit()" style="background:none;border:none;color:var(--pr);font-size:20px;cursor:pointer;padding:2px 6px">+</button></div><div id="mHab"></div><div style="font-size:13px;font-weight:600;color:var(--tx2);margin:16px 0 8px">Статистика</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--pr)">23</div><div style="font-size:10px;color:var(--tx2)">Дней</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--ac)">47</div><div style="font-size:10px;color:var(--tx2)">Диалогов</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--sc)">12</div><div style="font-size:10px;color:var(--tx2)">Техник</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--wn)">85%</div><div style="font-size:10px;color:var(--tx2)">Выполнение</div></div></div>';
 ta.appendChild(tP);
 
 /* === SETTINGS === */
 var tS=document.createElement('div');tS.id='mt-set';tS.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
-tS.innerHTML='<div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Общие</div><div class="si">🌍 Язык <span style="color:var(--mu);margin-left:auto">Русский ›</span></div><div class="si">🏳 Страна <span style="color:var(--mu);margin-left:auto">Россия ›</span></div><div class="si">💬 Длина ответа <span style="color:var(--mu);margin-left:auto">Средне ›</span></div><div class="si">🎭 Тон <span style="color:var(--mu);margin-left:auto">Мягко ›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">AI</div><div class="si">🤖 Режим <span style="color:var(--mu);margin-left:auto">Listen ›</span></div><div class="si">🧠 Память <span style="color:var(--mu);margin-left:auto">Вкл ›</span></div><div class="si">🔑 API ключи <span style="color:var(--mu);margin-left:auto">›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Уведомления</div><div class="si">🔔 Check-in <span style="color:var(--mu);margin-left:auto">Вкл ›</span></div><div class="si">🕐 Тихие часы <span style="color:var(--mu);margin-left:auto">22-08 ›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Внешний вид</div><div class="si">🎨 Тема <span style="color:var(--mu);margin-left:auto">Системная ›</span></div></div><div style="margin-bottom:18px"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Данные</div><div class="si">💾 Экспорт <span style="color:var(--mu);margin-left:auto">›</span></div><div class="si" onclick="localStorage.removeItem(\''+K+'\');location.reload()">🔄 Повторить онбординг <span style="color:var(--mu);margin-left:auto">›</span></div></div><div><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">О приложении</div><div class="si">📱 Версия <span style="color:var(--mu);margin-left:auto">0.1.0</span></div></div>';
+var setVals={lang:'Русский',country:'Россия',len:'Средне',tone:'Мягко',mode:'Listen',mem:'Вкл',notif:'Вкл',quiet:'22-08',theme:'Системная'};
+function renderSet(){
+tS.innerHTML='';
+var groups=[
+{title:'Общие',items:[
+{icon:'🌍',key:'lang',label:'Язык',opts:['Русский','English']},
+{icon:'🏳',key:'country',label:'Страна',opts:['Россия','Украина','Казахстан','Беларусь','Грузия','США','Германия','Франция','Израиль','Корея','Япония']},
+{icon:'💬',key:'len',label:'Длина ответа',opts:['Коротко','Средне','Подробно']},
+{icon:'🎭',key:'tone',label:'Тон',opts:['Мягко','Нейтрально']}
+]},
+{title:'AI',items:[
+{icon:'🤖',key:'mode',label:'Режим по умолчанию',opts:['Listen','Calm','Sort','Next step']},
+{icon:'🧠',key:'mem',label:'Память',opts:['Вкл','Выкл']}
+]},
+{title:'Уведомления',items:[
+{icon:'🔔',key:'notif',label:'Check-in',opts:['Вкл','Выкл']},
+{icon:'🕐',key:'quiet',label:'Тихие часы',opts:['22-08','23-07','Выкл']}
+]},
+{title:'Внешний вид',items:[
+{icon:'🎨',key:'theme',label:'Тема',opts:['Системная','Тёмная','Светлая']}
+]},
+{title:'Данные',items:[
+{icon:'💾',label:'Экспорт данных',action:'Экспорт'},
+{icon:'🔄',label:'Повторить онбординг',action:'reset'}
+]},
+{title:'О приложении',items:[
+{icon:'📱',label:'Версия',val:'0.1.0'}
+]}
+];
+groups.forEach(function(g){
+var hd=document.createElement('div');hd.style.cssText='font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px';hd.textContent=g.title;tS.appendChild(hd);
+g.items.forEach(function(item){
+var d=document.createElement('div');d.className='si';
+if(item.action){
+d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">›</span>';
+if(item.action==='reset')d.onclick=function(){localStorage.removeItem(K);location.reload()};
+else d.onclick=function(){alert(item.action+': скоро')};
+}else if(item.val){
+d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+item.val+'</span>';
+}else{
+var cur=setVals[item.key]||item.opts[0];
+d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto" id="sv-'+item.key+'">'+cur+' ›</span>';
+d.onclick=function(){
+var idx=item.opts.indexOf(cur);cur=item.opts[(idx+1)%item.opts.length];setVals[item.key]=cur;
+var el=document.getElementById('sv-'+item.key);if(el)el.textContent=cur+' ›';
+};
+}
+tS.appendChild(d);
+});
+});
+}
+renderSet();
 ta.appendChild(tP);ta.appendChild(tS);
 
 w.appendChild(ta);
@@ -191,15 +242,35 @@ w.appendChild(bn);
 A.appendChild(w);
 
 /* Habits */
-var habEl=$('mHab');
-if(habEl){
-[{name:'Утренняя медитация',done:true},{name:'Дыхательная практика',done:true},{name:'Журнал благодарности',done:false},{name:'Вечерний возврат',done:false}].forEach(function(h){
+var habits=[
+{name:'Утренняя медитация',done:true,desc:'10 минут'},
+{name:'Дыхательная практика',done:true,desc:'5 минут'},
+{name:'Журнал благодарности',done:false,desc:'3 вещи'},
+{name:'Вечерний возврат',done:false,desc:'Как прошёл день?'}
+];
+function renderHabits(){
+var habEl=$('mHab');if(!habEl)return;habEl.innerHTML='';
+habits.forEach(function(h,i){
 var d=document.createElement('div');d.className='hi'+(h.done?' dn':'');
-d.innerHTML='<div class="ck"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">'+h.name+'</div></div>';
-d.onclick=function(){this.classList.toggle('dn')};
+d.innerHTML='<div class="ck"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">'+h.name+'</div><div style="font-size:11px;color:var(--tx2)">'+h.desc+'</div></div><div style="display:flex;gap:8px"><button onclick="event.stopPropagation();editHabit('+i+')" style="background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;padding:4px">✏️</button><button onclick="event.stopPropagation();delHabit('+i+')" style="background:none;border:none;color:var(--dn);font-size:14px;cursor:pointer;padding:4px">🗑</button></div>';
+d.onclick=function(){h.done=!h.done;renderHabits()};
 habEl.appendChild(d);
 });
 }
+window.addHabit=function(){
+var name=prompt('Название привычки:');if(!name)return;
+var desc=prompt('Описание (необязательно):')||'';
+habits.push({name:name,done:false,desc:desc});renderHabits();
+};
+window.editHabit=function(i){
+var h=habits[i];var name=prompt('Название:',h.name);if(!name)return;
+var desc=prompt('Описание:',h.desc);if(desc===null)return;
+h.name=name;h.desc=desc;renderHabits();
+};
+window.delHabit=function(i){
+if(confirm('Удалить привычку "'+habits[i].name+'"?')){habits.splice(i,1);renderHabits()}
+};
+renderHabits();
 
 /* Chat */
 var aiResp=['Я тебя слышу. Расскажи подробнее.','Спасибо, что делишься.','Это нормально чувствовать так.','Я здесь рядом.','Хочешь попробовать заземление?','Как давно ты так себя чувствуешь?','Это смело — говорить об этом.','Давай сделаем вдох вместе.','Что бы ты хотела сделать сейчас?'];
