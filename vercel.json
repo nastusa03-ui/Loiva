@@ -1,7 +1,7 @@
 {
-  "installCommand": "yarn install --frozen-lockfile",
-  "buildCommand": "yarn --cwd apps/mobile run build:web",
+  "installCommand": "yarn install",
+  "buildCommand": "cd apps/mobile && npx expo export --platform web",
   "outputDirectory": "apps/mobile/dist",
-  "framework": null,
+  "framework": "expo",
   "nodeVersion": "22.x"
 }
