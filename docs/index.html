@@ -171,6 +171,28 @@ ta.appendChild(tP);
 /* === SETTINGS === */
 var tS=document.createElement('div');tS.id='mt-set';tS.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
 var setVals={lang:'Русский',country:'Россия',len:'Средне',tone:'Мягко',mode:'Listen',mem:'Вкл',notif:'Вкл',quiet:'22-08',theme:'Системная'};
+
+function showPicker(key,label,opts,cur){
+var ov=document.createElement('div');
+ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center';
+var sheet=document.createElement('div');
+sheet.style.cssText='width:100%;max-width:480px;background:var(--sf);border-radius:16px 16px 0 0;padding:20px 16px 32px;max-height:70vh;overflow-y:auto';
+sheet.innerHTML='<div style="display:flex;align-items:center;margin-bottom:16px"><h3 style="font-size:16px;font-weight:600;flex:1">'+label+'</h3><button id="pickerClose" style="background:none;border:none;color:var(--tx2);font-size:20px;cursor:pointer">✕</button></div>';
+opts.forEach(function(opt){
+var row=document.createElement('div');
+row.style.cssText='padding:14px;border-radius:12px;cursor:pointer;margin-bottom:4px;font-size:15px;display:flex;align-items:center;justify-content:space-between';
+if(opt===cur){row.style.background='var(--sf2)';row.style.border='1px solid var(--pr)'}
+row.innerHTML=opt+(opt===cur?'<span style="color:var(--pr);font-weight:700">✓</span>':'');
+row.onclick=function(){setVals[key]=opt;renderSet();ov.remove()};
+sheet.appendChild(row);
+});
+ov.appendChild(sheet);
+ov.onclick=function(e){if(e.target===ov)ov.remove()};
+document.body.appendChild(ov);
+$('pickerClose').onclick=function(){ov.remove()};
+}
+
+var tS=document.createElement('div');tS.id='mt-set';tS.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
 function renderSet(){
 tS.innerHTML='';
 var groups=[
@@ -178,7 +200,7 @@ var groups=[
 {icon:'🌍',key:'lang',label:'Язык',opts:['Русский','English']},
 {icon:'🏳',key:'country',label:'Страна',opts:['Россия','Украина','Казахстан','Беларусь','Грузия','США','Германия','Франция','Израиль','Корея','Япония']},
 {icon:'💬',key:'len',label:'Длина ответа',opts:['Коротко','Средне','Подробно']},
-{icon:'🎭',key:'tone',label:'Тон',opts:['Мягко','Нейтрально']}
+{icon:'🎭',key:'tone',label:'Тон ответа',opts:['Мягко','Нейтрально']}
 ]},
 {title:'AI',items:[
 {icon:'🤖',key:'mode',label:'Режим по умолчанию',opts:['Listen','Calm','Sort','Next step']},
@@ -192,7 +214,7 @@ var groups=[
 {icon:'🎨',key:'theme',label:'Тема',opts:['Системная','Тёмная','Светлая']}
 ]},
 {title:'Данные',items:[
-{icon:'💾',label:'Экспорт данных',action:'Экспорт'},
+{icon:'💾',label:'Экспорт данных',action:'export'},
 {icon:'🔄',label:'Повторить онбординг',action:'reset'}
 ]},
 {title:'О приложении',items:[
@@ -206,16 +228,13 @@ var d=document.createElement('div');d.className='si';
 if(item.action){
 d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">›</span>';
 if(item.action==='reset')d.onclick=function(){localStorage.removeItem(K);location.reload()};
-else d.onclick=function(){alert(item.action+': скоро')};
+else d.onclick=function(){alert(item.label+': скоро')};
 }else if(item.val){
 d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+item.val+'</span>';
 }else{
 var cur=setVals[item.key]||item.opts[0];
-d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto" id="sv-'+item.key+'">'+cur+' ›</span>';
-d.onclick=function(){
-var idx=item.opts.indexOf(cur);cur=item.opts[(idx+1)%item.opts.length];setVals[item.key]=cur;
-var el=document.getElementById('sv-'+item.key);if(el)el.textContent=cur+' ›';
-};
+d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+cur+' ›</span>';
+d.onclick=function(){showPicker(item.key,item.label,item.opts,cur)};
 }
 tS.appendChild(d);
 });
