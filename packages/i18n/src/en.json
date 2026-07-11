@@ -1,0 +1,291 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "close": "Close",
+    "undo": "Undo"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "LOIVA",
+      "subtitle": "Support, at your pace.",
+      "cta": "Get started"
+    },
+    "ageGate": {
+      "title": "Age Verification",
+      "description": "Loiva is designed for adults aged 18 and older.",
+      "confirm": "I am 18 or older",
+      "exit": "Exit"
+    },
+    "language": {
+      "title": "Choose Your Language",
+      "description": "This will be your default language. You can change it later.",
+      "english": "English",
+      "russian": "Русский"
+    },
+    "country": {
+      "title": "Your Country",
+      "description": "Used for local crisis resources and emergency contacts.",
+      "search": "Search countries..."
+    },
+    "disclosure": {
+      "title": "What Loiva Is",
+      "items": [
+        "Loiva is an AI self-help guide",
+        "Loiva is not a human, therapist, or doctor",
+        "Loiva is a tool for reflection and coping skills",
+        "Loiva is not a crisis service"
+      ],
+      "understood": "I understand"
+    },
+    "privacy": {
+      "title": "Your Privacy Choices",
+      "saveHistory": "Save chat history",
+      "saveHistoryDesc": "Keep your conversations for reference",
+      "memory": "Allow personalized memory",
+      "memoryDesc": "Loiva remembers your preferences between sessions",
+      "analytics": "Allow optional product analytics",
+      "analyticsDesc": "Help improve Loiva (no chat content shared)",
+      "notifications": "Allow notifications"
+    },
+    "communication": {
+      "title": "How Should Loiva Respond?",
+      "length": "Response length",
+      "lengthShort": "Brief",
+      "lengthLong": "Detailed",
+      "tone": "Tone",
+      "toneGentle": "Gentle",
+      "toneStructured": "Structured",
+      "questions": "When unsure, Loiva should...",
+      "questionsFirst": "Ask questions first",
+      "optionsFirst": "Offer options first"
+    },
+    "safetyNotice": {
+      "title": "Important Notice",
+      "text": "Loiva is not monitored by a person in real time and cannot contact emergency services for you. If there is immediate danger, use your local emergency number.",
+      "cta": "I understand"
+    },
+    "intention": {
+      "title": "What Would Help Right Now?",
+      "options": [
+        "Reduce stress",
+        "Handle anxious thoughts",
+        "Support myself through low mood",
+        "Talk through and organize my thoughts",
+        "Learn self-help practices",
+        "Not sure yet"
+      ]
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "email": "Email",
+      "password": "Password",
+      "cta": "Log In",
+      "forgot": "Forgot password?",
+      "signup": "Don't have an account? Sign up"
+    },
+    "signup": {
+      "title": "Create Account",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "cta": "Sign Up",
+      "login": "Already have an account? Log in"
+    }
+  },
+  "home": {
+    "greeting": "What would help right now?",
+    "quickActions": {
+      "anxious": "I feel anxious",
+      "stressed": "I feel stressed",
+      "low": "I feel low and drained",
+      "talk": "I want to talk it through",
+      "sort": "Help me sort this out",
+      "practice": "Give me a short practice"
+    },
+    "continue": {
+      "title": "Continue where you left off"
+    },
+    "dailyPractice": "A small practice for today",
+    "calmRoom": "Calm Room"
+  },
+  "chat": {
+    "modes": {
+      "listen": "Listen",
+      "calm": "Calm",
+      "sort": "Sort",
+      "nextStep": "Next Step"
+    },
+    "header": {
+      "aiBadge": "AI",
+      "endSession": "End Session"
+    },
+    "input": {
+      "placeholder": "Type your message...",
+      "send": "Send",
+      "stop": "Stop generating"
+    },
+    "empty": {
+      "title": "Start a conversation",
+      "description": "Choose a mode and share what's on your mind."
+    },
+    "actions": {
+      "helpful": "Helpful",
+      "notForMe": "Not for me",
+      "tryAnother": "Try another approach",
+      "saveInsight": "Save insight"
+    },
+    "sessionEnd": {
+      "title": "Session Summary",
+      "whatNoticed": "What you noticed",
+      "whatHelped": "What helped",
+      "nextStep": "Your next step",
+      "save": "Save summary",
+      "skip": "Skip"
+    },
+    "pauseNudge": "Would you like to pause and come back to this later?"
+  },
+  "techniques": {
+    "title": "Practices",
+    "categories": {
+      "anxiety": "Anxious Thoughts",
+      "stress": "Stress & Overload",
+      "lowMood": "Low Mood",
+      "grounding": "Grounding & Orientation",
+      "compassion": "Self-Compassion",
+      "actions": "Small Actions"
+    },
+    "practice": {
+      "start": "Start",
+      "stop": "Stop",
+      "duration": "{{minutes}} min",
+      "afterQuestion": "Did it feel better, about the same, or worse?",
+      "better": "Better",
+      "same": "Same",
+      "worse": "Worse",
+      "addToFavorites": "Add to favorites"
+    }
+  },
+  "checkin": {
+    "title": "How Are You Doing?",
+    "mood": "Mood",
+    "tension": "Tension",
+    "energy": "Energy",
+    "note": "Add a note (optional)",
+    "save": "Save check-in",
+    "labels": {
+      "1": "Very low",
+      "2": "Low",
+      "3": "Neutral",
+      "4": "Good",
+      "5": "Great"
+    }
+  },
+  "progress": {
+    "title": "Your Progress",
+    "weekly": "This Week",
+    "avgMood": "Average mood",
+    "checkIns": "Check-ins completed",
+    "sessions": "Chat sessions",
+    "techniques": "Practices tried",
+    "noData": "No data yet. Start with a check-in."
+  },
+  "calmRoom": {
+    "title": "Calm Room",
+    "subtitle": "A quiet space to pause",
+    "timer": {
+      "1min": "1 min",
+      "3min": "3 min",
+      "5min": "5 min",
+      "10min": "10 min"
+    },
+    "exercises": {
+      "breathing": "Breathing",
+      "grounding": "Grounding",
+      "timer": "Timer"
+    },
+    "start": "Start",
+    "stop": "Stop"
+  },
+  "habits": {
+    "title": "Habits",
+    "add": "Add habit",
+    "name": "Habit name",
+    "frequency": "Frequency",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "custom": "Custom",
+    "completed": "{{done}} of {{total}} days",
+    "noHabits": "No habits yet. Add one to start tracking."
+  },
+  "memory": {
+    "title": "Memory Center",
+    "description": "Loiva remembers these things to personalize your experience.",
+    "empty": "No memories yet. Memory is saved automatically when enabled.",
+    "edit": "Edit",
+    "delete": "Delete",
+    "disable": "Disable memory",
+    "deleteAll": "Delete all memories",
+    "toast": "Saved to Loiva memory"
+  },
+  "settings": {
+    "title": "Settings",
+    "sections": {
+      "general": "General",
+      "ai": "AI Interaction",
+      "notifications": "Notifications",
+      "appearance": "Appearance",
+      "data": "Data & Privacy",
+      "safety": "Safety",
+      "about": "About"
+    },
+    "apiKeys": {
+      "title": "API Keys",
+      "description": "Add your own API keys for AI providers. Keys are encrypted and stored securely.",
+      "addProvider": "Add Provider",
+      "provider": "Provider",
+      "model": "Model",
+      "key": "API Key",
+      "save": "Save Key",
+      "remove": "Remove",
+      "configured": "Configured",
+      "notConfigured": "Not configured"
+    },
+    "language": "Language",
+    "country": "Country",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "reducedMotion": "Reduce motion",
+    "exportData": "Export my data",
+    "deleteAccount": "Delete account",
+    "deleteAccountConfirm": "This will permanently delete your account and all data."
+  },
+  "safety": {
+    "crisis": {
+      "title": "You're not alone",
+      "description": "If you're in crisis, help is available right now.",
+      "call": "Call",
+      "text": "Text",
+      "website": "Visit Website",
+      "emergency": "Emergency services"
+    },
+    "banner": {
+      "elevated": "It seems like you're going through a difficult time. Remember, support is available.",
+      "urgent": "I'm concerned about you. Please consider reaching out to a crisis line.",
+      "imminent": "Your safety matters. Please reach out for immediate help."
+    },
+    "report": "Report unsafe response"
+  }
+}

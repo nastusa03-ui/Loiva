@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Loiva",
+    "slug": "loiva",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "loiva",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#0B1020",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.loiva.mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "",
+        "NSMicrophoneUsageDescription": "",
+        "UIBackgroundModes": ["remote-notification"]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1020"
+      },
+      "package": "app.loiva.mobile"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-localization",
+      [
+        "expo-av",
+        {
+          "microphonePermission": ""
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

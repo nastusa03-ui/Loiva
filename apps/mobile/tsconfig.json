@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@loiva/ui": ["../../packages/ui/src"],
+      "@loiva/shared": ["../../packages/shared/src"],
+      "@loiva/i18n": ["../../packages/i18n/src"],
+      "@loiva/schemas": ["../../packages/schemas/src"],
+      "@loiva/ai-contracts": ["../../packages/ai-contracts/src"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "exclude": ["node_modules"]
+}
