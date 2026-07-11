@@ -438,6 +438,7 @@ document.getElementById('o-w').classList.add('on');
 window.oN=function(id){if(window._busy)return;var el=document.getElementById('o-'+id);if(!el)return;var all=document.querySelectorAll('.scr');for(var i=0;i<all.length;i++)all[i].classList.remove('on');el.classList.add('on')};
 
 /* INIT */
+localStorage.removeItem('loiva_done');
 if(localStorage.getItem(K)){buildApp()}else{buildOnboard()}
 </script>
 </body>
