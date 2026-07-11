@@ -1,17 +1,6 @@
 {
   "framework": "expo",
-  "buildCommand": "npx expo export --platform web",
-  "outputDirectory": "dist",
   "installCommand": "yarn install",
-  "headers": [
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    }
-  ]
+  "buildCommand": "npx expo export --platform web",
+  "outputDirectory": "dist"
 }
