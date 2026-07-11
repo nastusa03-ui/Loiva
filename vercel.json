@@ -1,5 +1,5 @@
 {
-  "framework": "expo",
+  "rootDirectory": "apps/mobile",
   "installCommand": "yarn install",
   "buildCommand": "npx expo export --platform web",
   "outputDirectory": "dist"
