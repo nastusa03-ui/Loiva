@@ -9,6 +9,7 @@
     "dev:mobile": "turbo run dev --filter=mobile",
     "dev:admin": "turbo run dev --filter=admin",
     "build": "turbo run build",
+    "build:web": "cd apps/mobile && npx expo export --platform web",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"

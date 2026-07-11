@@ -1,7 +1,7 @@
 {
   "installCommand": "yarn install",
-  "buildCommand": "cd apps/mobile && npx expo export --platform web",
+  "buildCommand": "yarn build:web",
   "outputDirectory": "apps/mobile/dist",
-  "framework": "expo",
+  "framework": null,
   "nodeVersion": "22.x"
 }
