@@ -213,7 +213,7 @@ el.classList.add('sel');
 
 function tgl(el){el.classList.toggle('on')}
 
-function done(){localStorage.setItem(K,'1');buildApp()}
+function done(){if(window._busy)return;window._busy=1;localStorage.setItem(K,'1');buildApp()}
 
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
@@ -435,7 +435,7 @@ if(cl)countries.forEach(function(c){var d=document.createElement('div');d.textCo
 document.getElementById('o-w').classList.add('on');
 }
 
-window.oN=function(id){var el=document.getElementById('o-'+id);if(!el)return;var all=document.querySelectorAll('.scr');for(var i=0;i<all.length;i++)all[i].classList.remove('on');el.classList.add('on')};
+window.oN=function(id){if(window._busy)return;var el=document.getElementById('o-'+id);if(!el)return;var all=document.querySelectorAll('.scr');for(var i=0;i<all.length;i++)all[i].classList.remove('on');el.classList.add('on')};
 
 /* INIT */
 if(localStorage.getItem(K)){buildApp()}else{buildOnboard()}
