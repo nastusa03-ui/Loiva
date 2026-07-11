@@ -99,10 +99,21 @@ window.goScreen=goScreen;
 
 function enterApp(){
 if(busy)return;busy=1;
-try{localStorage.setItem(K,'1');buildMain();}catch(e){
+try{
+/* Save onboarding selections to settings */
+var langSel=document.querySelector('#s2 .lg button.sel');
+if(langSel){var ln=langSel.textContent.trim();setVals.lang=ln==='Русский'?'Русский':'English'}
+var lenSel=document.querySelector('#s6 .chips .sel');
+if(lenSel){var lText=lenSel.textContent.trim();if(['Коротко','Средне','Подробно'].indexOf(lText)>=0)setVals.len=lText}
+var addrSel=document.querySelectorAll('#s6 .chips');
+if(addrSel.length>=3){var aSel=addrSel[2].querySelector('.sel');if(aSel)setVals.addr=aSel.textContent.trim()}
+saveSettings();
+localStorage.setItem(K,'1');
+buildMain();mSw('home');
+}catch(e){
 A.innerHTML='<div style="padding:20px;color:white"><h2>Error</h2><pre>'+esc(e.message)+'</pre></div>';
-}}
-window.enterApp=enterApp;
+}
+}
 
 function buildMain(){
 A.innerHTML='';
@@ -201,7 +212,10 @@ ta.appendChild(tP);
 
 /* === SETTINGS === */
 var tS=document.createElement('div');tS.id='mt-set';tS.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
-var setVals={lang:'Русский',country:'Россия',len:'Средне',tone:'Мягко',mode:'Listen',mem:'Вкл',notif:'Вкл',quiet:'22-08',theme:'Системная'};
+var setValsDefault={lang:'Русский',country:'Россия',len:'Средне',tone:'Мягко',addr:'На вы',offer:'Да',mode:'Listen',mem:'Вкл',notif:'Вкл',notifPr:'Вкл',quiet:'22-08',theme:'Системная',motion:'Выкл',textSize:'Средний',hist:'Вкл'};
+var setVals={};
+try{var saved=JSON.parse(localStorage.getItem(K+'_settings'));if(saved)for(var k in setValsDefault)setVals[k]=saved[k]||setValsDefault[k];else setVals=JSON.parse(JSON.stringify(setValsDefault))}catch(e){setVals=JSON.parse(JSON.stringify(setValsDefault))}
+function saveSettings(){try{localStorage.setItem(K+'_settings',JSON.stringify(setVals))}catch(e){}}
 
 function showPicker(key,label,opts,cur){
 var ov=document.createElement('div');
@@ -214,7 +228,7 @@ var row=document.createElement('div');
 row.style.cssText='padding:14px;border-radius:12px;cursor:pointer;margin-bottom:4px;font-size:15px;display:flex;align-items:center;justify-content:space-between';
 if(opt===cur){row.style.background='var(--sf2)';row.style.border='1px solid var(--pr)'}
 row.innerHTML=opt+(opt===cur?'<span style="color:var(--pr);font-weight:700">✓</span>':'');
-row.onclick=function(){setVals[key]=opt;renderSet();ov.remove()};
+row.onclick=function(){setVals[key]=opt;saveSettings();renderSet();ov.remove()};
 sheet.appendChild(row);
 });
 ov.appendChild(sheet);
@@ -361,16 +375,23 @@ ciLog.push(entry);
 try{localStorage.setItem(K+'_ci',JSON.stringify(ciLog))}catch(e){}
 if(note)note.value='';
 var btn=document.getElementById('ciBtn');if(btn){btn.textContent='✓ Сохранено';btn.style.background='var(--ac)';setTimeout(function(){btn.textContent='Готово';btn.style.background='var(--pr)'},1500)}
+updateCiChart();
 };
 function updateCiChart(){
-var el=$('ciChart');if(!el||!ciLog.length)return;
+var el=$('ciChart');if(!el)return;
+if(!ciLog.length){el.innerHTML='<div style="font-size:12px;color:var(--tx2);text-align:center;padding:12px">Пока нет данных. Сделай первый check-in!</div>';return}
 var last=ciLog[ciLog.length-1];
-el.innerHTML='<div style="display:flex;gap:12px;margin-top:8px">'
-+'<div style="flex:1;padding:10px;border-radius:10px;background:var(--sf);text-align:center"><div style="font-size:11px;color:var(--tx2)">Настроение</div><div style="font-size:20px;font-weight:700;color:var(--pr)">'+last.mood+'</div></div>'
-+'<div style="flex:1;padding:10px;border-radius:10px;background:var(--sf);text-align:center"><div style="font-size:11px;color:var(--tx2)">Напряжение</div><div style="font-size:20px;font-weight:700;color:var(--wn)">'+last.tension+'</div></div>'
-+'<div style="flex:1;padding:10px;border-radius:10px;background:var(--sf);text-align:center"><div style="font-size:11px;color:var(--tx2)">Энергия</div><div style="font-size:20px;font-weight:700;color:var(--ac)">'+last.energy+'</div></div>'
-+'</div>'+(last.note?'<div style="font-size:12px;color:var(--tx2);margin-top:8px;padding:8px;border-radius:8px;background:var(--sf)">📝 '+last.note+'</div>':'')
-+'<div style="font-size:11px;color:var(--mu);margin-top:6px">Последний check-in: '+new Date(last.date).toLocaleDateString('ru')+'</div>';}
+var dt=new Date(last.date);
+var timeStr=dt.getHours()+':'+(dt.getMinutes()<10?'0':'')+dt.getMinutes();
+el.innerHTML='<div style="padding:12px;border-radius:12px;background:var(--sf);margin-bottom:8px">'
++'<div style="font-size:11px;color:var(--mu);margin-bottom:8px">📅 '+dt.toLocaleDateString('ru')+' в '+timeStr+'</div>'
++'<div style="display:flex;gap:8px">'
++'<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Настроение</div><div style="font-size:20px;font-weight:700;color:var(--pr)">'+last.mood+'</div></div>'
++'<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Напряжение</div><div style="font-size:20px;font-weight:700;color:var(--wn)">'+last.tension+'</div></div>'
++'<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Энергия</div><div style="font-size:20px;font-weight:700;color:var(--ac)">'+last.energy+'</div></div>'
++'</div>'
++(last.note?'<div style="font-size:12px;color:var(--tx2);margin-top:8px;padding:6px 8px;border-radius:8px;background:var(--bg)">📝 '+last.note+'</div>':'')
++'</div>';}
 setTimeout(updateCiChart,100);
 
 /* Chat */
@@ -399,6 +420,7 @@ bis[i].children[0].style.opacity=active?'1':'.4';
 bis[i].children[1].style.color=active?'var(--pr)':'var(--mu)';
 bis[i].children[1].style.fontWeight=active?'600':'500';
 }
+if(id==='prog')updateCiChart();
 };
 }
 
@@ -426,13 +448,14 @@ $('detBack').onclick=function(){overlay.remove()};
 $('detDone').onclick=function(){
 overlay.remove();
 var q=document.createElement('div');
+q.id='surveyQ';
 q.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';
 var box=document.createElement('div');
 box.style.cssText='background:var(--sf);border-radius:16px;padding:24px 20px;max-width:340px;width:90%;text-align:center';
 box.innerHTML='<div style="font-size:28px;margin-bottom:12px">💭</div><div style="font-size:16px;font-weight:600;margin-bottom:16px">Стало легче, так же или хуже?</div>'
-+'<div style="display:flex;gap:8px"><button onclick="this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--pr);color:#0B1020;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Легче</button>'
-+'<button onclick="this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--tx);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Так же</button>'
-+'<button onclick="this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--dn);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Хуже</button></div>';
++'<div style="display:flex;gap:8px"><button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--pr);color:#0B1020;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Легче</button>'
++'<button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--tx);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Так же</button>'
++'<button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--dn);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Хуже</button></div>';
 q.appendChild(box);
 q.onclick=function(e){if(e.target===q)q.remove()};
 document.body.appendChild(q);
