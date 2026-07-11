@@ -514,7 +514,7 @@ const bn=D.createElement('div');bn.className='bn';
 const tabs=[{id:'t-home',ic:'🏠',lb:'Главная'},{id:'t-chat',ic:'💬',lb:'Чат'},{id:'t-tech',ic:'🧘',lb:'Практики'},{id:'t-calm',ic:'🌙',lb:'Calm'},{id:'t-prog',ic:'📊',lb:'Динамика'},{id:'t-set',ic:'⚙️',lb:'Настройки'}];
 tabs.forEach((t,i)=>{
 const bi=D.createElement('div');bi.className='bi'+(i===0?' on':'');bi.dataset.tab=t.id;
-bi.innerHTML=`<span class="ic">${t.ic}</span><span class="lb">${t.lb}</lb>`;
+bi.innerHTML=`<span class="ic">${t.ic}</span><span class="lb">${t.lb}</span>`;
 bi.onclick=()=>swTab(t.id);
 bn.appendChild(bi);
 });
