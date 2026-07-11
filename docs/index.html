@@ -119,7 +119,29 @@ ta.style.cssText='flex:1;overflow:hidden;position:relative';
 
 /* === HOME === */
 var tH=document.createElement('div');tH.id='mt-home';tH.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px';
-tH.innerHTML='<h3 style="font-size:18px;margin-bottom:12px">Что полезно сейчас?</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px"><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😰</div><div style="font-size:12px;font-weight:600">Тревожно</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😰</div><div style="font-size:12px;font-weight:600">Стресс</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😔</div><div style="font-size:12px;font-weight:600">Тяжело</div></div><div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">🗣</div><div style="font-size:12px;font-weight:600">Выговориться</div></div><div class="ac" onclick="mSw(\'tech\')"><div style="font-size:22px;margin-bottom:4px">🧘</div><div style="font-size:12px;font-weight:600">Практика</div></div><div class="ac" onclick="mSw(\'calm\')"><div style="font-size:22px;margin-bottom:4px">🌙</div><div style="font-size:12px;font-weight:600">Calm Room</div></div></div><div style="padding:14px;border-radius:14px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin-bottom:12px"><div style="font-size:13px;font-weight:600;color:var(--dn)">🆘 Нужна помощь?</div><div style="font-size:12px;color:var(--tx2);margin-top:4px">Позвони: <a href="tel:8-800-2000-122" style="color:var(--dn)">8-800-2000-122</a></div></div>';
+tH.innerHTML='<h3 style="font-size:18px;margin-bottom:12px">Что полезно сейчас?</h3>'
++'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">'
++'<div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😰</div><div style="font-size:12px;font-weight:600">Мне тревожно</div></div>'
++'<div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">🔥</div><div style="font-size:12px;font-weight:600">Я в стрессе</div></div>'
++'<div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">😔</div><div style="font-size:12px;font-weight:600">Мне тяжело</div></div>'
++'<div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">🗣</div><div style="font-size:12px;font-weight:600">Хочу выговориться</div></div>'
++'<div class="ac" onclick="mSw(\'chat\')"><div style="font-size:22px;margin-bottom:4px">🔍</div><div style="font-size:12px;font-weight:600">Помоги разобраться</div></div>'
++'<div class="ac" onclick="mSw(\'tech\')"><div style="font-size:22px;margin-bottom:4px">🧘</div><div style="font-size:12px;font-weight:600">Короткая практика</div></div>'
++'</div>'
++'<div style="padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--sf),var(--sf2));border:1px solid var(--bd);margin-bottom:16px">'
++'<div style="font-size:13px;font-weight:600;margin-bottom:10px">📊 Check-in</div>'
++'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:var(--tx2);width:80px">Настроение</span><div style="display:flex;gap:4px" id="ciMood"></div></div>'
++'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:var(--tx2);width:80px">Напряжение</span><div style="display:flex;gap:4px" id="ciTens"></div></div>'
++'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:var(--tx2);width:80px">Энергия</span><div style="display:flex;gap:4px" id="ciEn"></div></div>'
++'<textarea id="ciNote" placeholder="Заметка (необязательно)..." style="width:100%;padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:12px;font-family:inherit;resize:none;outline:none;margin-top:4px" rows="2"></textarea>'
++'</div>'
++'<div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Продолжить</div>'
++'<div class="ac" onclick="mSw(\'chat\')" style="margin-bottom:8px;display:flex;align-items:center;gap:10px"><div style="font-size:20px;width:36px;height:36px;border-radius:10px;background:var(--sf2);display:flex;align-items:center;justify-content:center">💬</div><div><div style="font-size:13px;font-weight:600">Чат с Loiva</div><div style="font-size:11px;color:var(--tx2)">Продолжить диалог</div></div></div>'
++'<div class="ac" onclick="mSw(\'tech\')" style="margin-bottom:16px;display:flex;align-items:center;gap:10px"><div style="font-size:20px;width:36px;height:36px;border-radius:10px;background:var(--sf2);display:flex;align-items:center;justify-content:center">🧊</div><div><div style="font-size:13px;font-weight:600">5-4-3-2-1</div><div style="font-size:11px;color:var(--tx2)">Заземление</div></div></div>'
++'<div style="padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(121,199,195,.08),rgba(170,167,232,.08));border:1px solid var(--bd);margin-bottom:16px;cursor:pointer" onclick="mSw(\'tech\')">'
++'<div style="font-size:13px;font-weight:600">🌱 Небольшая практика на сегодня</div>'
++'<div style="font-size:12px;color:var(--tx2);margin-top:4px">Мягкое замедление дыхания — 2 минуты</div></div>'
++'<div style="padding:12px;border-radius:12px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2)"><div style="font-size:13px;font-weight:600;color:var(--dn)">🆘 Нужна помощь?</div><div style="font-size:12px;color:var(--tx2);margin-top:4px">Позвони: <a href="tel:8-800-2000-122" style="color:var(--dn)">8-800-2000-122</a></div></div>';
 ta.appendChild(tH);
 
 /* === CHAT === */
@@ -144,7 +166,11 @@ var techData=[
 {icon:'🤝',name:'Самосострадание',dur:'3-5 мин',desc:'Доброта к себе как к другу.',caution:null,steps:['Что бы сказал другу?','Скажи себе.']}
 ]},
 {cat:'Кризис',items:[
-{icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Быстрая помощь при панике.',caution:'При реальной опасности звони 112.',steps:['Скажи: это паника, она пройдёт','Возьми холодный предмет','Назови где ты, какой день','Не помогает? Звони 8-800-2000-122']}
+{icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Быстрая помощь при панике.',caution:'При реальной опасности звони 112.',steps:['Скажи: это паника, она пройдёт','Возьми холодный предмет','Назови где ты, какой день','Не помогает? Звони 8-800-2000-122']},
+{icon:'🧭',name:'Ориентация в пространстве',dur:'1-2 мин',desc:'Вернись в реальность через факты.',caution:null,steps:['Где ты находишься? Назови место.','Какой сегодня день и дата?','Какое время года?','Назови 3 предмета рядом.']},
+{icon:'🔍',name:'Проверка катастрофы',dur:'5-10 мин',desc:'Проверь тревожную мысль на реальность.',caution:null,steps:['Напиши тревожную мысль','Худшая реалистичная возможность?','Наиболее вероятная?','Что бы сказал другу?','Сформулируй реалистичную мысль']},
+{icon:'💌',name:'Благодарность',dur:'3-5 мин',desc:'3 вещи за которые благодарен сегодня.',caution:null,steps:['Назови 3 вещи','Для каждой: ПОЧЕМУ','Какое чувство это вызывает?']},
+{icon:'🌅',name:'Визуализация',dur:'5 мин',desc:'Представь безопасное спокойное место.',caution:null,steps:['3 глубоких вдоха','Представь безопасное место','Заметь детали','Побудь минуту','Открой глаза']}
 ]}
 ];
 var thtml='';
@@ -200,25 +226,43 @@ var groups=[
 {icon:'🌍',key:'lang',label:'Язык',opts:['Русский','English']},
 {icon:'🏳',key:'country',label:'Страна',opts:['Россия','Украина','Казахстан','Беларусь','Грузия','США','Германия','Франция','Израиль','Корея','Япония']},
 {icon:'💬',key:'len',label:'Длина ответа',opts:['Коротко','Средне','Подробно']},
-{icon:'🎭',key:'tone',label:'Тон ответа',opts:['Мягко','Нейтрально']}
+{icon:'🎭',key:'tone',label:'Тон ответа',opts:['Мягко','Нейтрально']},
+{icon:'💬',key:'addr',label:'Обращение',opts:['На вы','На ты']},
+{icon:'❓',key:'offer',label:'Предлагать практики',opts:['Да','Нет']}
 ]},
 {title:'AI',items:[
 {icon:'🤖',key:'mode',label:'Режим по умолчанию',opts:['Listen','Calm','Sort','Next step']},
-{icon:'🧠',key:'mem',label:'Память',opts:['Вкл','Выкл']}
+{icon:'🧠',key:'mem',label:'Память',opts:['Вкл','Выкл']},
+{icon:'📋',label:'Memory Center',action:'memory'},
+{icon:'💡',label:'Сохранённые выводы',action:'insights'}
 ]},
 {title:'Уведомления',items:[
 {icon:'🔔',key:'notif',label:'Check-in',opts:['Вкл','Выкл']},
-{icon:'🕐',key:'quiet',label:'Тихие часы',opts:['22-08','23-07','Выкл']}
+{icon:'🧘',key:'notifPr',label:'Напоминание практики',opts:['Вкл','Выкл']},
+{icon:'🕐',key:'quiet',label:'Тихие часы',opts:['22-08','23-07','Выкл']},
+{icon:'⏸',label:'Приостановить все',action:'pauseNotif'}
 ]},
 {title:'Внешний вид',items:[
-{icon:'🎨',key:'theme',label:'Тема',opts:['Системная','Тёмная','Светлая']}
+{icon:'🎨',key:'theme',label:'Тема',opts:['Системная','Тёмная','Светлая']},
+{icon:'✨',key:'motion',label:'Reduced motion',opts:['Вкл','Выкл']},
+{icon:'🔤',key:'textSize',label:'Размер текста',opts:['Маленький','Средний','Большой']}
 ]},
-{title:'Данные',items:[
+{title:'Данные и приватность',items:[
+{icon:'💬',key:'hist',label:'История чатов',opts:['Вкл','Выкл']},
 {icon:'💾',label:'Экспорт данных',action:'export'},
+{icon:'🗑',label:'Удалить историю',action:'deleteHistory'},
+{icon:'🧠',label:'Удалить память',action:'deleteMemory'},
+{icon:'📋',label:'Политика приватности',action:'privacy'},
 {icon:'🔄',label:'Повторить онбординг',action:'reset'}
 ]},
+{title:'Безопасность',items:[
+{icon:'🆘',label:'Кризисные контакты',action:'crisis'},
+{icon:'📖',label:'Что Loiva может и не может',action:'limits'},
+{icon:'⚠',label:'Сообщить об unsafe-ответе',action:'report'}
+]},
 {title:'О приложении',items:[
-{icon:'📱',label:'Версия',val:'0.1.0'}
+{icon:'📱',label:'Версия',val:'0.1.0'},
+{icon:'🤖',label:'AI-провайдер',action:'aiProvider'}
 ]}
 ];
 groups.forEach(function(g){
@@ -291,6 +335,20 @@ if(confirm('Удалить привычку "'+habits[i].name+'"?')){habits.spli
 };
 renderHabits();
 
+/* Check-in */
+var ciState={mood:3,tension:3,energy:3};
+function ciBuild(id,key){
+var el=$(id);if(!el)return;el.innerHTML='';
+for(var i=1;i<=5;i++){
+var b=document.createElement('div');
+b.style.cssText='width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--tx2)';
+b.textContent=i;
+if(ciState[key]===i){b.style.background='var(--pr)';b.style.borderColor='var(--pr)';b.style.color='#0B1020'}
+b.onclick=function(){ciState[key]=parseInt(this.textContent);ciBuild(id,key)};
+el.appendChild(b);
+}}
+ciBuild('ciMood','mood');ciBuild('ciTens','tension');ciBuild('ciEn','energy');
+
 /* Chat */
 var aiResp=['Я тебя слышу. Расскажи подробнее.','Спасибо, что делишься.','Это нормально чувствовать так.','Я здесь рядом.','Хочешь попробовать заземление?','Как давно ты так себя чувствуешь?','Это смело — говорить об этом.','Давай сделаем вдох вместе.','Что бы ты хотела сделать сейчас?'];
 var chatStarted=false;
@@ -336,12 +394,31 @@ body.style.cssText='flex:1;overflow-y:auto;padding:16px';
 var html='<div style="font-size:12px;color:var(--tx2);margin-bottom:12px">⏱ '+t.dur+'</div><p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:14px">'+t.desc+'</p>';
 if(t.caution)html+='<div style="padding:12px;border-radius:12px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin:12px 0;font-size:12px;color:var(--dn);line-height:1.5">⚠ '+t.caution+'</div>';
 t.steps.forEach(function(s,i){html+='<div style="padding:12px;border-radius:12px;background:var(--sf);margin-bottom:8px;display:flex;gap:10px"><div style="width:26px;height:26px;border-radius:50%;background:var(--pr);color:#0B1020;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">'+(i+1)+'</div><div style="font-size:13px;line-height:1.5">'+s+'</div></div>'});
-html+='<div style="margin-top:16px"><button class="btn b1" id="detDone">Завершить</button></div>';
+html+='<div style="margin-top:16px"><button class="btn b1" id="detDone">Завершить практику</button></div>';
 body.innerHTML=html;
 overlay.appendChild(body);
 A.appendChild(overlay);
 $('detBack').onclick=function(){overlay.remove()};
-$('detDone').onclick=function(){overlay.remove()};
+$('detDone').onclick=function(){
+overlay.remove();
+var q=document.createElement('div');
+q.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';
+var box=document.createElement('div');
+box.style.cssText='background:var(--sf);border-radius:16px;padding:24px 20px;max-width:340px;width:90%;text-align:center';
+box.innerHTML='<div style="font-size:28px;margin-bottom:12px">💭</div><div style="font-size:16px;font-weight:600;margin-bottom:16px">Стало легче, так же или хуже?</div>'
++'<div style="display:flex;gap:8px"><button onclick="alert(\'Спасибо за обратную связь!\');this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--pr);color:#0B1020;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Легче</button>'
++'<button onclick="alert(\'Спасибо за обратную связь!\');this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--tx);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Так же</button>'
++'<button onclick="alert(\'Спасибо за обратную связь!\');this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--dn);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Хуже</button></div>';
+q.appendChild(box);
+q.onclick=function(e){if(e.target===q)q.remove()};
+document.body.appendChild(q);
+};
+/* Favorite button */
+var favBtn=document.createElement('button');
+favBtn.style.cssText='background:none;border:none;color:var(--tx2);font-size:20px;cursor:pointer;padding:4px;margin-left:8px';
+favBtn.textContent='☆';
+favBtn.onclick=function(){this.textContent=this.textContent==='☆'?'★':'☆';this.style.color=this.textContent==='★'?'var(--wn)':'var(--tx2)'};
+hdr.appendChild(favBtn);
 }
 window.openDetail=openDetail;
 
@@ -387,7 +464,11 @@ var techData2=[
 {icon:'📦',name:'Следующий шаг',dur:'2-5 мин',desc:'Самое маленькое действие сейчас.',caution:null,steps:['Что можно за 2 минуты?','Это реалистично?','Готов? Сделай.']},
 {icon:'💛',name:'Маленький шаг',dur:'2-5 мин',desc:'Минимальное действие.',caution:null,steps:['Что полезно?','Мало энергии?','Сделай.']},
 {icon:'🤝',name:'Самосострадание',dur:'3-5 мин',desc:'Доброта к себе как к другу.',caution:null,steps:['Что бы сказал другу?','Скажи себе.']},
-{icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Быстрая помощь при панике.',caution:'При реальной опасности звони 112.',steps:['Скажи: это паника, она пройдёт','Возьми холодный предмет','Назови где ты, какой день','Не помогает? Звони 8-800-2000-122']}
+{icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Быстрая помощь при панике.',caution:'При реальной опасности звони 112.',steps:['Скажи: это паника, она пройдёт','Возьми холодный предмет','Назови где ты, какой день','Не помогает? Звони 8-800-2000-122']},
+{icon:'🧭',name:'Ориентация в пространстве',dur:'1-2 мин',desc:'Вернись в реальность через факты.',caution:null,steps:['Где ты находишься? Назови место.','Какой сегодня день и дата?','Какое время года?','Назови 3 предмета рядом.']},
+{icon:'🔍',name:'Проверка катастрофы',dur:'5-10 мин',desc:'Проверь тревожную мысль на реальность.',caution:null,steps:['Напиши тревожную мысль','Худшая реалистичная возможность?','Наиболее вероятная?','Что бы сказал другу?','Сформулируй реалистичную мысль']},
+{icon:'💌',name:'Благодарность',dur:'3-5 мин',desc:'3 вещи за которые благодарен сегодня.',caution:null,steps:['Назови 3 вещи','Для каждой: ПОЧЕМУ','Какое чувство это вызывает?']},
+{icon:'🌅',name:'Визуализация',dur:'5 мин',desc:'Представь безопасное спокойное место.',caution:null,steps:['3 глубоких вдоха','Представь безопасное место','Заметь детали','Побудь минуту','Открой глаза']}
 ];
 techData2.forEach(function(t){techLookup[t.name]=t});
 })();
