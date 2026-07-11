@@ -167,6 +167,11 @@ var tCa=document.createElement('div');tCa.id='mt-calm';tCa.style.cssText='positi
 tCa.innerHTML='<div id="mBreath" style="width:140px;height:140px;border-radius:50%;border:3px solid var(--pr);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:transform 4s"><span id="mBrT" style="color:var(--pr);font-weight:600">Готов</span></div><div id="mTimer" style="font-size:42px;font-weight:700;color:var(--tx2);margin-bottom:12px">5:00</div><div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><button class="cBtn" onclick="mDur(this,1)">1</button><button class="cBtn" onclick="mDur(this,3)">3</button><button class="cBtn sel" onclick="mDur(this,5)">5</button><button class="cBtn" onclick="mDur(this,10)">10</button><span style="color:var(--tx2);font-size:13px">мин</span><input id="mCustom" type="number" min="1" max="120" placeholder="своё" style="width:52px;padding:6px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-size:13px;text-align:center;font-family:inherit" oninput="mCustomDur(this.value)"></div><div style="display:flex;gap:10px"><button id="mStart" onclick="mStartCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--pr);color:#0B1020;cursor:pointer">Старт</button><button id="mStop" onclick="mStopCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Стоп</button><button id="mReset" onclick="mResetCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Сброс</button></div>';
 ta.appendChild(tCa);
 
+/* Habits - must be before calendar */
+var habits=JSON.parse(localStorage.getItem(K+'_habits')||'[]');
+if(!habits.length)habits=[{name:'Утренняя медитация',desc:'10 минут'},{name:'Дыхательная практика',desc:'5 минут'},{name:'Журнал благодарности',desc:'3 вещи'},{name:'Вечерний возврат',desc:'Как прошёл день?'}];
+var habLog=JSON.parse(localStorage.getItem(K+'_habLog')||'{}');
+
 /* PROGRESS */
 var tP=document.createElement('div');tP.id='mt-prog';tP.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
 var today=new Date();var todayD=today.getDate();var todayM=today.getMonth()+1;var todayY=today.getFullYear();
@@ -209,10 +214,6 @@ bn.appendChild(bi);
 w.appendChild(bn);
 A.appendChild(w);
 
-/* Habits */
-var habits=JSON.parse(localStorage.getItem(K+'_habits')||'[]');
-if(!habits.length)habits=[{name:'Утренняя медитация',desc:'10 минут'},{name:'Дыхательная практика',desc:'5 минут'},{name:'Журнал благодарности',desc:'3 вещи'},{name:'Вечерний возврат',desc:'Как прошёл день?'}];
-var habLog=JSON.parse(localStorage.getItem(K+'_habLog')||'{}');
 function saveHabits(){try{localStorage.setItem(K+'_habits',JSON.stringify(habits))}catch(e){}}
 function saveHabLog(){try{localStorage.setItem(K+'_habLog',JSON.stringify(habLog))}catch(e){}}
 function renderHabits(dayKey){
