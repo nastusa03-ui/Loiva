@@ -2,11 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0B1020">
-<meta name="yandex-overflow-behavior" content="contain">
 <title>Loiva</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,588 +12,581 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0B1020;--surface:#141B2D;--surface-light:#1E2A42;
-  --primary:#6C63FF;--secondary:#FF6584;--accent:#64FFDA;
-  --text:#FFFFFF;--text-sec:#8892B0;--muted:#495670;
-  --error:#FF6B6B;--warning:#FFB347;--success:#64FFDA;
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
-  --nav-h:68px;
+--bg:#0B1020;--bg2:#111A2B;--surface:#172237;--surface2:#1E2B43;
+--primary:#79C7C3;--secondary:#AAA7E8;--accent:#79C69A;
+--text:#F4F7FA;--text2:#AAB6C6;--muted:#495670;
+--danger:#E27C88;--warn:#E2B66F;--border:#2A3850;
+--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+--nav:64px;
 }
-html{height:100%;-webkit-text-size-adjust:100%}
-body{
-  height:100%;margin:0;padding:0;
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
-  background:var(--bg);color:var(--text);
-  overflow:hidden;overscroll-behavior:none;
-  position:fixed;width:100%;
-}
-.app{position:fixed;inset:0;max-width:480px;margin:0 auto;background:var(--bg);overflow:hidden;display:flex;flex-direction:column}
+html,body{height:100%;overflow:hidden;position:fixed;width:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.app{position:fixed;inset:0;max-width:480px;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+@media(min-width:481px){.app{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
 
-/* ===== SCREENS ===== */
-.screen{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  background:var(--bg);z-index:1;
-  opacity:0;visibility:hidden;
-  transition:opacity .3s ease,transform .3s ease;
-  transform:translateX(20px);
-}
-.screen.active{opacity:1;visibility:visible;transform:translateX(0);z-index:2}
-.screen.prev{transform:translateX(-20px);opacity:0}
+/* === SCREEN SYSTEM === */
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);opacity:0;visibility:hidden;transition:opacity .25s,transform .25s;transform:translateX(12px);z-index:1}
+.scr.on{opacity:1;visibility:visible;transform:none;z-index:2}
+.scr.off{transform:translateX(-12px);opacity:0}
 
-/* ===== ONBOARDING ===== */
-.onboard{justify-content:center;align-items:center;padding:24px;text-align:center;overflow-y:auto}
-.onboard .back-btn{
-  position:absolute;top:calc(12px + var(--safe-top));left:16px;
-  background:none;border:none;color:var(--text-sec);font-size:28px;
-  cursor:pointer;padding:8px;z-index:10;line-height:1;
-}
-.onboard h1{font-size:42px;font-weight:700;letter-spacing:-1px;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.onboard p{font-size:15px;color:var(--text-sec);margin-bottom:36px;line-height:1.5}
-.onboard .hero{font-size:56px;margin-bottom:16px}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:15px 28px;border-radius:14px;font-size:15px;font-weight:600;border:none;cursor:pointer;transition:all .15s;width:100%;font-family:inherit}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-primary:active{transform:scale(.97);opacity:.9}
-.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--surface-light)}
-.btn-outline:active{border-color:var(--primary);color:var(--primary)}
-.btn-sm{padding:12px 20px;font-size:14px;border-radius:12px}
-.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:300px;margin-bottom:28px}
-.lang-card{padding:18px 12px;border-radius:16px;background:var(--surface);border:2px solid transparent;cursor:pointer;transition:all .15s;text-align:center}
-.lang-card.selected{border-color:var(--primary);background:var(--surface-light)}
-.lang-card .flag{font-size:28px;margin-bottom:6px}
-.lang-card .name{font-size:13px;font-weight:500}
-.dots{display:flex;gap:8px;margin-top:20px;justify-content:center}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);transition:all .3s}
-.dot.active{background:var(--primary);width:24px;border-radius:4px}
-.onboard-step{padding:20px 24px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;width:100%;max-width:360px}
-.onboard-step h2{font-size:24px;font-weight:700;margin-bottom:10px}
-.onboard-step p{font-size:14px;color:var(--text-sec);margin-bottom:28px;line-height:1.6}
-.privacy-toggle{display:flex;justify-content:space-between;align-items:center;width:100%;padding:14px 0;border-bottom:1px solid var(--surface-light)}
-.privacy-toggle:last-child{border:none}
-.privacy-toggle span{font-size:14px}
-.toggle{width:48px;height:28px;border-radius:14px;background:var(--muted);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
-.toggle.on{background:var(--primary)}
-.toggle::after{content:'';position:absolute;width:24px;height:24px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s}
-.toggle.on::after{transform:translateX(20px)}
+/* === ONBOARD === */
+.ob{justify-content:center;align-items:center;padding:28px 20px;text-align:center;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ob .bk{position:absolute;top:calc(10px + var(--safe-t));left:12px;background:none;border:none;color:var(--text2);font-size:26px;cursor:pointer;padding:8px;z-index:5}
+.ob h1{font-size:36px;font-weight:700;margin-bottom:6px;color:var(--primary)}
+.ob h2{font-size:22px;font-weight:700;margin-bottom:8px}
+.ob p{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px;max-width:320px}
+.ob .ico{font-size:48px;margin-bottom:12px}
+.ob .sub{font-size:13px;color:var(--text2);font-style:italic;margin-top:-16px;margin-bottom:20px}
+.wrap{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center}
+.btn{display:flex;align-items:center;justify-content:center;padding:14px;border-radius:12px;font-size:15px;font-weight:600;border:none;cursor:pointer;width:100%;font-family:inherit;transition:opacity .15s}
+.btn:active{opacity:.8}
+.btn1{background:var(--primary);color:#0B1020}
+.btn2{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+.btn2:active{border-color:var(--primary)}
+.btns{display:flex;gap:10px;width:100%;margin-top:10px}
+.btns .btn{flex:1}
+.dots{display:flex;gap:6px;margin-top:18px;justify-content:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:all .3s}
+.dot.on{background:var(--primary);width:20px;border-radius:4px}
 
-/* ===== MAIN APP ===== */
-.main-wrap{display:flex;flex-direction:column;height:100%;position:relative}
-.topbar{
-  padding:calc(8px + var(--safe-top)) 20px 10px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;background:var(--bg);z-index:5;
-  border-bottom:1px solid rgba(255,255,255,.04);
-}
-.topbar h2{font-size:18px;font-weight:700}
-.topbar .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer}
-.topbar .back-arrow{
-  background:none;border:none;color:var(--text);font-size:22px;
-  cursor:pointer;padding:4px 8px 4px 0;margin-right:8px;
-}
+/* Age gate */
+.age-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:20px}
+.age-btn{padding:18px;border-radius:14px;background:var(--surface);border:2px solid transparent;cursor:pointer;text-align:center;font-size:14px;font-weight:500;color:var(--text);font-family:inherit;transition:border-color .2s}
+.age-btn.sel{border-color:var(--primary);background:var(--surface2)}
+.age-btn .em{font-size:28px;margin-bottom:6px}
+
+/* Lang */
+.langs{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:20px}
+.lang{padding:16px;border-radius:14px;background:var(--surface);border:2px solid transparent;cursor:pointer;text-align:center;font-family:inherit;transition:border-color .2s;color:var(--text)}
+.lang.sel{border-color:var(--primary)}
+.lang .fl{font-size:26px;margin-bottom:4px}
+.lang .nm{font-size:13px;font-weight:500}
+
+/* Country */
+.country-list{width:100%;max-height:280px;overflow-y:auto;margin-bottom:16px;text-align:left}
+.country-item{padding:12px 14px;border-radius:10px;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:10px;transition:background .15s}
+.country-item:hover,.country-item.sel{background:var(--surface)}
+.country-item .fl{font-size:20px}
+
+/* Privacy toggles */
+.tgl-row{display:flex;justify-content:space-between;align-items:center;width:100%;padding:13px 0;border-bottom:1px solid var(--border)}
+.tgl-row:last-child{border:none}
+.tgl-row span{font-size:14px}
+.tgl{width:46px;height:26px;border-radius:13px;background:var(--muted);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.tgl.on{background:var(--primary)}
+.tgl::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s}
+.tgl.on::after{transform:translateX(20px)}
+
+/* Comm prefs */
+.chips{display:flex;flex-wrap:wrap;gap:8px;width:100%;justify-content:center}
+.chip{padding:10px 16px;border-radius:20px;background:var(--surface);border:1.5px solid transparent;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .2s}
+.chip.sel{border-color:var(--primary);background:var(--surface2)}
+
+/* === TOPBAR === */
+.tb{padding:calc(6px + var(--safe-t)) 16px 8px;display:flex;align-items:center;gap:8px;flex-shrink:0;background:var(--bg);z-index:5;border-bottom:1px solid rgba(255,255,255,.04)}
+.tb h2{font-size:17px;font-weight:700;flex:1}
+.tb .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
+.tb .ai-badge{font-size:10px;font-weight:700;background:var(--secondary);color:#0B1020;padding:2px 6px;border-radius:6px;margin-right:4px}
+.tb .mode-badge{font-size:10px;color:var(--text2);margin-left:auto;margin-right:8px}
+.tb .help-btn{background:none;border:none;color:var(--warn);font-size:18px;cursor:pointer;padding:4px}
+
+/* === TABS === */
 .tab-area{flex:1;overflow:hidden;position:relative}
-.tab-content{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav-h) + var(--safe-bottom) + 12px)}
-.tab-content[hidden]{display:none}
+.tab{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav) + var(--safe-b) + 16px)}
+.tab[hidden]{display:none}
 
-/* ===== BOTTOM NAV ===== */
-.bottom-nav{
-  position:relative;flex-shrink:0;
-  height:calc(var(--nav-h) + var(--safe-bottom));
-  padding-bottom:var(--safe-bottom);
-  background:var(--surface);
-  border-top:1px solid rgba(255,255,255,.06);
-  display:flex;align-items:stretch;justify-content:space-around;
-  z-index:10;
-}
-.nav-item{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;cursor:pointer;padding:6px 8px;flex:1;
-  -webkit-tap-highlight-color:transparent;
-}
-.nav-icon{font-size:20px;opacity:.45;transition:opacity .2s;line-height:1}
-.nav-label{font-size:10px;color:var(--muted);font-weight:500;transition:color .2s}
-.nav-item.active .nav-icon{opacity:1}
-.nav-item.active .nav-label{color:var(--primary);font-weight:600}
+/* === BOTTOM NAV === */
+.bn{position:relative;flex-shrink:0;height:calc(var(--nav) + var(--safe-b));padding-bottom:var(--safe-b);background:var(--surface);border-top:1px solid rgba(255,255,255,.06);display:flex;z-index:10}
+.bi{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:6px 4px;flex:1}
+.bi .ic{font-size:20px;opacity:.4;transition:opacity .2s;line-height:1}
+.bi .lb{font-size:9px;color:var(--muted);font-weight:500;transition:color .2s}
+.bi.on .ic{opacity:1}
+.bi.on .lb{color:var(--primary);font-weight:600}
 
-/* ===== HOME ===== */
-.greeting{margin-bottom:20px}
-.greeting h3{font-size:20px;font-weight:700;margin-bottom:2px}
-.greeting p{font-size:13px;color:var(--text-sec)}
-.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.action-card{
-  padding:16px 14px;border-radius:16px;background:var(--surface);
-  cursor:pointer;transition:all .15s;border:1px solid transparent;
-}
-.action-card:active{transform:scale(.97);border-color:var(--primary)}
-.action-card .icon{font-size:24px;margin-bottom:8px}
-.action-card .label{font-size:13px;font-weight:600}
-.action-card .desc{font-size:11px;color:var(--text-sec);margin-top:2px}
-.calm-card{padding:16px;border-radius:16px;background:linear-gradient(135deg,#1a1040,#0d1a30);border:1px solid var(--surface-light);margin-bottom:20px}
-.calm-card h4{font-size:15px;font-weight:600;margin-bottom:4px}
-.calm-card p{font-size:12px;color:var(--text-sec);line-height:1.5}
-.section-title{font-size:14px;font-weight:600;margin-bottom:10px;color:var(--text-sec)}
+/* === HOME === */
+.greet{padding:16px}
+.greet h3{font-size:18px;font-weight:700;margin-bottom:2px}
+.greet p{font-size:13px;color:var(--text2)}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px;margin-bottom:16px}
+.qa .ac{padding:14px 12px;border-radius:14px;background:var(--surface);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
+.qa .ac:active{border-color:var(--primary)}
+.qa .ac .em{font-size:22px;margin-bottom:6px}
+.qa .ac .lb{font-size:12px;font-weight:600}
+.qa .ac .ds{font-size:10px;color:var(--text2);margin-top:2px}
 
-/* ===== CHAT ===== */
-.chat-screen{display:flex;flex-direction:column;height:100%}
-.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch}
-.msg{max-width:82%;padding:12px 14px;border-radius:16px;font-size:13.5px;line-height:1.5;animation:fadeIn .3s ease;word-wrap:break-word}
-.msg.user{align-self:flex-end;background:var(--primary);border-bottom-right-radius:4px}
-.msg.ai{align-self:flex-start;background:var(--surface);border-bottom-left-radius:4px}
-.msg.ai .mode{font-size:10px;color:var(--primary);font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
-.chat-input{
-  padding:10px 14px calc(10px + var(--safe-bottom));
-  border-top:1px solid var(--surface-light);
-  display:flex;gap:8px;align-items:center;
-  background:var(--bg);flex-shrink:0;
-}
-.chat-input input{
-  flex:1;padding:12px 14px;border-radius:24px;
-  background:var(--surface);border:1px solid var(--surface-light);
-  color:var(--text);font-size:14px;outline:none;font-family:inherit;
-}
-.chat-input input:focus{border-color:var(--primary)}
-.chat-input button{
-  width:40px;height:40px;border-radius:50%;
-  background:var(--primary);border:none;color:#fff;
-  font-size:18px;cursor:pointer;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-}
-.typing{display:flex;gap:4px;padding:12px 14px;background:var(--surface);border-radius:16px;align-self:flex-start;width:fit-content}
-.typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:typing 1.4s infinite}
-.typing span:nth-child(2){animation-delay:.2s}
-.typing span:nth-child(3){animation-delay:.4s}
-.chat-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-sec);text-align:center;padding:20px}
-.chat-empty .icon{font-size:48px;margin-bottom:12px;opacity:.6}
-.chat-empty p{font-size:13px;line-height:1.5}
+/* Check-in */
+.checkin{margin:0 16px 16px;padding:16px;border-radius:16px;background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border)}
+.checkin h4{font-size:14px;font-weight:600;margin-bottom:12px}
+.ci-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ci-row:last-child{margin-bottom:0}
+.ci-label{font-size:12px;color:var(--text2);width:70px;flex-shrink:0}
+.ci-scale{display:flex;gap:4px;flex:1}
+.ci-dot{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text2)}
+.ci-dot.sel{background:var(--primary);border-color:var(--primary);color:#0B1020}
+.ci-note{width:100%;padding:10px;border-radius:10px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:13px;font-family:inherit;resize:none;outline:none;margin-top:8px}
+.ci-note:focus{border-color:var(--primary)}
 
-/* ===== TECHNIQUES ===== */
-.technique-list{padding:0 16px;display:flex;flex-direction:column;gap:10px}
-.technique-card{padding:14px;border-radius:14px;background:var(--surface);cursor:pointer;transition:all .15s;border:1px solid transparent}
-.technique-card:active{border-color:var(--primary)}
-.technique-card h4{font-size:14px;font-weight:600;margin-bottom:3px}
-.technique-card p{font-size:12px;color:var(--text-sec);line-height:1.4}
-.technique-card .tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;margin-top:6px;background:var(--surface-light);color:var(--primary)}
-.tag-crisis{background:rgba(255,107,107,.15);color:var(--error)}
-.tag-breathing{background:rgba(108,99,255,.15);color:var(--primary)}
-.tag-mindfulness{background:rgba(100,255,218,.15);color:var(--accent)}
+/* Continue / Daily */
+.sec{padding:0 16px;margin-bottom:16px}
+.sec-t{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;padding-left:2px}
+.cont-card{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--surface);cursor:pointer;margin-bottom:6px}
+.cont-card .em{font-size:20px;width:36px;height:36px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center}
+.cont-card .inf .lb{font-size:13px;font-weight:600}
+.cont-card .inf .ds{font-size:11px;color:var(--text2)}
+.daily{padding:14px;border-radius:14px;background:linear-gradient(135deg,rgba(121,199,195,.08),rgba(170,167,232,.08));border:1px solid var(--border);margin:0 16px 16px;cursor:pointer}
+.daily h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.daily p{font-size:12px;color:var(--text2)}
 
-/* ===== PROGRESS ===== */
-.streak-card{padding:20px;border-radius:18px;background:linear-gradient(135deg,var(--surface),var(--surface-light));text-align:center;margin-bottom:20px}
-.streak-num{font-size:56px;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
-.streak-label{font-size:13px;color:var(--text-sec);margin-top:4px}
-.habit-list{display:flex;flex-direction:column;gap:8px}
-.habit-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--surface);cursor:pointer;transition:all .15s}
-.habit-item:active{background:var(--surface-light)}
-.habit-check{
-  width:26px;height:26px;border-radius:50%;border:2px solid var(--muted);
-  display:flex;align-items:center;justify-content:center;
-  transition:all .2s;flex-shrink:0;
-}
-.habit-item.done .habit-check{background:var(--primary);border-color:var(--primary)}
-.habit-item.done .habit-check::after{content:'✓';color:#fff;font-size:13px;font-weight:700}
-.habit-info h4{font-size:13px;font-weight:600}
-.habit-info p{font-size:11px;color:var(--text-sec)}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-card{padding:14px;border-radius:12px;background:var(--surface);text-align:center}
-.stat-card .num{font-size:24px;font-weight:700}
-.stat-card .lbl{font-size:11px;color:var(--text-sec);margin-top:2px}
+/* === CHAT === */
+.ch{display:flex;flex-direction:column;height:100%}
+.msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
+.msg{max-width:82%;padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.55;animation:fi .25s}
+.msg.u{align-self:flex-end;background:var(--primary);color:#0B1020;border-bottom-right-radius:4px}
+.msg.a{align-self:flex-start;background:var(--surface);border-bottom-left-radius:4px}
+.msg .md{font-size:9px;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.msg .act{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.msg .act button{padding:5px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;cursor:pointer;font-family:inherit;transition:border-color .15s}
+.msg .act button:hover{border-color:var(--primary)}
+.ch-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text2);text-align:center;padding:20px}
+.ch-empty .em{font-size:40px;margin-bottom:10px;opacity:.5}
+.ch-empty p{font-size:13px;line-height:1.5}
+.ch-inp{padding:8px 12px calc(8px + var(--safe-b));border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;background:var(--bg);flex-shrink:0}
+.ch-inp input{flex:1;padding:11px 14px;border-radius:22px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:14px;outline:none;font-family:inherit}
+.ch-inp input:focus{border-color:var(--primary)}
+.ch-inp button{width:38px;height:38px;border-radius:50%;background:var(--primary);border:none;color:#0B1020;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700}
+.typing{display:flex;gap:4px;padding:11px 14px;background:var(--surface);border-radius:14px;align-self:flex-start;width:fit-content}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:tp 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
 
-/* ===== SETTINGS ===== */
-.settings-group{margin-bottom:20px}
-.settings-group h4{font-size:11px;color:var(--text-sec);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding-left:4px}
-.settings-item{
-  display:flex;align-items:center;gap:12px;padding:13px 14px;
-  background:var(--surface);margin-bottom:1px;cursor:pointer;
-  transition:background .15s;
-}
-.settings-item:first-child{border-radius:12px 12px 2px 2px}
-.settings-item:last-child{border-radius:2px 2px 12px 12px}
-.settings-item:only-child{border-radius:12px}
-.settings-item:active{background:var(--surface-light)}
-.settings-item .icon{font-size:18px;width:22px;text-align:center}
-.settings-item .label{flex:1;font-size:14px}
-.settings-item .arrow{color:var(--muted);font-size:13px}
+/* === TECHNIQUES === */
+.tech-list{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.tech-cat{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.8px;padding:8px 2px 4px}
+.tc{padding:14px;border-radius:14px;background:var(--surface);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
+.tc:active{border-color:var(--primary)}
+.tc h4{font-size:14px;font-weight:600;margin-bottom:3px}
+.tc p{font-size:12px;color:var(--text2);line-height:1.4}
+.tc .dur{font-size:11px;color:var(--muted);margin-top:4px}
+.tc .tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px}
+.tag-b{background:rgba(121,199,195,.12);color:var(--primary)}
+.tag-g{background:rgba(121,198,154,.12);color:var(--accent)}
+.tag-d{background:rgba(226,124,136,.12);color:var(--danger)}
 
-/* ===== TECHNIQUE DETAIL ===== */
-.detail-overlay{
-  position:absolute;inset:0;background:var(--bg);z-index:20;
-  display:flex;flex-direction:column;
-  transform:translateY(100%);transition:transform .3s ease;
-}
-.detail-overlay.open{transform:translateY(0)}
-.detail-header{
-  padding:calc(12px + var(--safe-top)) 16px 12px;
-  display:flex;align-items:center;gap:12px;
-  border-bottom:1px solid rgba(255,255,255,.04);flex-shrink:0;
-}
-.detail-header .back{background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;padding:4px}
-.detail-header h2{font-size:17px;font-weight:600;flex:1}
-.detail-body{flex:1;overflow-y:auto;padding:20px 16px;-webkit-overflow-scrolling:touch}
-.detail-body h3{font-size:18px;font-weight:700;margin-bottom:8px}
-.detail-body p{font-size:14px;color:var(--text-sec);line-height:1.7;margin-bottom:16px}
-.detail-body .step{padding:14px;border-radius:12px;background:var(--surface);margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
-.detail-body .step-num{
-  width:28px;height:28px;border-radius:50%;background:var(--primary);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:700;flex-shrink:0;
-}
-.detail-body .step-text{font-size:14px;line-height:1.5}
+/* === TECHNIQUE DETAIL === */
+.det{position:absolute;inset:0;background:var(--bg);z-index:20;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .25s ease}
+.det.open{transform:none}
+.det-h{padding:calc(10px + var(--safe-t)) 14px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04);flex-shrink:0}
+.det-h .bk{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px}
+.det-h h2{font-size:16px;font-weight:600;flex:1}
+.det-b{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+.det-b h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.det-b .meta{font-size:12px;color:var(--text2);margin-bottom:12px;display:flex;gap:12px}
+.det-b p{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:14px}
+.det-b .stp{padding:12px;border-radius:12px;background:var(--surface);margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
+.det-b .stp-n{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#0B1020;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.det-b .stp-t{font-size:13px;line-height:1.5}
+.det-b .caution{padding:12px;border-radius:12px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin:12px 0;font-size:12px;color:var(--danger);line-height:1.5}
+.det-b .done-btn{margin-top:16px}
 
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes typing{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+/* === CALM ROOM === */
+.calm{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;position:relative}
+.calm .breath{width:160px;height:160px;border-radius:50%;border:3px solid var(--primary);display:flex;align-items:center;justify-content:center;margin-bottom:24px;opacity:.7;transition:transform 4s ease-in-out}
+.calm .breath.inhale{transform:scale(1.3)}
+.calm .breath.exhale{transform:scale(1)}
+.calm .breath-text{font-size:14px;color:var(--primary);font-weight:600}
+.calm .timer{font-size:48px;font-weight:700;color:var(--text2);margin-bottom:20px;font-variant-numeric:tabular-nums}
+.calm .dur-btns{display:flex;gap:8px;margin-bottom:20px}
+.calm .dur-btn{padding:8px 16px;border-radius:20px;background:var(--surface);border:1.5px solid var(--border);color:var(--text);font-size:13px;cursor:pointer;font-family:inherit;transition:border-color .15s}
+.calm .dur-btn.sel{border-color:var(--primary);color:var(--primary)}
+.calm .ctrls{display:flex;gap:12px}
+.calm .ctrl{padding:12px 28px;border-radius:14px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.calm .ctrl:active{opacity:.8}
+.calm .ctrl-start{background:var(--primary);color:#0B1020}
+.calm .ctrl-stop{background:var(--surface);color:var(--text)}
+.calm .grounding{margin-top:24px;padding:16px;border-radius:14px;background:var(--surface);width:100%;max-width:340px;text-align:left}
+.calm .grounding h4{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--primary)}
+.calm .grounding li{font-size:12px;color:var(--text2);margin-bottom:4px;line-height:1.5}
 
-@media(min-width:481px){
-  .app{border-left:1px solid var(--surface-light);border-right:1px solid var(--surface-light)}
-}
+/* === PROGRESS === */
+.prog{padding:16px}
+.streak{padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--surface),var(--surface2));text-align:center;margin-bottom:16px}
+.streak .num{font-size:48px;font-weight:700;color:var(--primary);line-height:1}
+.streak .lb{font-size:12px;color:var(--text2);margin-top:4px}
+.cal{margin-bottom:16px}
+.cal h4{font-size:13px;font-weight:600;margin-bottom:8px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-d{width:100%;aspect-ratio:1;border-radius:6px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2)}
+.cal-d.filled{background:var(--primary);color:#0B1020;font-weight:600}
+.cal-d.half{background:rgba(121,199,195,.3);color:var(--text)}
+.hab-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.hab{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--surface);cursor:pointer}
+.hab:active{opacity:.8}
+.hab .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.hab.dn .ck{background:var(--primary);border-color:var(--primary)}
+.hab.dn .ck::after{content:'✓';color:#0B1020;font-size:12px;font-weight:700}
+.hab .inf h4{font-size:13px;font-weight:600}
+.hab .inf p{font-size:11px;color:var(--text2)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stat{padding:14px;border-radius:12px;background:var(--surface);text-align:center}
+.stat .n{font-size:22px;font-weight:700}
+.stat .l{font-size:10px;color:var(--text2);margin-top:2px}
+
+/* === SETTINGS === */
+.set{padding:16px}
+.sg{margin-bottom:18px}
+.sg h4{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;padding-left:2px}
+.si{display:flex;align-items:center;gap:10px;padding:12px;background:var(--surface);margin-bottom:1px;cursor:pointer;transition:background .15s}
+.si:first-child{border-radius:12px 12px 2px 2px}
+.si:last-child{border-radius:2px 2px 12px 12px}
+.si:only-child{border-radius:12px}
+.si:active{background:var(--surface2)}
+.si .em{font-size:16px;width:20px;text-align:center}
+.si .lb{flex:1;font-size:14px}
+.si .ar{color:var(--muted);font-size:12px}
+
+/* Crisis banner */
+.crisis{margin:0 16px 16px;padding:14px;border-radius:14px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2)}
+.crisis h4{font-size:13px;font-weight:600;color:var(--danger);margin-bottom:4px}
+.crisis p{font-size:12px;color:var(--text2);line-height:1.5}
+.crisis a{color:var(--danger);font-weight:600}
+
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes tp{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
 </style>
 </head>
 <body>
-<div class="app" id="app"></div>
-
+<div class="app" id="A"></div>
 <script>
-const LS_KEY = 'loiva_onboarded';
-const onboardingDone = localStorage.getItem(LS_KEY) === '1';
+const K='loiva_done',D=document,$=id=>D.getElementById(id),A=$('A');
+let cur=null,hist=[];
+function S(id){const n=$(id);if(!n)return;if(cur){cur.classList.remove('on');cur.classList.add('off')}hist.push(id);n.classList.remove('off');n.classList.add('on');cur=n}
+function dots(n){return`<div class="dots">${[0,1,2,3,4,5,6].map(i=>`<div class="dot${i===n?' on':''}"></div>`).join('')}</div>`}
 
-function h(tag, attrs, ...children) {
-  const el = document.createElement(tag);
-  if (attrs) Object.entries(attrs).forEach(([k,v]) => {
-    if (k === 'class') el.className = v;
-    else if (k === 'html') el.innerHTML = v;
-    else if (k.startsWith('on')) el.addEventListener(k.slice(2).toLowerCase(), v);
-    else el.setAttribute(k, v);
-  });
-  children.flat().forEach(c => {
-    if (typeof c === 'string') el.appendChild(document.createTextNode(c));
-    else if (c) el.appendChild(c);
-  });
-  return el;
-}
-
-const $ = id => document.getElementById(id);
-const app = $('app');
-
-/* ===== TECHNIQUE DATA ===== */
-const techniques = [
-  {icon:'🫁',title:'Дыхание 4-7-8',tag:'Дыхание',tagCls:'tag-breathing',
-   desc:'Активирует парасимпатическую нервную систему и снижает тревогу за 2 минуты.',
-   full:'Это одна из самых эффективных техник для быстрого снижения тревоги. Она основана на дыхательном паттерне доктора Эндрю Вейла.',
-   steps:['Сядь удобно. Закрой глаза или опусти взгляд.','Вдохни через нос на 4 счёта: 1...2...3...4...','Задержи дыхание на 7 счётов: 1...2...3...4...5...6...7...','Выдохни через рот на 8 счётов: 1...2...3...4...5...6...7...8...','Повтори 3-4 цикла. Ты почувствуешь расслабление уже после первого круга.']},
-  {icon:'🧊',title:'Техника 5-4-3-2-1',tag:'Осознанность',tagCls:'tag-mindfulness',
-   desc:'Заземление через органы чувств: 5 вещей увидеть, 4 услышать, 3 потрогать, 2 понюхать, 1 попробовать на вкус.',
-   full:'Эта техника помогает вернуться в текущий момент, когда тревога уносит тебя в будущее.',
-   steps:['Назови 5 вещей, которые ты ВИДИШЬ прямо сейчас.','Назови 4 вещи, которые ты можешь ПОТРОГАТЬ.','Назови 3 вещи, которые ты СЛЫШИШЬ.','Назови 2 вещи, которые ты можешь ЗАПАХНУТЬ.','Назови 1 вещь, которая у тебя НА ВКУСЕ (или что-то приятное на вкус).']},
-  {icon:'📝',title:'Cognitive Restructuring',tag:'CBT',tagCls:'',
-   desc:'Выявление искажённых мыслей и их замена на более реалистичные.',
-   full:'Когнитивно-поведенческая техника. Мы часто думаем хуже, чем есть на самом деле.',
-   steps:['Запиши тревожную мысль целиком.','Определи тип искажения: катастрофизация, чёрно-белое мышление, чтение мыслей?','Найди доказательства ЗА эту мысль.','Найди доказательства ПРОТИВ.','Сформулируй более сбалансированную мысль.']},
-  {icon:'🫀',title:'Расслабление мышц',tag:'Расслабление',tagCls:'',
-   desc:'Чередование напряжения и расслабления групп мышц по всему телу.',
-   full:'Прогрессивная мышечная релаксация (ПМР) — проверенная техника для снятия физического напряжения.',
-   steps:['Напряги руки (кулачки) на 5 секунд. Затем расслабь на 10 сек. Отметь разницу.','Подыми плечи к ушам, задержь на 5 сек. Опусти, расслабь на 10 сек.','Напряги лицо — наморщи нос, сожми глаза на 5 сек. Расслабь.','Напряги пресс на 5 сек. Расслабь.','Напряги ноги — носки на себя на 5 сек. Расслабь. Отметь общее расслабление.']},
-  {icon:'🧘',title:'Body Scan Meditation',tag:'Медитация',tagCls:'tag-mindfulness',
-   desc:'Осознанное прохождение вниманием через каждую часть тела.',
-   full:'Медитация сканирования тела помогает обнаружить и отпустить напряжение, о котором ты даже не подозревала.',
-   steps:['Ляг или сядь удобно. Закрой глаза.','Направь внимание на макушку. Заметь любые ощущения.','Медленно перемещай внимание вниз: лоб → глаза → челюсть → шея.','Продолжай: плечи → руки → грудь → живот.','Заверши: бёдра → колени → ступни. Заметь общее состояние тела.']},
-  {icon:'🆘',title:'Crisis Grounding',tag:'Кризис',tagCls:'tag-crisis',
-   desc:'Быстрая помощь при панической атаке. Пошаговое руководство.',
-   full:'Если ты в кризисе — помни: это временно. Ты в безопасности. Следуй шагам.',
-   steps:['Остановись. Скажи себе: «Это паника. Она пройдёт. Я в безопасности.»','Дыжи 4-4: вдох 4 счёта, выдох 4 счёта. Продолжай.','Возьми кубик льда или холодный предмет. Сожми в руке. Физическое ощущение помогает заземлиться.','Назови вслух: где ты, какой день, сколько времени.','Если не помогает — позвони на горячую линию: 8-800-2000-122 (бесплатно, 24/7).']},
-  {icon:'💌',title:'Журнал благодарности',tag:'Благодарность',tagCls:'',
-   desc:'Запись трёх вещей, за которые ты благодарен сегодня.',
-   full:'Исследования показывают, что практика благодарности снижает уровень кортизола и улучшает настроение.',
-   steps:['Вечером запиши 3 вещи, за которые ты благодарна сегодня.','Для каждой укажи ПОЧЕМУ ты благодарна.','Какое чувство это вызывает?','Попробуй вспомнить конкретный момент, а не абстракцию.','Повторяй каждый день 21 день для формирования привычки.']},
-  {icon:'🌈',title:'Визуализация',tag:'Визуализация',tagCls:'tag-mindfulness',
-   desc:'Гидированная визуализация безопасного и спокойного места.',
-   full:'Визуализация активирует те же зоны мозга, что и реальный опыт. Твоё тело не отличает воображение от реальности.',
-   steps:['Закрой глаза. Сделай 3 глубоких вдоха.','Представь место, где тебе безопасно и спокойно. Это может быть лес, пляж, комната...','Заметь детали: что ты видишь? Какие звуки? Как пахнет?','Почувствуй температуру, текстуру поверхностей. Побудь здесь минуту.','Когда будешь готова — медленно открой глаза.']},
+/* === TECHNIQUE DATA === */
+const TECH=[
+{cat:'Тревожные мысли',items:[
+{icon:'🧊',title:'5-4-3-2-1 Заземление',dur:'3-5 мин',tags:['Заземление','tag-g'],
+desc:'Вернись в текущий момент через органы чувств.',
+caution:'Если закрытие глаз усиливает тревогу — не закрывай их. Используй внешние объекты.',
+steps:['Назови 5 вещей, которые ты ВИДИШЬ.','Назови 4 вещи, которые ты можешь ПОТРОГАТЬ.','Назови 3 вещи, которые ты СЛЫШИШЬ.','Назови 2 вещи, которые ты можешь ЗАПАХНУТЬ.','Назови 1 вещь на ВКУС.']},
+{icon:'📝',title:'Факты и предположения',dur:'5-7 мин',tags:['CBT','tag-b'],
+desc:'Отдели то, что известно точно, от того, что ты предполагаешь.',
+steps:['Запиши ситуацию одним предложением.','Что ты знаешь НАВЕРНЯКА?','Что ты ПРЕДПОЛАГАЕШЬ?','Есть ли альтернативные объяснения?','Какая мысль кажется более сбалансированной?']},
+{icon:'🔍',title:'Проверка катастрофической мысли',dur:'5-10 мин',tags:['CBT','tag-b'],
+desc:'Проверь, насколько твоя тревожная мысль соответствует реальности.',
+steps:['Напиши тревожную мысль.','Какова худшая реалистичная возможность?','Какова наиболее вероятная возможность?','Что бы ты сказал другу с такой мыслью?','Сформулируй более реалистичную мысль.']},
+{icon:'🎯',title:'Зона контроля',dur:'3-5 мин',tags:['Практика','tag-b'],
+desc:'Определи, что зависит от тебя, а что нет.',
+steps:['Напиши ситуацию, которая тебя беспокоит.','Раздели на 2 колонки: МОЁ / НЕ МОЁ.','Для «МОЁ» — определи одно маленькое действие.','Для «НЕ МОЁ» — попробуй принять как факт на данный момент.']}
+]},
+{cat:'Стресс и перегрузка',items:[
+{icon:'🫁',title:'Мягкое замедление дыхания',dur:'2-3 мин',tags:['Дыхание','tag-b'],
+desc:'Плавно замедли дыхание без жёстких правил.',
+caution:'Не задерживай дыхание принудительно. Если дыхание вызывает дискомфорт — переключись на внешнее заземление.',
+steps:['Сядь удобно. Положи одну руку на грудь, другую на живот.','Дыши как обычно 30 секунд. Просто наблюдай.','Начни слегка удлинять выдох — на 1-2 счёта длиннее вдоха.','Продолжай 2-3 минуты. Если не помогает — остановись.']},
+{icon:'⏸',title:'Одна маленькая пауза',dur:'1 мин',tags:['Практика','tag-b'],
+desc:'Остановись на минуту. Без целей и оценок.',
+steps:['Остановись. Не нужно менять дыхание или позу.','Заметь 3 вещи вокруг себя.','Замень своё физическое состояние — как тело соприкасается с поверхностью.','Можно уйти через минуту.']},
+{icon:'📦',title:'Один маленький следующий шаг',dur:'2-5 мин',tags:['Действие','tag-g'],
+desc:'Определи самое маленькое действие, которое возможно прямо сейчас.',
+steps:['Что самое маленькое можно сделать за 2 минуты?','Это действие реалистично?','Готов(а) сделать это сейчас?','Если нет — выбери ещё меньшее действие.']}
+]},
+{cat:'Сниженное настроение',items:[
+{icon:'💛',title:'Один маленький шаг',dur:'2-5 мин',tags:['Действие','tag-g'],
+desc:'Найди самое минимальное действие, которое ты можешь сделать.',
+steps:['Что было бы хоть немного полезно?','Это действие требует мало энергии?','Сделай его. Отметь результат.']},
+{icon:'🤝',title:'Короткое самосострадание',dur:'3-5 мин',tags:['Самосострадание','tag-g'],
+desc:'Отнесись к себе с той же добротой, что и к другу.',
+steps:['Представь, что друг говорит тебе то же самое.','Что бы ты ему ответил(а)?','Скажи это себе — вслух или про себя.','Не нужно чувствовать себя «хорошо». Просто.notice.']},
+{icon:'🌅',title:'Контакт с ценностями',dur:'5 мин',tags:['Рефлексия','tag-g'],
+desc:'Вспомни, что для тебя действительно важно.',
+steps:['Что для тебя важно в жизни? (не цели, а ценности)','Как одно маленькое действие может быть связано с этой ценностью?','Можешь ли ты сделать это действие сегодня?']}
+]},
+{cat:'Заземление и ориентация',items:[
+{icon:'🧭',title:'Ориентация в пространстве',dur:'1-2 мин',tags:['Заземление','tag-g'],
+desc:'Вернись в реальность через простые факты.',
+steps:['Где ты находишься? Назови место.','Какой сегодня день?','Какое время года?','Назови 3 предмета рядом с тобой.']},
+{icon:'💧',title:'Короткая пауза на 60 секунд',dur:'1 мин',tags:['Практика','tag-b'],
+desc:'Одна минута без целей и оценок.',
+steps:['Поставь таймер на 60 секунд.','Просто будь. Не нужно менять дыхание или позу.','Когда таймер сработает — отметь своё состояние.']}
+]},
+{cat:'Самосострадание',items:[
+{icon:'💌',title:'Один добрый внутренний ответ',dur:'2-3 мин',tags:['Самосострадание','tag-g'],
+desc:'Замени внутреннего критика на более мягкого голоса.',
+steps:['Какую критическую мысль ты слышишь чаще всего?','Что бы ты сказал другу с такой мыслью?','Скажи это себе — про себя или вслух.']},
+{icon:'🌱',title:'Нейтральная рефлексия',dur:'3-5 мин',tags:['Рефлексия','tag-g'],
+desc:'Посмотри на ситуацию без оценки «хорошо/плохо».',
+steps:['Что произошло? (факты, без интерпретаций)','Какие чувства ты заметил(а)?','Что ты знаешь наверняка?','Что ещё может быть правдой?']}
+]},
 ];
 
-const aiResponses = [
-  'Я понимаю тебя. Расскажи подробнее, что происходит?',
-  'Спасибо, что делишься. Твои чувства важны и имеют значение.',
-  'Это нормально чувствовать так. Давай сделаем глубокий вдох вместе.',
-  'Я здесь рядом. Ты не одна в этом. Что бы ты хотела сделать сейчас?',
-  'Попробуй технику 5-4-3-2-1: назови 5 вещей, которые видишь.',
-  'Звучит непросто. Как давно ты так себя чувствуешь?',
-  'Я вижу, что тебе тяжело. Это смело — говорить об этом. Продолжай.',
-  'Давай попробуем дыхательную технику 4-7-8. Хочешь, я проведу тебя?',
+const AI_R=[
+'Я тебя слышу. Расскажи подробнее, что происходит.',
+'Спасибо, что делишься. Твои чувства важны.',
+'Это нормально чувствовать так. Давай сделаем глубокий вдох вместе.',
+'Я здесь рядом. Ты не одна в этом.',
+'Хочешь попробовать технику 5-4-3-2-1? Она помогает вернуться в момент.',
+'Как давно ты так себя чувствуешь?',
+'Я вижу, что тебе тяжело. Это смело — говорить об этом.',
+'Давай попробуем дыхательную практику. Хочешь, я проведу тебя?',
+'Что бы ты хотела сделать сейчас — поговорить, успокоиться или разобраться?',
+'Звучит непросто. Давай разберёмся вместе.',
 ];
 
-/* ===== RENDER FUNCTIONS ===== */
-function renderOnboarding() {
-  app.innerHTML = '';
-  const screens = [
-    {id:'w',html:`
-      <div class="onboard-step">
-        <div class="hero">🧠</div>
-        <h1 style="font-size:38px;font-weight:700;letter-spacing:-1px;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px">LOIVA</h1>
-        <p>Поддержка, в твоём темпе.<br>AI-компаньон для эмоционального здоровья.</p>
-        <button class="btn btn-primary" data-next="l">Начать</button>
-        <div class="dots" data-dots="0"></div>
-      </div>`},
-    {id:'l',back:'w',html:`
-      <div class="onboard-step">
-        <h2>Выбери язык</h2>
-        <p>Loiva поддерживает русский и английский</p>
-        <div class="lang-grid">
-          <div class="lang-card selected" onclick="this.parentElement.querySelectorAll('.lang-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')"><div class="flag">🇷🇺</div><div class="name">Русский</div></div>
-          <div class="lang-card" onclick="this.parentElement.querySelectorAll('.lang-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')"><div class="flag">🇬🇧</div><div class="name">English</div></div>
-        </div>
-        <button class="btn btn-primary" data-next="d">Далее</button>
-        <div class="dots" data-dots="1"></div>
-      </div>`},
-    {id:'d',back:'l',html:`
-      <div class="onboard-step">
-        <div style="font-size:44px;margin-bottom:12px">ℹ️</div>
-        <h2>Важная информация</h2>
-        <p>Loiva — это AI-компаньон, а не замена профессиональной помощи. В случае кризиса обращайтесь на горячую линию.</p>
-        <button class="btn btn-primary" data-next="p" style="margin-bottom:10px">Я понимаю</button>
-        <button class="btn btn-outline btn-sm" data-next="p">Пропустить</button>
-        <div class="dots" data-dots="2"></div>
-      </div>`},
-    {id:'p',back:'d',html:`
-      <div class="onboard-step">
-        <h2>Настрой приватность</h2>
-        <p>Ты контролируешь свои данные</p>
-        <div style="width:100%;max-width:320px">
-          <div class="privacy-toggle"><span>История чатов</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-          <div class="privacy-toggle"><span>AI-память</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-          <div class="privacy-toggle"><span>Аналитика</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
-          <div class="privacy-toggle"><span>Уведомления</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-        </div>
-        <button class="btn btn-primary" data-next="done" style="margin-top:20px">Готово</button>
-        <div class="dots" data-dots="3"></div>
-      </div>`},
-    {id:'done',back:'p',html:`
-      <div class="onboard-step">
-        <div style="font-size:56px;margin-bottom:12px">✨</div>
-        <h2>Всё готово!</h2>
-        <p>Loiva настроена. Начни диалог — я здесь, чтобы поддержать.</p>
-        <button class="btn btn-primary" data-next="app">Войти</button>
-      </div>`},
-  ];
-
-  let cur = 0;
-  function show(idx) {
-    cur = idx;
-    app.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const el = app.querySelector(`[data-oidx="${idx}"]`);
-    if (el) el.classList.add('active');
-    // dots
-    app.querySelectorAll('.dots').forEach(d => {
-      const di = parseInt(d.dataset.dots);
-      d.innerHTML = [0,1,2,3].map(i => `<div class="dot${i===di?' active':''}"></div>`).join('');
-    });
-  }
-
-  screens.forEach((s, i) => {
-    const el = h('div', {class:'screen onboard', 'data-oidx':i});
-    el.innerHTML = s.html;
-    if (s.back) {
-      const bb = h('button', {class:'back-btn', html:'←', onClick:()=>show(screens.findIndex(x=>x.id===s.back))});
-      el.appendChild(bb);
-    }
-    el.querySelectorAll('[data-next]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const next = btn.dataset.next;
-        if (next === 'app') { localStorage.setItem(LS_KEY,'1'); renderApp(); return; }
-        const ni = screens.findIndex(x=>x.id===next);
-        if (ni >= 0) show(ni);
-      });
-    });
-    app.appendChild(el);
-  });
-
-  show(0);
+/* === BUILD === */
+function build(){
+A.innerHTML='';
+if(localStorage.getItem(K)){buildApp();return}
+buildOnboard();
 }
 
-function renderApp() {
-  app.innerHTML = '';
-  const wrap = h('div',{class:'main-wrap'});
-
-  // Topbar
-  const topbar = h('div',{class:'topbar', html:'<h2>Loiva</h2><div class="avatar">👤</div>'});
-  wrap.appendChild(topbar);
-
-  // Tab area
-  const tabArea = h('div',{class:'tab-area'});
-
-  // HOME
-  const homeTab = h('div',{class:'tab-content',id:'tab-home'});
-  homeTab.innerHTML = `
-    <div style="padding:16px">
-      <div class="greeting"><h3>Привет! 👋</h3><p>Как ты себя чувствуешь сегодня?</p></div>
-      <div class="quick-actions">
-        <div class="action-card" data-tab="tab-chat"><div class="icon">💬</div><div class="label">Поговорить</div><div class="desc">Начать диалог</div></div>
-        <div class="action-card" data-tab="tab-techniques"><div class="icon">🧘</div><div class="label">Техники</div><div class="desc">Дыхание, осознанность</div></div>
-        <div class="action-card" data-tab="tab-progress"><div class="icon">📊</div><div class="label">Прогресс</div><div class="desc">Статистика</div></div>
-        <div class="action-card" data-tab="tab-home"><div class="icon">🌙</div><div class="label">Calm Room</div><div class="desc">Пространство покоя</div></div>
-      </div>
-      <div class="calm-card"><h4>🌙 Calm Room</h4><p>Тихое пространство для медитации и дыхательных практик.</p></div>
-      <div class="section-title">Последние чаты</div>
-      <div class="action-card" data-tab="tab-chat" style="margin-bottom:12px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:36px;height:36px;border-radius:10px;background:var(--surface-light);display:flex;align-items:center;justify-content:center;font-size:18px">🤖</div>
-          <div><div class="label">Чат с Loiva</div><div class="desc">Продолжить диалог</div></div>
-        </div>
-      </div>
-    </div>`;
-  tabArea.appendChild(homeTab);
-
-  // CHAT
-  const chatTab = h('div',{class:'tab-content',id:'tab-chat',hidden:''});
-  chatTab.innerHTML = `
-    <div class="chat-screen">
-      <div class="chat-messages" id="chatMessages">
-        <div class="chat-empty" id="chatEmpty">
-          <div class="icon">💬</div>
-          <p>Начни диалог с Loiva.<br>Напиши, что у тебя на душе.</p>
-        </div>
-      </div>
-      <div class="chat-input">
-        <input type="text" id="chatInput" placeholder="Напиши сообщение...">
-        <button id="chatSend">↑</button>
-      </div>
-    </div>`;
-  tabArea.appendChild(chatTab);
-
-  // TECHNIQUES
-  const techTab = h('div',{class:'tab-content',id:'tab-techniques',hidden:''});
-  let techHtml = '<div style="padding:16px"><div class="technique-list">';
-  techniques.forEach((t,i) => {
-    techHtml += `<div class="technique-card" data-tidx="${i}"><h4>${t.icon} ${t.title}</h4><p>${t.desc}</p><span class="tag ${t.tagCls}">${t.tag}</span></div>`;
-  });
-  techHtml += '</div></div>';
-  techTab.innerHTML = techHtml;
-  tabArea.appendChild(techTab);
-
-  // PROGRESS
-  const progTab = h('div',{class:'tab-content',id:'tab-progress',hidden:''});
-  progTab.innerHTML = `
-    <div style="padding:16px">
-      <div class="streak-card"><div class="streak-num">7</div><div class="streak-label">дней подряд 🔥</div></div>
-      <div class="section-title">Привычки</div>
-      <div class="habit-list" id="habitList">
-        <div class="habit-item done"><div class="habit-check"></div><div class="habit-info"><h4>Утренняя медитация</h4><p>10 минут осознанности</p></div></div>
-        <div class="habit-item done"><div class="habit-check"></div><div class="habit-info"><h4>Дыхательная практика</h4><p>5 минут 4-7-8</p></div></div>
-        <div class="habit-item"><div class="habit-check"></div><div class="habit-info"><h4>Журнал благодарности</h4><p>3 вещи за сегодня</p></div></div>
-        <div class="habit-item"><div class="habit-check"></div><div class="habit-info"><h4>Вечерний возврат</h4><p>Как прошёл день?</p></div></div>
-      </div>
-      <div class="section-title" style="margin-top:20px">Статистика</div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="num" style="color:var(--primary)">23</div><div class="lbl">Дней использования</div></div>
-        <div class="stat-card"><div class="num" style="color:var(--accent)">47</div><div class="lbl">Диалогов</div></div>
-        <div class="stat-card"><div class="num" style="color:var(--secondary)">12</div><div class="lbl">Техник освоено</div></div>
-        <div class="stat-card"><div class="num" style="color:var(--warning)">85%</div><div class="lbl">Выполнение</div></div>
-      </div>
-    </div>`;
-  tabArea.appendChild(progTab);
-
-  // SETTINGS
-  const setTab = h('div',{class:'tab-content',id:'tab-settings',hidden:''});
-  setTab.innerHTML = `
-    <div style="padding:16px">
-      <div class="settings-group"><h4>Аккаунт</h4>
-        <div class="settings-item"><span class="icon">👤</span><span class="label">Профиль</span><span class="arrow">›</span></div>
-        <div class="settings-item"><span class="icon">🔑</span><span class="label">API ключи ИИ</span><span class="arrow">›</span></div>
-      </div>
-      <div class="settings-group"><h4>Приложение</h4>
-        <div class="settings-item"><span class="icon">🎨</span><span class="label">Внешний вид</span><span class="arrow">›</span></div>
-        <div class="settings-item"><span class="icon">🌍</span><span class="label">Язык</span><span class="arrow">›</span></div>
-        <div class="settings-item"><span class="icon">🔔</span><span class="label">Уведомления</span><span class="arrow">›</span></div>
-      </div>
-      <div class="settings-group"><h4>Данные</h4>
-        <div class="settings-item"><span class="icon">💾</span><span class="label">Экспорт данных</span><span class="arrow">›</span></div>
-        <div class="settings-item" onclick="localStorage.removeItem('${LS_KEY}');location.reload()"><span class="icon">🔄</span><span class="label">Повторить онбординг</span><span class="arrow">›</span></div>
-      </div>
-      <div class="settings-group"><h4>О приложении</h4>
-        <div class="settings-item"><span class="icon">📱</span><span class="label">Версия</span><span class="arrow" style="color:var(--text-sec)">0.1.0</span></div>
-      </div>
-    </div>`;
-  tabArea.appendChild(setTab);
-
-  // Technique detail overlay
-  const detail = h('div',{class:'detail-overlay',id:'techDetail'});
-  detail.innerHTML = `<div class="detail-header"><button class="back" id="techBack">←</button><h2 id="techTitle"></h2></div><div class="detail-body" id="techBody"></div>`;
-  tabArea.appendChild(detail);
-
-  wrap.appendChild(tabArea);
-
-  // Bottom nav
-  const nav = h('div',{class:'bottom-nav'});
-  const tabs = [{id:'tab-home',icon:'🏠',label:'Главная'},{id:'tab-chat',icon:'💬',label:'Чат'},{id:'tab-techniques',icon:'🧘',label:'Техники'},{id:'tab-progress',icon:'📊',label:'Прогресс'},{id:'tab-settings',icon:'⚙️',label:'Настройки'}];
-  tabs.forEach((t,i) => {
-    const ni = h('div',{class:'nav-item'+(i===0?' active':'')});
-    ni.innerHTML = `<span class="nav-icon">${t.icon}</span><span class="nav-label">${t.label}</span>`;
-    ni.addEventListener('click', () => switchTab(t.id));
-    nav.appendChild(ni);
-  });
-  wrap.appendChild(nav);
-  app.appendChild(wrap);
-
-  // Habits toggle
-  $('habitList')?.addEventListener('click', e => {
-    const item = e.target.closest('.habit-item');
-    if (item) item.classList.toggle('done');
-  });
-
-  // Chat
-  let chatStarted = false;
-  $('chatSend').addEventListener('click', doSend);
-  $('chatInput').addEventListener('keypress', e => { if (e.key==='Enter') doSend(); });
-  function doSend() {
-    const inp = $('chatInput');
-    const msg = inp.value.trim();
-    if (!msg) return;
-    if (!chatStarted) {
-      $('chatEmpty')?.remove();
-      chatStarted = true;
-    }
-    const box = $('chatMessages');
-    box.insertAdjacentHTML('beforeend',`<div class="msg user">${esc(msg)}</div>`);
-    inp.value = '';
-    box.insertAdjacentHTML('beforeend',`<div class="typing" id="typing"><span></span><span></span><span></span></div>`);
-    box.scrollTop = box.scrollHeight;
-    setTimeout(() => {
-      $('typing')?.remove();
-      const resp = aiResponses[Math.floor(Math.random()*aiResponses.length)];
-      box.insertAdjacentHTML('beforeend',`<div class="msg ai"><div class="mode">general</div>${resp}</div>`);
-      box.scrollTop = box.scrollHeight;
-    }, 1200);
-  }
-
-  // Technique cards
-  techTab.querySelectorAll('.technique-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const t = techniques[parseInt(card.dataset.tidx)];
-      $('techTitle').textContent = t.icon + ' ' + t.title;
-      let bh = `<h3>${t.title}</h3><p>${t.full}</p>`;
-      t.steps.forEach((s,i) => { bh += `<div class="step"><div class="step-num">${i+1}</div><div class="step-text">${s}</div></div>`; });
-      $('techBody').innerHTML = bh;
-      $('techDetail').classList.add('open');
-    });
-  });
-  $('techBack').addEventListener('click', () => $('techDetail').classList.remove('open'));
-
-  // Nav card clicks
-  wrap.querySelectorAll('[data-tab]').forEach(card => {
-    card.addEventListener('click', () => switchTab(card.dataset.tab));
-  });
+function buildOnboard(){
+const screens=[
+{id:'w',dot:0,html:`<div class="wrap"><div class="ico">🧠</div><h1>LOIVA</h1><p>Поддержка в вашем темпе.<br>AI-гид по эмоциональной самопомощи.</p><button class="btn btn1" onclick="next('ag')">Начать</button>${dots(0)}</div>`},
+{id:'ag',dot:1,bk:'w',html:`<div class="wrap"><div class="ico">🎂</div><h2>Возраст</h2><p>Loiva предназначена только для пользователей 18 лет и старше.</p><div class="age-btns"><button class="age-btn" onclick="ageOk(this)"><div class="em">✅</div>Мне есть 18</button><button class="age-btn" onclick="ageNo()"><div class="em">🚫</div>Мне нет 18</button></div>${dots(1)}</div>`},
+{id:'lg',dot:2,bk:'ag',html:`<div class="wrap"><h2>Выбери язык</h2><p>Язык можно изменить позже</p><div class="langs"><button class="lang sel" onclick="sel(this)"><div class="fl">🇷🇺</div><div class="nm">Русский</div></button><button class="lang" onclick="sel(this)"><div class="fl">🇬🇧</div><div class="nm">English</div></button></div><button class="btn btn1" onclick="next('ct')">Далее</button>${dots(2)}</div>`},
+{id:'ct',dot:3,bk:'lg',html:`<div class="wrap"><div class="ico">🌍</div><h2>Страна</h2><p>Страна нужна для показа актуальных ресурсов помощи</p><div class="country-list" id="cl"></div><button class="btn btn1" onclick="next('dp')">Далее</button>${dots(3)}</div>`},
+{id:'dp',dot:4,bk:'ct',html:`<div class="wrap"><div class="ico">ℹ️</div><h2>Что такое Loiva</h2><p>Loiva — это ИИ-инструмент самопомощи.<br><br>✅ Помогает остановиться, выразить чувства, попробовать практику<br>❌ Не заменяет психолога, психотерапевта, врача<br>❌ Не является кризисной службой</p><button class="btn btn1" onclick="next('pv')" style="margin-bottom:8px">Я понимаю</button><button class="btn btn2" onclick="next('pv')">Пропустить</button>${dots(4)}</div>`},
+{id:'pv',dot:5,bk:'dp',html:`<div class="wrap"><h2>Настрой приватность</h2><p>Ты контролируешь свои данные</p><div style="width:100%"><div class="tgl-row"><span>Сохранять историю чатов</span><div class="tgl on" onclick="this.classList.toggle('on')"></div></div><div class="tgl-row"><span>Разрешить AI-память</span><div class="tgl on" onclick="this.classList.toggle('on')"></div></div><div class="tgl-row"><span>Продуктовая аналитика</span><div class="tgl" onclick="this.classList.toggle('on')"></div></div><div class="tgl-row"><span>Уведомления</span><div class="tgl" onclick="this.classList.toggle('on')"></div></div></div><button class="btn btn1" onclick="next('cm')" style="margin-top:16px">Далее</button>${dots(5)}</div>`},
+{id:'cm',dot:6,bk:'pv',html:`<div class="wrap"><h2>Стиль общения</h2><p>Как ты предпочитаешь общаться с Loiva?</p><div style="width:100%"><div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Длина ответа</div><div class="chips"><button class="chip" onclick="sel(this)">Коротко</button><button class="chip sel" onclick="sel(this)">Средне</button><button class="chip" onclick="sel(this)">Подробно</button></div></div><div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Тон</div><div class="chips"><button class="chip sel" onclick="sel(this)">Мягко</button><button class="chip" onclick="sel(this)">Нейтрально</button></div></div><div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Обращение (RU)</div><div class="chips"><button class="chip sel" onclick="sel(this)">На вы</button><button class="chip" onclick="sel(this)">На ты</button></div></div></div><button class="btn btn1" onclick="next('sn')" style="margin-top:16px">Далее</button>${dots(6)}</div>`},
+{id:'sn',dot:7,bk:'cm',html:`<div class="wrap"><div class="ico">🛡️</div><h2>Безопасность</h2><p>Loiva не контролируется человеком в реальном времени и не может вызвать экстренную помощь за вас.<br><br>При непосредственной опасности используйте местный номер экстренной помощи.</p><button class="btn btn1" onclick="next('fi')" style="margin-bottom:8px">Понятно</button>${dots(7)}</div>`},
+{id:'fi',dot:8,bk:'sn',html:`<div class="wrap"><div class="ico">🎯</div><h2>Что вас привело?</h2><p>Это поможет Loiva предложить релевантные практики</p><div class="age-btns" style="max-width:340px"><button class="age-btn" onclick="sel(this)"><div class="em">😰</div>Снизить стресс</button><button class="age-btn" onclick="sel(this)"><div class="em">💭</div>Тревожные мысли</button><button class="age-btn" onclick="sel(this)"><div class="em">😔</div>Сниженное настроение</button><button class="age-btn" onclick="sel(this)"><div class="em">🗣</div>Выговориться</button><button class="age-btn" onclick="sel(this)"><div class="em">🧘</div>Изучать практики</button><button class="age-btn" onclick="sel(this)"><div class="em">🤷</div>Пока не знаю</button></div><button class="btn btn1" onclick="done()" style="margin-top:16px">Войти в Loiva</button>${dots(8)}</div>`},
+];
+let ci=0;
+const sc=screens.map(s=>{
+const el=D.createElement('div');el.className='scr ob';el.id='o-'+s.id;
+el.innerHTML=s.html;
+if(s.bk){const b=D.createElement('button');b.className='bk';b.textContent='←';b.onclick=()=>go(s.bk);el.appendChild(b)}
+el.querySelectorAll('[onclick]').forEach(b=>{if(b.getAttribute('onclick').startsWith('next')){const m=b.getAttribute('onclick').match(/next\('(.+?)'\)/);if(m){b.onclick=()=>go(m[1])}}});
+A.appendChild(el);return{s,el};
+});
+// Countries
+const countries=['🇷🇺 Россия','🇺🇦 Украина','🇰🇿 Казахстан','🇧🇾 Беларусь','🇺🇿 Узбекистан','🇬🇪 Грузия','🇦🇲 Армения','🇦🇿 Азербайджан','🇰🇬 Кыргызстан','🇹🇯 Таджикистан','🇹🇲 Туркменистан','🇱🇹 Литва','🇱🇻 Латвия','🇪🇪 Эстония','🇩🇪 Германия','🇬🇧 Великобритания','🇺🇸 США','🇨🇦 Канада','🇫🇷 Франция','🇮🇱 Израиль','🇹🇷 Турция','🇰🇷 Южная Корея','🇯🇵 Япония'];
+const cl=$('cl');
+if(cl)countries.forEach(c=>{const d=D.createElement('div');d.className='country-item';d.textContent=c;d.onclick=()=>{cl.querySelectorAll('.country-item').forEach(x=>x.classList.remove('sel'));d.classList.add('sel')};cl.appendChild(d)});
+function go(id){const s=screens.findIndex(x=>x.id===id);if(s>=0)sc.forEach((x,i)=>{x.el.className=i===s?'scr ob on':i<sc.indexOf(sc.find(y=>y.s.id===id))?'scr ob off':'scr ob'});ci=s}
+window.next=id=>go(screens.findIndex(s=>s.id===id));
+window.ageOk=el=>{el.classList.add('sel');setTimeout(()=>next('lg'),300)};
+window.ageNo=()=>alert('Loiva предназначена только для пользователей 18 лет и старше.');
+window.sel=el=>{el.parentElement.querySelectorAll('.chip,.lang,.age-btn').forEach(x=>x.classList.remove('sel'));el.classList.add('sel')};
+window.done=()=>{localStorage.setItem(K,'1');buildApp()};
+sc[0].el.classList.add('on');
 }
 
-function switchTab(id) {
-  app.querySelectorAll('.tab-content').forEach(t => { t.hidden = true; });
-  const target = $(id);
-  if (target) target.hidden = false;
-  app.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const tabs = ['tab-home','tab-chat','tab-techniques','tab-progress','tab-settings'];
-  const idx = tabs.indexOf(id);
-  if (idx >= 0) app.querySelectorAll('.nav-item')[idx].classList.add('active');
+function buildApp(){
+A.innerHTML='';
+const wrap=D.createElement('div');wrap.style.cssText='display:flex;flex-direction:column;height:100%;position:relative';
+
+// TOPBAR
+const tb=D.createElement('div');tb.className='tb';
+tb.innerHTML=`<h2>Loiva</h2><span class="ai-badge">AI</span><span class="mode-badge" id="modeBadge">Listen</span><div class="av">👤</div>`;
+wrap.appendChild(tb);
+
+// TAB AREA
+const ta=D.createElement('div');ta.className='tab-area';
+
+// === HOME ===
+const tH=D.createElement('div');tH.className='tab';tH.id='t-home';
+tH.innerHTML=`
+<div class="greet"><h3>Что было бы полезно сейчас?</h3><p>Я здесь, чтобы поддержать.</p></div>
+<div class="qa">
+<div class="ac" data-t="t-chat"><div class="em">😰</div><div class="lb">Мне тревожно</div></div>
+<div class="ac" data-t="t-chat"><div class="em">😰</div><div class="lb">Я в стрессе</div></div>
+<div class="ac" data-t="t-chat"><div class="em">😔</div><div class="lb">Мне тяжело</div></div>
+<div class="ac" data-t="t-chat"><div class="em">🗣</div><div class="lb">Хочу выговориться</div></div>
+<div class="ac" data-t="t-chat"><div class="em">🔍</div><div class="lb">Помоги разобраться</div></div>
+<div class="ac" data-t="t-tech"><div class="em">🧘</div><div class="lb">Короткая практика</div></div>
+</div>
+<div class="checkin"><h4>📊 Check-in</h4>
+<div class="ci-row"><span class="ci-label">Настроение</span><div class="ci-scale" data-k="mood">${[1,2,3,4,5].map(i=>`<div class="ci-dot${i===3?' sel':''}" onclick="ciPick(this)">${i}</div>`).join('')}</div></div>
+<div class="ci-row"><span class="ci-label">Напряжение</span><div class="ci-scale" data-k="tension">${[1,2,3,4,5].map(i=>`<div class="ci-dot${i===3?' sel':''}" onclick="ciPick(this)">${i}</div>`).join('')}</div></div>
+<div class="ci-row"><span class="ci-label">Энергия</span><div class="ci-scale" data-k="energy">${[1,2,3,4,5].map(i=>`<div class="ci-dot${i===3?' sel':''}" onclick="ciPick(this)">${i}</div>`).join('')}</div></div>
+<textarea class="ci-note" placeholder="Заметка (необязательно)..." rows="2"></textarea></div>
+<div class="sec"><div class="sec-t">Продолжить</div>
+<div class="cont-card" data-t="t-chat"><div class="em">💬</div><div class="inf"><div class="lb">Чат с Loiva</div><div class="ds">Продолжить диалог</div></div></div>
+<div class="cont-card" data-t="t-tech"><div class="em">🧊</div><div class="inf"><div class="lb">5-4-3-2-1</div><div class="ds">Заземление</div></div></div></div>
+<div class="daily" data-t="t-tech"><h4>🌱 Небольшая практика на сегодня</h4><p>Мягкое замедление дыхания — 2 минуты</p></div>
+<div class="sec"><div class="sec-t">Calm Room</div>
+<div class="cont-card" data-t="t-calm"><div class="em">🌙</div><div class="inf"><div class="lb">Тихое пространство</div><div class="ds">Дыхание, таймер, покой</div></div></div></div>
+<div class="crisis"><h4>🆘 Нужна помощь сейчас?</h4><p>Если ты в кризисе — позвони: <a href="tel:8-800-2000-122">8-800-2000-122</a> (бесплатно, 24/7)</p></div>`;
+ta.appendChild(tH);
+
+// === CHAT ===
+const tC=D.createElement('div');tC.className='tab';tC.id='t-chat';tC.hidden=true;
+tC.innerHTML=`<div class="ch"><div class="msgs" id="msgs"><div class="ch-empty" id="chE"><div class="em">💬</div><p>Начни диалог с Loiva.<br>Расскажи, что у тебя на душе.</p></div></div><div class="ch-inp"><input id="cInp" placeholder="Напиши сообщение..."><button id="cSend">↑</button></div></div>`;
+ta.appendChild(tC);
+
+// === TECHNIQUES ===
+const tT=D.createElement('div');tT.className='tab';tT.id='t-tech';tT.hidden=true;
+let thtml='<div class="tech-list">';
+TECH.forEach(cat=>{
+thtml+=`<div class="tech-cat">${cat.cat}</div>`;
+cat.items.forEach(t=>{
+thtml+=`<div class="tc" onclick="openTech(this)" data-title="${t.title}"><h4>${t.icon} ${t.title}</h4><p>${t.desc}</p><div class="dur">⏱ ${t.dur}</div><div class="tags">${t.tags.map(tg=>tg.startsWith('tag')?`<span class="tag ${tg}">${tg==='tag-b'?'Дыхание':tg==='tag-g'?'Практика':'CBT'}</span>`:`<span class="tag tag-b">${tg}</span>`).join('')}</div></div>`;
+});
+});
+thtml+='</div>';
+tT.innerHTML=thtml;
+ta.appendChild(tT);
+
+// === CALM ROOM ===
+const tCa=D.createElement('div');tCa.className='tab';tCa.id='t-calm';tCa.hidden=true;
+tCa.innerHTML=`<div class="calm">
+<div class="breath" id="breath"><span class="breath-text" id="brTxt">Готов</span></div>
+<div class="timer" id="calmTimer">5:00</div>
+<div class="dur-btns"><button class="dur-btn" onclick="setDur(this,1)">1 мин</button><button class="dur-btn" onclick="setDur(this,3)">3 мин</button><button class="dur-btn sel" onclick="setDur(this,5)">5 мин</button><button class="dur-btn" onclick="setDur(this,10)">10 мин</button></div>
+<div class="ctrls"><button class="ctrl ctrl-start" id="calmStart" onclick="startCalm()">Начать</button><button class="ctrl ctrl-stop" onclick="stopCalm()" style="display:none" id="calmStop">Стоп</button></div>
+<div class="grounding"><h4>Внешнее заземление</h4><ul><li>Назови 5 вещей, которые видишь</li><li>Почувствуй текстуру поверхности</li><li>Заметь звуки вокруг</li><li>Отметь температуру воздуха</li></ul></div></div>`;
+ta.appendChild(tCa);
+
+// === PROGRESS ===
+const tP=D.createElement('div');tP.className='tab';tP.id='t-prog';tP.hidden=true;
+const calDays=Array.from({length:28},(_,i)=>{const r=Math.random();return r>.7?'filled':r>.4?'half':''});
+tP.innerHTML=`<div class="prog">
+<div class="streak"><div class="num">7</div><div class="lb">дней подряд 🔥</div></div>
+<div class="sec"><div class="sec-t">Активность за месяц</div>
+<div class="cal-grid">${calDays.map((c,i)=>`<div class="cal-d ${c}">${i+1}</div>`).join('')}</div></div>
+<div class="sec"><div class="sec-t">Привычки</div>
+<div class="hab-list">
+<div class="hab dn" onclick="this.classList.toggle('dn')"><div class="ck"></div><div class="inf"><h4>Утренняя медитация</h4><p>10 минут</p></div></div>
+<div class="hab dn" onclick="this.classList.toggle('dn')"><div class="ck"></div><div class="inf"><h4>Дыхательная практика</h4><p>5 минут 4-7-8</p></div></div>
+<div class="hab" onclick="this.classList.toggle('dn')"><div class="ck"></div><div class="inf"><h4>Журнал благодарности</h4><p>3 вещи за сегодня</p></div></div>
+<div class="hab" onclick="this.classList.toggle('dn')"><div class="ck"></div><div class="inf"><h4>Вечерний возврат</h4><p>Как прошёл день?</p></div></div>
+</div></div>
+<div class="sec"><div class="sec-t">Статистика</div>
+<div class="stats">
+<div class="stat"><div class="n" style="color:var(--primary)">23</div><div class="l">Дней использования</div></div>
+<div class="stat"><div class="n" style="color:var(--accent)">47</div><div class="l">Диалогов</div></div>
+<div class="stat"><div class="n" style="color:var(--secondary)">12</div><div class="l">Техник освоено</div></div>
+<div class="stat"><div class="n" style="color:var(--warn)">85%</div><div class="l">Выполнение</div></div>
+</div></div></div>`;
+ta.appendChild(tP);
+
+// === SETTINGS ===
+const tS=D.createElement('div');tS.className='tab';tS.id='t-set';tS.hidden=true;
+tS.innerHTML=`<div class="set">
+<div class="sg"><h4>Общие</h4>
+<div class="si"><span class="em">🌍</span><span class="lb">Язык</span><span class="ar">Русский ›</span></div>
+<div class="si"><span class="em">🏳</span><span class="lb">Страна</span><span class="ar">Россия ›</span></div>
+<div class="si"><span class="em">💬</span><span class="lb">Длина ответа</span><span class="ar">Средне ›</span></div>
+<div class="si"><span class="em">🎭</span><span class="lb">Стиль ответа</span><span class="ar">Мягко ›</span></div>
+</div>
+<div class="sg"><h4>AI</h4>
+<div class="si"><span class="em">🤖</span><span class="lb">Режим по умолчанию</span><span class="ar">Listen ›</span></div>
+<div class="si"><span class="em">💡</span><span class="lb">Предлагать практики</span><span class="ar">Да ›</span></div>
+<div class="si"><span class="em">🧠</span><span class="lb">Память</span><span class="ar">Включена ›</span></div>
+<div class="si"><span class="em">🔑</span><span class="lb">API ключи</span><span class="ar">›</span></div>
+</div>
+<div class="sg"><h4>Уведомления</h4>
+<div class="si"><span class="em">🔔</span><span class="lb">Напоминание check-in</span><span class="ar">Вкл ›</span></div>
+<div class="si"><span class="em">🕐</span><span class="lb">Тихие часы</span><span class="ar">22:00–08:00 ›</span></div>
+</div>
+<div class="sg"><h4>Внешний вид</h4>
+<div class="si"><span class="em">🎨</span><span class="lb">Тема</span><span class="ar">Системная ›</span></div>
+<div class="si"><span class="em">✨</span><span class="lb">Reduced motion</span><span class="ar">Off ›</span></div>
+</div>
+<div class="sg"><h4>Данные и приватность</h4>
+<div class="si"><span class="em">💾</span><span class="lb">Экспорт данных</span><span class="ar">›</span></div>
+<div class="si"><span class="em">🗑</span><span class="lb">Удалить историю</span><span class="ar">›</span></div>
+<div class="si"><span class="em">🧠</span><span class="lb">Удалить память</span><span class="ar">›</span></div>
+<div class="si" onclick="localStorage.removeItem('${K}');location.reload()"><span class="em">🔄</span><span class="lb">Повторить онбординг</span><span class="ar">›</span></div>
+</div>
+<div class="sg"><h4>Безопасность</h4>
+<div class="si"><span class="em">🆘</span><span class="lb">Кризисные контакты</span><span class="ar">›</span></div>
+<div class="si"><span class="em">📖</span><span class="lb">Что Loiva может и не может</span><span class="ar">›</span></div>
+</div>
+<div class="sg"><h4>О приложении</h4>
+<div class="si"><span class="em">📱</span><span class="lb">Версия</span><span class="ar" style="color:var(--text2)">0.1.0</span></div>
+<div class="si"><span class="em">📖</span><span class="lb">Политика приватности</span><span class="ar">›</span></div>
+</div></div>`;
+ta.appendChild(tS);
+
+// TECHNIQUE DETAIL OVERLAY
+const det=D.createElement('div');det.className='det';det.id='det';
+det.innerHTML=`<div class="det-h"><button class="bk" onclick="$('det').classList.remove('open')">←</button><h2 id="detT"></h2></div><div class="det-b" id="detB"></div>`;
+ta.appendChild(det);
+
+wrap.appendChild(ta);
+
+// BOTTOM NAV
+const bn=D.createElement('div');bn.className='bn';
+const tabs=[{id:'t-home',ic:'🏠',lb:'Главная'},{id:'t-chat',ic:'💬',lb:'Чат'},{id:'t-tech',ic:'🧘',lb:'Практики'},{id:'t-calm',ic:'🌙',lb:'Calm'},{id:'t-prog',ic:'📊',lb:'Динамика'},{id:'t-set',ic:'⚙️',lb:'Настройки'}];
+tabs.forEach((t,i)=>{
+const bi=D.createElement('div');bi.className='bi'+(i===0?' on':'');bi.dataset.tab=t.id;
+bi.innerHTML=`<span class="ic">${t.ic}</span><span class="lb">${t.lb}</lb>`;
+bi.onclick=()=>swTab(t.id);
+bn.appendChild(bi);
+});
+wrap.appendChild(bn);
+A.appendChild(wrap);
+
+// EVENT DELEGATION
+wrap.addEventListener('click',e=>{
+const card=e.target.closest('[data-t]');
+if(card)swTab(card.dataset.t);
+});
+
+// CHAT
+let chStarted=false;
+$('cSend').onclick=doSend;
+$('cInp').onkeypress=e=>{if(e.key==='Enter')doSend()};
+function doSend(){
+const inp=$('cInp'),msg=inp.value.trim();if(!msg)return;
+if(!chStarted){$('chE')?.remove();chStarted=true}
+const box=$('msgs');
+box.insertAdjacentHTML('beforeend',`<div class="msg u">${esc(msg)}</div>`);
+inp.value='';
+box.insertAdjacentHTML('beforeend',`<div class="typing" id="typ"><span></span><span></span><span></span></div>`);
+box.scrollTop=box.scrollHeight;
+setTimeout(()=>{
+$('typ')?.remove();
+const resp=AI_R[Math.floor(Math.random()*AI_R.length)];
+box.insertAdjacentHTML('beforeend',`<div class="msg a"><div class="md">listen</div>${resp}<div class="act"><button>👍 Полезно</button><button>🔄 Попробовать иначе</button><button>💬 Сохранить вывод</button></div></div>`);
+box.scrollTop=box.scrollHeight;
+},1200);
 }
 
-function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+// TECHNIQUE DETAIL
+window.openTech=el=>{
+const title=el.dataset.title;
+let t=null;TECH.forEach(c=>c.items.forEach(i=>{if(i.title===title)t=i}));
+if(!t)return;
+$('detT').textContent=t.icon+' '+t.title;
+let h=`<h3>${t.title}</h3><div class="meta"><span>⏱ ${t.dur}</span><span>${t.tags.filter(tg=>!tg.startsWith('tag')).join(', ')}</span></div><p>${t.desc}</p>`;
+if(t.caution)h+=`<div class="caution">⚠️ ${t.caution}</div>`;
+t.steps.forEach((s,i)=>{h+=`<div class="stp"><div class="stp-n">${i+1}</div><div class="stp-t">${s}</div></div>`});
+h+=`<div class="done-btn"><button class="btn btn1" onclick="afterTech()">Завершить практику</button></div>`;
+$('detB').innerHTML=h;
+$('det').classList.add('open');
+};
+window.afterTech=()=>{$('det').classList.remove('open');alert('Стало легче, так же или хуже?\n\n(Прототип — голосование пока не работает)')};
 
-// INIT
-if (onboardingDone) renderApp(); else renderOnboarding();
+// CHECK-IN
+window.ciPick=el=>{el.parentElement.querySelectorAll('.ci-dot').forEach(d=>d.classList.remove('sel'));el.classList.add('sel')};
+
+// CALM ROOM
+let calmInterval=null,calmSec=300,breathInterval=null;
+window.setDur=(el,min)=>{el.parentElement.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');calmSec=min*60;updTimer()};
+function updTimer(){const m=Math.floor(calmSec/60),s=calmSec%60;$('calmTimer').textContent=m+':'+String(s).padStart(2,'0')}
+window.startCalm=()=>{$('calmStart').style.display='none';$('calmStop').style.display='';
+breathInterval=setInterval(()=>{const b=$('breath'),t=$('brTxt');b.classList.toggle('inhale');b.classList.toggle('exhale');t.textContent=b.classList.contains('inhale')?'Вдох...':'Выдох...'},4000);
+calmInterval=setInterval(()=>{if(calmSec<=0){stopCalm();return}calmSec--;updTimer()},1000)};
+window.stopCalm=()=>{clearInterval(calmInterval);clearInterval(breathInterval);$('calmStart').style.display='';$('calmStop').style.display='none';$('breath').className='breath';$('brTxt').textContent='Готов';updTimer()};
+
+// TAB SWITCH
+function swTab(id){
+ta.querySelectorAll('.tab').forEach(t=>t.hidden=true);
+$(id).hidden=false;
+bn.querySelectorAll('.bi').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+// Update mode badge
+const modeMap={'t-chat':'Listen','t-tech':'Practice','t-calm':'Calm','t-prog':'Progress','t-set':'Settings','t-home':'Home'};
+$('modeBadge').textContent=modeMap[id]||'';
+}
+
+function esc(s){const d=D.createElement('div');d.textContent=s;return d.innerHTML}
+
+build();
 </script>
 </body>
 </html>
