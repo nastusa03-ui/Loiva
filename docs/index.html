@@ -60,7 +60,9 @@ var busy=0;
 
 function $(id){return document.getElementById(id)}
 function sel(el){var p=el.parentElement;for(var i=0;i<p.children.length;i++)p.children[i].classList.remove('sel');el.classList.add('sel')}
+window.sel=sel;
 function tgl(el){el.classList.toggle('on')}
+window.tgl=tgl;
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
 function goScreen(id){
@@ -68,6 +70,7 @@ var els=A.querySelectorAll('.scr');
 for(var i=0;i<els.length;i++)els[i].classList.remove('on');
 var t=$(id);if(t)t.classList.add('on');
 }
+window.goScreen=goScreen;
 
 function enterApp(){
 if(busy)return;busy=1;
@@ -78,6 +81,7 @@ buildMain();
 A.innerHTML='<div style="padding:20px;color:white"><h2>Error in buildMain</h2><pre>'+esc(e.message)+'\n'+esc(e.stack)+'</pre></div>';
 }
 }
+window.enterApp=enterApp;
 
 function buildMain(){
 A.innerHTML='';
@@ -227,6 +231,7 @@ body.innerHTML=html;
 overlay.appendChild(body);
 A.appendChild(overlay);
 }
+window.openDetail=openDetail;
 
 /* Calm Room */
 var calmSec=300,calmIv=null,breathIv=null;
