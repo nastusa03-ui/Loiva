@@ -148,8 +148,7 @@ tH.innerHTML='<h3 style="font-size:18px;margin-bottom:12px">Что полезн�
 +'<button id="ciBtn" onclick="ciSave()" style="margin-top:8px;width:100%;padding:10px;border-radius:10px;background:var(--pr);color:#0B1020;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Готово</button>'
 +'</div>'
 +'<div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Продолжить</div>'
-+'<div class="ac" onclick="mSw(\'chat\')" style="margin-bottom:8px;display:flex;align-items:center;gap:10px"><div style="font-size:20px;width:36px;height:36px;border-radius:10px;background:var(--sf2);display:flex;align-items:center;justify-content:center">💬</div><div><div style="font-size:13px;font-weight:600">Чат с Loiva</div><div style="font-size:11px;color:var(--tx2)">Продолжить диалог</div></div></div>'
-+'<div class="ac" onclick="mSw(\'tech\')" style="margin-bottom:16px;display:flex;align-items:center;gap:10px"><div style="font-size:20px;width:36px;height:36px;border-radius:10px;background:var(--sf2);display:flex;align-items:center;justify-content:center">🧊</div><div><div style="font-size:13px;font-weight:600">5-4-3-2-1</div><div style="font-size:11px;color:var(--tx2)">Заземление</div></div></div>'
++'<div class="ac" onclick="mSw(\'chat\')" style="margin-bottom:16px;display:flex;align-items:center;gap:10px"><div style="font-size:20px;width:36px;height:36px;border-radius:10px;background:var(--sf2);display:flex;align-items:center;justify-content:center">💬</div><div><div style="font-size:13px;font-weight:600">Чат с Loiva</div><div style="font-size:11px;color:var(--tx2)">Продолжить диалог</div></div></div>'
 +'<div style="padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(121,199,195,.08),rgba(170,167,232,.08));border:1px solid var(--bd);margin-bottom:16px;cursor:pointer" onclick="mSw(\'tech\')">'
 +'<div style="font-size:13px;font-weight:600">🌱 Небольшая практика на сегодня</div>'
 +'<div style="font-size:12px;color:var(--tx2);margin-top:4px">Мягкое замедление дыхания — 2 минуты</div></div>'
@@ -202,11 +201,22 @@ ta.appendChild(tCa);
 
 /* === PROGRESS === */
 var tP=document.createElement('div');tP.id='mt-prog';tP.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
-var today=new Date().getDate();var calD='';for(var i=1;i<=28;i++){var isToday=i===today;var r=Math.random();var bg=isToday?'var(--pr)':r>.7?'var(--pr)':r>.4?'rgba(121,199,195,.3)':'var(--sf)';var clr=isToday?'#0B1020':r>.7?'#0B1020':'var(--tx2)';var brd=isToday?'border:2px solid var(--tx)':'';calD+='<div style="width:100%;aspect-ratio:1;border-radius:6px;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:10px;color:'+clr+';'+brd+'">'+i+'</div>'}
+var today=new Date();var todayD=today.getDate();var todayM=today.getMonth()+1;var todayY=today.getFullYear();
+var calD='';for(var i=1;i<=28;i++){
+var dk=todayY+'-'+todayM+'-'+i;
+var dayDone=habLog[dk]||[];
+var completion=habits.length?Math.round(dayDone.length/habits.length*100):0;
+var isToday=i===todayD;
+var bg=isToday?'var(--pr)':completion===100?'var(--ac)':completion>0?'rgba(121,199,195,.25)':'var(--sf)';
+var clr=isToday?'#0B1020':completion>=50?'#0B1020':'var(--tx2)';
+var brd=isToday?'border:2px solid var(--tx)':'';
+calD+='<div onclick="pickDay('+i+')" style="width:100%;aspect-ratio:1;border-radius:6px;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:10px;color:'+clr+';'+brd+';cursor:pointer">'+i+'</div>'}
 tP.innerHTML='<div style="padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--sf),var(--sf2));text-align:center;margin-bottom:16px"><div style="font-size:48px;font-weight:700;color:var(--pr)">7</div><div style="font-size:12px;color:var(--tx2)">дней подряд</div></div>'
 +'<div id="ciChart"></div>'
 +'<div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Активность за месяц</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px">'+calD+'</div>'
-+'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:13px;font-weight:600;color:var(--tx2)">Привычки</div><button onclick="addHabit()" style="background:none;border:none;color:var(--pr);font-size:20px;cursor:pointer;padding:2px 6px">+</button></div><div id="mHab"></div>'
++'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div style="font-size:13px;font-weight:600;color:var(--tx2)">Привычки</div><button onclick="addHabit()" style="background:none;border:none;color:var(--pr);font-size:20px;cursor:pointer;padding:2px 6px">+</button></div>'
++'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:11px;color:var(--mu)" id="dayLabel">'+todayD+'.'+todayM+'.'+todayY+' (сегодня)</div><button onclick="pickDay('+todayD+')" style="background:none;border:none;color:var(--pr);font-size:11px;cursor:pointer;padding:2px 6px;border:1px solid var(--pr);border-radius:6px">Сегодня</button></div>'
++'<div id="mHab"></div>'
 +'<div style="font-size:13px;font-weight:600;color:var(--tx2);margin:16px 0 8px">Статистика</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--pr)">23</div><div style="font-size:10px;color:var(--tx2)">Дней</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--ac)">47</div><div style="font-size:10px;color:var(--tx2)">Диалогов</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--sc)">12</div><div style="font-size:10px;color:var(--tx2)">Техник</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--wn)">85%</div><div style="font-size:10px;color:var(--tx2)">Выполнение</div></div></div>';
 ta.appendChild(tP);
 
@@ -258,7 +268,7 @@ var groups=[
 {title:'Уведомления',items:[
 {icon:'🔔',key:'notif',label:'Check-in',opts:['Вкл','Выкл']},
 {icon:'🧘',key:'notifPr',label:'Напоминание практики',opts:['Вкл','Выкл']},
-{icon:'🕐',key:'quiet',label:'Тихие часы',opts:['22-08','23-07','Выкл']},
+{icon:'🕐',key:'quiet',label:'Тихие часы',timePicker:true},
 {icon:'⏸',label:'Приостановить все',action:'pauseNotif'}
 ]},
 {title:'Внешний вид',items:[
@@ -294,6 +304,27 @@ if(item.action==='reset')d.onclick=function(){localStorage.removeItem(K);locatio
 else d.onclick=function(){alert(item.label+': скоро')};
 }else if(item.val){
 d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+item.val+'</span>';
+}else if(item.timePicker){
+var cur=setVals[item.key]||'22:00-08:00';
+d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto" id="sv-'+item.key+'">'+cur+' ›</span>';
+d.onclick=function(){
+var ov=document.createElement('div');
+ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';
+var box=document.createElement('div');
+box.style.cssText='background:var(--sf);border-radius:16px;padding:24px 20px;max-width:340px;width:90%;text-align:center';
+var parts=cur.replace('Выкл','').split('-');
+var sH=parts[0]||'22';var eH=parts[1]||'08';
+box.innerHTML='<h3 style="font-size:16px;font-weight:600;margin-bottom:16px">Тихие часы</h3>'
++'<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px">'
++'<div><div style="font-size:11px;color:var(--tx2);margin-bottom:4px">С</div><input id="qStart" type="time" value="'+sH+':00" style="padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:14px;font-family:inherit"></div>'
++'<div style="font-size:18px;color:var(--tx2)">—</div>'
++'<div><div style="font-size:11px;color:var(--tx2);margin-bottom:4px">До</div><input id="qEnd" type="time" value="'+eH+':00" style="padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:14px;font-family:inherit"></div>'
++'</div>'
++'<div style="display:flex;gap:8px"><button onclick="var s=document.getElementById(\'qStart\').value.split(\':\')[0];var e=document.getElementById(\'qEnd\').value.split(\':\')[0];setVals[\''+item.key+'\']=s+\':00-\'+e+\':00\';saveSettings();document.getElementById(\'sv-'+item.key+'\').textContent=s+\':00-\'+e+\':00\';this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--pr);color:#0B1020;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Готово</button>'
++'<button onclick="setVals[\''+item.key+'\']=\'Выкл\';saveSettings();document.getElementById(\'sv-'+item.key+'\').textContent=\'Выкл\';this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--tx);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Выкл</button></div>';
+ov.appendChild(box);ov.onclick=function(e){if(e.target===ov)ov.remove()};
+document.body.appendChild(ov);
+};
 }else{
 var cur=setVals[item.key]||item.opts[0];
 d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+cur+' ›</span>';
@@ -324,35 +355,56 @@ w.appendChild(bn);
 A.appendChild(w);
 
 /* Habits */
-var habits=[
-{name:'Утренняя медитация',done:true,desc:'10 минут'},
-{name:'Дыхательная практика',done:true,desc:'5 минут'},
-{name:'Журнал благодарности',done:false,desc:'3 вещи'},
-{name:'Вечерний возврат',done:false,desc:'Как прошёл день?'}
+var habits=JSON.parse(localStorage.getItem(K+'_habits')||'[]');
+if(!habits.length)habits=[
+{name:'Утренняя медитация',desc:'10 минут'},
+{name:'Дыхательная практика',desc:'5 минут'},
+{name:'Журнал благодарности',desc:'3 вещи'},
+{name:'Вечерний возврат',desc:'Как прошёл день?'}
 ];
-function renderHabits(){
+var habLog=JSON.parse(localStorage.getItem(K+'_habLog')||'{}');
+function todayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function saveHabits(){try{localStorage.setItem(K+'_habits',JSON.stringify(habits))}catch(e){}}
+function saveHabLog(){try{localStorage.setItem(K+'_habLog',JSON.stringify(habLog))}catch(e){}}
+function renderHabits(dayKey){
+dayKey=dayKey||todayKey();
+var done=habLog[dayKey]||[];
 var habEl=$('mHab');if(!habEl)return;habEl.innerHTML='';
 habits.forEach(function(h,i){
-var d=document.createElement('div');d.className='hi'+(h.done?' dn':'');
+var isDone=done.indexOf(i)>=0;
+var d=document.createElement('div');d.className='hi'+(isDone?' dn':'');
 d.innerHTML='<div class="ck"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">'+h.name+'</div><div style="font-size:11px;color:var(--tx2)">'+h.desc+'</div></div><div style="display:flex;gap:8px"><button onclick="event.stopPropagation();editHabit('+i+')" style="background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;padding:4px">✏️</button><button onclick="event.stopPropagation();delHabit('+i+')" style="background:none;border:none;color:var(--dn);font-size:14px;cursor:pointer;padding:4px">🗑</button></div>';
-d.onclick=function(){h.done=!h.done;renderHabits()};
+d.onclick=function(){
+if(!habLog[dayKey])habLog[dayKey]=[];
+var arr=habLog[dayKey];
+var idx=arr.indexOf(i);
+if(idx>=0)arr.splice(idx,1);else arr.push(i);
+saveHabLog();renderHabits(dayKey);
+};
 habEl.appendChild(d);
 });
 }
 window.addHabit=function(){
 var name=prompt('Название привычки:');if(!name)return;
 var desc=prompt('Описание (необязательно):')||'';
-habits.push({name:name,done:false,desc:desc});renderHabits();
+habits.push({name:name,desc:desc});saveHabits();renderHabits();
 };
 window.editHabit=function(i){
 var h=habits[i];var name=prompt('Название:',h.name);if(!name)return;
 var desc=prompt('Описание:',h.desc);if(desc===null)return;
-h.name=name;h.desc=desc;renderHabits();
+h.name=name;h.desc=desc;saveHabits();renderHabits();
 };
 window.delHabit=function(i){
-if(confirm('Удалить привычку "'+habits[i].name+'"?')){habits.splice(i,1);renderHabits()}
+if(confirm('Удалить привычку "'+habits[i].name+'"?')){habits.splice(i,1);saveHabits();renderHabits()}
 };
 renderHabits();
+var selectedDay=todayD;
+window.pickDay=function(day){
+selectedDay=day;
+var dk=todayY+'-'+todayM+'-'+day;
+renderHabits(dk);
+var dayLabel=$('dayLabel');if(dayLabel)dayLabel.textContent=day+'.'+todayM+'.'+todayY+(day===todayD?' (сегодня)':'');
+};
 
 /* Check-in */
 var ciState={mood:3,tension:3,energy:3};
