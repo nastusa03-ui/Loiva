@@ -51,36 +51,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .ac{padding:14px 12px;border-radius:14px;background:var(--sf);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
 .ac:active{border-color:var(--pr)}
 .tc{padding:14px;border-radius:14px;background:var(--sf);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
-.tc:active{border-color:var(--pr)}
-.hi{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--sf);cursor:pointer;margin-bottom:8px}
-.hi:active{opacity:.8}
-.hi .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--mu);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.hi.dn .ck{background:var(--pr);border-color:var(--pr)}
-.hi.dn .ck::after{content:'\2713';color:#0B1020;font-size:12px;font-weight:700}
-.si{display:flex;align-items:center;gap:10px;padding:12px;background:var(--sf);margin-bottom:1px;cursor:pointer;transition:background .15s}
-.si:first-child{border-radius:12px 12px 2px 2px}
-.si:last-child{border-radius:2px 2px 12px 12px}
-.si:only-child{border-radius:12px}
-.si:active{background:var(--sf2)}
-.m{max-width:82%;padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.55}
-.m.u{align-self:flex-end;background:var(--pr);color:#0B1020;border-bottom-right-radius:4px}
-.m.a{align-self:flex-start;background:var(--sf);border-bottom-left-radius:4px}
-.tp{display:flex;gap:4px;padding:11px 14px;background:var(--sf);border-radius:14px;align-self:flex-start;width:fit-content}
-.tp span{width:6px;height:6px;border-radius:50%;background:var(--mu);animation:an 1.2s infinite}
-.tp span:nth-child(2){animation-delay:.15s}
-.tp span:nth-child(3){animation-delay:.3s}
-.cBtn{padding:8px 16px;border-radius:20px;background:var(--sf);border:1.5px solid var(--bd);color:var(--tx);font-size:13px;cursor:pointer;font-family:inherit;transition:border-color .15s}
-.cBtn.sel{border-color:var(--pr);color:var(--pr)}
-@keyframes an{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
-.det{position:absolute;inset:0;background:var(--bg);z-index:20;display:flex;flex-direction:column}
-</style>
-</head>
-<body>
-<div id="A"></div>
 <script>
-(function(){
 var A=document.getElementById('A');
-var K='loiva_v4';
+var K='loiva_v5';
 var busy=0;
 
 function $(id){return document.getElementById(id)}
@@ -100,13 +73,10 @@ window.goScreen=goScreen;
 function enterApp(){
 if(busy)return;busy=1;
 try{
-/* Save onboarding selections to settings */
 var langSel=document.querySelector('#s2 .lg button.sel');
-if(langSel){var ln=langSel.textContent.trim();setVals.lang=ln==='Русский'?'Русский':'English'}
+if(langSel){var ln=langSel.textContent.trim();setVals.lang=ln.indexOf('усск')>=0?'Русский':'English'}
 var lenSel=document.querySelector('#s6 .chips .sel');
 if(lenSel){var lText=lenSel.textContent.trim();if(['Коротко','Средне','Подробно'].indexOf(lText)>=0)setVals.len=lText}
-var addrSel=document.querySelectorAll('#s6 .chips');
-if(addrSel.length>=3){var aSel=addrSel[2].querySelector('.sel');if(aSel)setVals.addr=aSel.textContent.trim()}
 saveSettings();
 localStorage.setItem(K,'1');
 buildMain();mSw('home');
@@ -114,6 +84,7 @@ buildMain();mSw('home');
 A.innerHTML='<div style="padding:20px;color:white"><h2>Error</h2><pre>'+esc(e.message)+'</pre></div>';
 }
 }
+window.enterApp=enterApp;
 
 function buildMain(){
 A.innerHTML='';
@@ -128,7 +99,7 @@ w.appendChild(tb);
 var ta=document.createElement('div');
 ta.style.cssText='flex:1;overflow:hidden;position:relative';
 
-/* === HOME === */
+/* HOME */
 var tH=document.createElement('div');tH.id='mt-home';tH.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px';
 tH.innerHTML='<h3 style="font-size:18px;margin-bottom:12px">Что полезно сейчас?</h3>'
 +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">'
@@ -144,23 +115,20 @@ tH.innerHTML='<h3 style="font-size:18px;margin-bottom:12px">Что полезн�
 +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:var(--tx2);width:80px">Настроение</span><div style="display:flex;gap:4px" id="ciMood"></div></div>'
 +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:var(--tx2);width:80px">Напряжение</span><div style="display:flex;gap:4px" id="ciTens"></div></div>'
 +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:var(--tx2);width:80px">Энергия</span><div style="display:flex;gap:4px" id="ciEn"></div></div>'
-+'<textarea id="ciNote" placeholder="Заметка (необязательно)..." style="width:100%;padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:12px;font-family:inherit;resize:none;outline:none;margin-top:4px" rows="2"></textarea>'
++'<textarea id="ciNote" placeholder="Заметка..." style="width:100%;padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:12px;font-family:inherit;resize:none;outline:none;margin-top:4px" rows="2"></textarea>'
 +'<button id="ciBtn" onclick="ciSave()" style="margin-top:8px;width:100%;padding:10px;border-radius:10px;background:var(--pr);color:#0B1020;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Готово</button>'
 +'</div>'
 +'<div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Продолжить</div>'
 +'<div class="ac" onclick="mSw(\'chat\')" style="margin-bottom:16px;display:flex;align-items:center;gap:10px"><div style="font-size:20px;width:36px;height:36px;border-radius:10px;background:var(--sf2);display:flex;align-items:center;justify-content:center">💬</div><div><div style="font-size:13px;font-weight:600">Чат с Loiva</div><div style="font-size:11px;color:var(--tx2)">Продолжить диалог</div></div></div>'
-+'<div style="padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(121,199,195,.08),rgba(170,167,232,.08));border:1px solid var(--bd);margin-bottom:16px;cursor:pointer" onclick="mSw(\'tech\')">'
-+'<div style="font-size:13px;font-weight:600">🌱 Небольшая практика на сегодня</div>'
-+'<div style="font-size:12px;color:var(--tx2);margin-top:4px">Мягкое замедление дыхания — 2 минуты</div></div>'
 +'<div style="padding:12px;border-radius:12px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2)"><div style="font-size:13px;font-weight:600;color:var(--dn)">🆘 Нужна помощь?</div><div style="font-size:12px;color:var(--tx2);margin-top:4px">Позвони: <a href="tel:8-800-2000-122" style="color:var(--dn)">8-800-2000-122</a></div></div>';
 ta.appendChild(tH);
 
-/* === CHAT === */
+/* CHAT */
 var tC=document.createElement('div');tC.id='mt-chat';tC.style.cssText='position:absolute;inset:0;display:none;flex-direction:column';
 tC.innerHTML='<div style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px" id="mMsgs"><div style="text-align:center;color:var(--tx2);padding:40px 20px"><div style="font-size:36px;margin-bottom:8px;opacity:.5">💬</div><p style="font-size:13px">Начни диалог с Loiva</p></div></div><div style="padding:8px 12px;border-top:1px solid var(--bd);display:flex;gap:8px"><input id="mInp" style="flex:1;padding:11px 14px;border-radius:22px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-size:14px;outline:none;font-family:inherit" placeholder="Напиши..."><button onclick="mSend()" style="width:38px;height:38px;border-radius:50%;background:var(--pr);border:none;color:#0B1020;font-size:18px;cursor:pointer;font-weight:700">↑</button></div>';
 ta.appendChild(tC);
 
-/* === TECH === */
+/* TECH */
 var tT=document.createElement('div');tT.id='mt-tech';tT.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:12px;display:none';
 var techData=[
 {cat:'Тревожные мысли',items:[
@@ -178,10 +146,10 @@ var techData=[
 ]},
 {cat:'Кризис',items:[
 {icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Быстрая помощь при панике.',caution:'При реальной опасности звони 112.',steps:['Скажи: это паника, она пройдёт','Возьми холодный предмет','Назови где ты, какой день','Не помогает? Звони 8-800-2000-122']},
-{icon:'🧭',name:'Ориентация в пространстве',dur:'1-2 мин',desc:'Вернись в реальность через факты.',caution:null,steps:['Где ты находишься? Назови место.','Какой сегодня день и дата?','Какое время года?','Назови 3 предмета рядом.']},
-{icon:'🔍',name:'Проверка катастрофы',dur:'5-10 мин',desc:'Проверь тревожную мысль на реальность.',caution:null,steps:['Напиши тревожную мысль','Худшая реалистичная возможность?','Наиболее вероятная?','Что бы сказал другу?','Сформулируй реалистичную мысль']},
-{icon:'💌',name:'Благодарность',dur:'3-5 мин',desc:'3 вещи за которые благодарен сегодня.',caution:null,steps:['Назови 3 вещи','Для каждой: ПОЧЕМУ','Какое чувство это вызывает?']},
-{icon:'🌅',name:'Визуализация',dur:'5 мин',desc:'Представь безопасное спокойное место.',caution:null,steps:['3 глубоких вдоха','Представь безопасное место','Заметь детали','Побудь минуту','Открой глаза']}
+{icon:'🧭',name:'Ориентация',dur:'1-2 мин',desc:'Вернись в реальность через факты.',caution:null,steps:['Где ты? Назови место','Какой день?','Какое время года?','3 предмета рядом']},
+{icon:'🔍',name:'Проверка катастрофы',dur:'5-10 мин',desc:'Проверь тревожную мысль.',caution:null,steps:['Напиши тревожную мысль','Худшая реалистичная?','Наиболее вероятная?','Что бы сказал другу?']},
+{icon:'💌',name:'Благодарность',dur:'3-5 мин',desc:'3 вещи за которые благодарен.',caution:null,steps:['Назови 3 вещи','Для каждой: ПОЧЕМУ','Какое чувство?']},
+{icon:'🌅',name:'Визуализация',dur:'5 мин',desc:'Безопасное спокойное место.',caution:null,steps:['3 вдоха','Представь место','Заметь детали','Побудь минуту']}
 ]}
 ];
 var thtml='';
@@ -194,12 +162,12 @@ thtml+='<div class="tc" onclick="openDetail(\''+esc(t.name).replace(/'/g,"\\'")+
 tT.innerHTML=thtml;
 ta.appendChild(tT);
 
-/* === CALM === */
+/* CALM */
 var tCa=document.createElement('div');tCa.id='mt-calm';tCa.style.cssText='position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center';
 tCa.innerHTML='<div id="mBreath" style="width:140px;height:140px;border-radius:50%;border:3px solid var(--pr);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:transform 4s"><span id="mBrT" style="color:var(--pr);font-weight:600">Готов</span></div><div id="mTimer" style="font-size:42px;font-weight:700;color:var(--tx2);margin-bottom:12px">5:00</div><div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><button class="cBtn" onclick="mDur(this,1)">1</button><button class="cBtn" onclick="mDur(this,3)">3</button><button class="cBtn sel" onclick="mDur(this,5)">5</button><button class="cBtn" onclick="mDur(this,10)">10</button><span style="color:var(--tx2);font-size:13px">мин</span><input id="mCustom" type="number" min="1" max="120" placeholder="своё" style="width:52px;padding:6px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-size:13px;text-align:center;font-family:inherit" oninput="mCustomDur(this.value)"></div><div style="display:flex;gap:10px"><button id="mStart" onclick="mStartCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--pr);color:#0B1020;cursor:pointer">Старт</button><button id="mStop" onclick="mStopCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Стоп</button><button id="mReset" onclick="mResetCalm()" style="padding:12px 24px;border-radius:14px;font-size:14px;font-weight:600;border:none;background:var(--sf);color:var(--tx);cursor:pointer;display:none">Сброс</button></div>';
 ta.appendChild(tCa);
 
-/* === PROGRESS === */
+/* PROGRESS */
 var tP=document.createElement('div');tP.id='mt-prog';tP.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
 var today=new Date();var todayD=today.getDate();var todayM=today.getMonth()+1;var todayY=today.getFullYear();
 var calD='';for(var i=1;i<=28;i++){
@@ -210,7 +178,8 @@ var isToday=i===todayD;
 var bg=isToday?'var(--pr)':completion===100?'var(--ac)':completion>0?'rgba(121,199,195,.25)':'var(--sf)';
 var clr=isToday?'#0B1020':completion>=50?'#0B1020':'var(--tx2)';
 var brd=isToday?'border:2px solid var(--tx)':'';
-calD+='<div onclick="pickDay('+i+')" style="width:100%;aspect-ratio:1;border-radius:6px;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:10px;color:'+clr+';'+brd+';cursor:pointer">'+i+'</div>'}
+calD+='<div onclick="pickDay('+i+')" style="width:100%;aspect-ratio:1;border-radius:6px;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:10px;color:'+clr+';'+brd+';cursor:pointer">'+i+'</div>';
+}
 tP.innerHTML='<div style="padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--sf),var(--sf2));text-align:center;margin-bottom:16px"><div style="font-size:48px;font-weight:700;color:var(--pr)">7</div><div style="font-size:12px;color:var(--tx2)">дней подряд</div></div>'
 +'<div id="ciChart"></div>'
 +'<div style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:8px">Активность за месяц</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px">'+calD+'</div>'
@@ -220,123 +189,9 @@ tP.innerHTML='<div style="padding:20px;border-radius:16px;background:linear-grad
 +'<div style="font-size:13px;font-weight:600;color:var(--tx2);margin:16px 0 8px">Статистика</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--pr)">23</div><div style="font-size:10px;color:var(--tx2)">Дней</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--ac)">47</div><div style="font-size:10px;color:var(--tx2)">Диалогов</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--sc)">12</div><div style="font-size:10px;color:var(--tx2)">Техник</div></div><div style="padding:14px;border-radius:12px;background:var(--sf);text-align:center"><div style="font-size:22px;font-weight:700;color:var(--wn)">85%</div><div style="font-size:10px;color:var(--tx2)">Выполнение</div></div></div>';
 ta.appendChild(tP);
 
-/* === SETTINGS === */
+/* SETTINGS */
 var tS=document.createElement('div');tS.id='mt-set';tS.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
-var setValsDefault={lang:'Русский',country:'Россия',len:'Средне',tone:'Мягко',addr:'На вы',offer:'Да',mode:'Listen',mem:'Вкл',notif:'Вкл',notifPr:'Вкл',quiet:'22-08',theme:'Системная',motion:'Выкл',textSize:'Средний',hist:'Вкл'};
-var setVals={};
-try{var saved=JSON.parse(localStorage.getItem(K+'_settings'));if(saved)for(var k in setValsDefault)setVals[k]=saved[k]||setValsDefault[k];else setVals=JSON.parse(JSON.stringify(setValsDefault))}catch(e){setVals=JSON.parse(JSON.stringify(setValsDefault))}
-function saveSettings(){try{localStorage.setItem(K+'_settings',JSON.stringify(setVals))}catch(e){}}
-
-function showPicker(key,label,opts,cur){
-var ov=document.createElement('div');
-ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center';
-var sheet=document.createElement('div');
-sheet.style.cssText='width:100%;max-width:480px;background:var(--sf);border-radius:16px 16px 0 0;padding:20px 16px 32px;max-height:70vh;overflow-y:auto';
-sheet.innerHTML='<div style="display:flex;align-items:center;margin-bottom:16px"><h3 style="font-size:16px;font-weight:600;flex:1">'+label+'</h3><button id="pickerClose" style="background:none;border:none;color:var(--tx2);font-size:20px;cursor:pointer">✕</button></div>';
-opts.forEach(function(opt){
-var row=document.createElement('div');
-row.style.cssText='padding:14px;border-radius:12px;cursor:pointer;margin-bottom:4px;font-size:15px;display:flex;align-items:center;justify-content:space-between';
-if(opt===cur){row.style.background='var(--sf2)';row.style.border='1px solid var(--pr)'}
-row.innerHTML=opt+(opt===cur?'<span style="color:var(--pr);font-weight:700">✓</span>':'');
-row.onclick=function(){setVals[key]=opt;saveSettings();renderSet();ov.remove()};
-sheet.appendChild(row);
-});
-ov.appendChild(sheet);
-ov.onclick=function(e){if(e.target===ov)ov.remove()};
-document.body.appendChild(ov);
-$('pickerClose').onclick=function(){ov.remove()};
-}
-
-var tS=document.createElement('div');tS.id='mt-set';tS.style.cssText='position:absolute;inset:0;overflow-y:auto;padding:16px;display:none';
-function renderSet(){
-tS.innerHTML='';
-var groups=[
-{title:'Общие',items:[
-{icon:'🌍',key:'lang',label:'Язык',opts:['Русский','English']},
-{icon:'🏳',key:'country',label:'Страна',opts:['Россия','Украина','Казахстан','Беларусь','Грузия','США','Германия','Франция','Израиль','Корея','Япония']},
-{icon:'💬',key:'len',label:'Длина ответа',opts:['Коротко','Средне','Подробно']},
-{icon:'🎭',key:'tone',label:'Тон ответа',opts:['Мягко','Нейтрально']},
-{icon:'💬',key:'addr',label:'Обращение',opts:['На вы','На ты']},
-{icon:'❓',key:'offer',label:'Предлагать практики',opts:['Да','Нет']}
-]},
-{title:'AI',items:[
-{icon:'🤖',key:'mode',label:'Режим по умолчанию',opts:['Listen','Calm','Sort','Next step']},
-{icon:'🧠',key:'mem',label:'Память',opts:['Вкл','Выкл']},
-{icon:'📋',label:'Memory Center',action:'memory'},
-{icon:'💡',label:'Сохранённые выводы',action:'insights'}
-]},
-{title:'Уведомления',items:[
-{icon:'🔔',key:'notif',label:'Check-in',opts:['Вкл','Выкл']},
-{icon:'🧘',key:'notifPr',label:'Напоминание практики',opts:['Вкл','Выкл']},
-{icon:'🕐',key:'quiet',label:'Тихие часы',timePicker:true},
-{icon:'⏸',label:'Приостановить все',action:'pauseNotif'}
-]},
-{title:'Внешний вид',items:[
-{icon:'🎨',key:'theme',label:'Тема',opts:['Системная','Тёмная','Светлая']},
-{icon:'✨',key:'motion',label:'Reduced motion',opts:['Вкл','Выкл']},
-{icon:'🔤',key:'textSize',label:'Размер текста',opts:['Маленький','Средний','Большой']}
-]},
-{title:'Данные и приватность',items:[
-{icon:'💬',key:'hist',label:'История чатов',opts:['Вкл','Выкл']},
-{icon:'💾',label:'Экспорт данных',action:'export'},
-{icon:'🗑',label:'Удалить историю',action:'deleteHistory'},
-{icon:'🧠',label:'Удалить память',action:'deleteMemory'},
-{icon:'📋',label:'Политика приватности',action:'privacy'},
-{icon:'🔄',label:'Повторить онбординг',action:'reset'}
-]},
-{title:'Безопасность',items:[
-{icon:'🆘',label:'Кризисные контакты',action:'crisis'},
-{icon:'📖',label:'Что Loiva может и не может',action:'limits'},
-{icon:'⚠',label:'Сообщить об unsafe-ответе',action:'report'}
-]},
-{title:'О приложении',items:[
-{icon:'📱',label:'Версия',val:'0.1.0'},
-{icon:'🤖',label:'AI-провайдер',action:'aiProvider'}
-]}
-];
-groups.forEach(function(g){
-var hd=document.createElement('div');hd.style.cssText='font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px';hd.textContent=g.title;tS.appendChild(hd);
-g.items.forEach(function(item){
-var d=document.createElement('div');d.className='si';
-if(item.action){
-d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">›</span>';
-if(item.action==='reset')d.onclick=function(){localStorage.removeItem(K);location.reload()};
-else d.onclick=function(){alert(item.label+': скоро')};
-}else if(item.val){
-d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+item.val+'</span>';
-}else if(item.timePicker){
-var cur=setVals[item.key]||'22:00-08:00';
-d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto" id="sv-'+item.key+'">'+cur+' ›</span>';
-d.onclick=function(){
-var ov=document.createElement('div');
-ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';
-var box=document.createElement('div');
-box.style.cssText='background:var(--sf);border-radius:16px;padding:24px 20px;max-width:340px;width:90%;text-align:center';
-var parts=cur.replace('Выкл','').split('-');
-var sH=parts[0]||'22';var eH=parts[1]||'08';
-box.innerHTML='<h3 style="font-size:16px;font-weight:600;margin-bottom:16px">Тихие часы</h3>'
-+'<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px">'
-+'<div><div style="font-size:11px;color:var(--tx2);margin-bottom:4px">С</div><input id="qStart" type="time" value="'+sH+':00" style="padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:14px;font-family:inherit"></div>'
-+'<div style="font-size:18px;color:var(--tx2)">—</div>'
-+'<div><div style="font-size:11px;color:var(--tx2);margin-bottom:4px">До</div><input id="qEnd" type="time" value="'+eH+':00" style="padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:14px;font-family:inherit"></div>'
-+'</div>'
-+'<div style="display:flex;gap:8px"><button onclick="var s=document.getElementById(\'qStart\').value.split(\':\')[0];var e=document.getElementById(\'qEnd\').value.split(\':\')[0];setVals[\''+item.key+'\']=s+\':00-\'+e+\':00\';saveSettings();document.getElementById(\'sv-'+item.key+'\').textContent=s+\':00-\'+e+\':00\';this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--pr);color:#0B1020;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Готово</button>'
-+'<button onclick="setVals[\''+item.key+'\']=\'Выкл\';saveSettings();document.getElementById(\'sv-'+item.key+'\').textContent=\'Выкл\';this.closest(\'div[style]\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--tx);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Выкл</button></div>';
-ov.appendChild(box);ov.onclick=function(e){if(e.target===ov)ov.remove()};
-document.body.appendChild(ov);
-};
-}else{
-var cur=setVals[item.key]||item.opts[0];
-d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+cur+' ›</span>';
-d.onclick=function(){showPicker(item.key,item.label,item.opts,cur)};
-}
-tS.appendChild(d);
-});
-});
-}
-renderSet();
 ta.appendChild(tP);ta.appendChild(tS);
-
 w.appendChild(ta);
 
 /* BOTTOM NAV */
@@ -356,250 +211,106 @@ A.appendChild(w);
 
 /* Habits */
 var habits=JSON.parse(localStorage.getItem(K+'_habits')||'[]');
-if(!habits.length)habits=[
-{name:'Утренняя медитация',desc:'10 минут'},
-{name:'Дыхательная практика',desc:'5 минут'},
-{name:'Журнал благодарности',desc:'3 вещи'},
-{name:'Вечерний возврат',desc:'Как прошёл день?'}
-];
+if(!habits.length)habits=[{name:'Утренняя медитация',desc:'10 минут'},{name:'Дыхательная практика',desc:'5 минут'},{name:'Журнал благодарности',desc:'3 вещи'},{name:'Вечерний возврат',desc:'Как прошёл день?'}];
 var habLog=JSON.parse(localStorage.getItem(K+'_habLog')||'{}');
-function todayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function saveHabits(){try{localStorage.setItem(K+'_habits',JSON.stringify(habits))}catch(e){}}
 function saveHabLog(){try{localStorage.setItem(K+'_habLog',JSON.stringify(habLog))}catch(e){}}
 function renderHabits(dayKey){
-dayKey=dayKey||todayKey();
+dayKey=dayKey||todayY+'-'+todayM+'-'+todayD;
 var done=habLog[dayKey]||[];
 var habEl=$('mHab');if(!habEl)return;habEl.innerHTML='';
 habits.forEach(function(h,i){
 var isDone=done.indexOf(i)>=0;
 var d=document.createElement('div');d.className='hi'+(isDone?' dn':'');
 d.innerHTML='<div class="ck"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">'+h.name+'</div><div style="font-size:11px;color:var(--tx2)">'+h.desc+'</div></div><div style="display:flex;gap:8px"><button onclick="event.stopPropagation();editHabit('+i+')" style="background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;padding:4px">✏️</button><button onclick="event.stopPropagation();delHabit('+i+')" style="background:none;border:none;color:var(--dn);font-size:14px;cursor:pointer;padding:4px">🗑</button></div>';
-d.onclick=function(){
-if(!habLog[dayKey])habLog[dayKey]=[];
-var arr=habLog[dayKey];
-var idx=arr.indexOf(i);
-if(idx>=0)arr.splice(idx,1);else arr.push(i);
-saveHabLog();renderHabits(dayKey);
-};
+d.onclick=function(){if(!habLog[dayKey])habLog[dayKey]=[];var arr=habLog[dayKey];var idx=arr.indexOf(i);if(idx>=0)arr.splice(idx,1);else arr.push(i);saveHabLog();renderHabits(dayKey)};
 habEl.appendChild(d);
 });
 }
-window.addHabit=function(){
-var name=prompt('Название привычки:');if(!name)return;
-var desc=prompt('Описание (необязательно):')||'';
-habits.push({name:name,desc:desc});saveHabits();renderHabits();
-};
-window.editHabit=function(i){
-var h=habits[i];var name=prompt('Название:',h.name);if(!name)return;
-var desc=prompt('Описание:',h.desc);if(desc===null)return;
-h.name=name;h.desc=desc;saveHabits();renderHabits();
-};
-window.delHabit=function(i){
-if(confirm('Удалить привычку "'+habits[i].name+'"?')){habits.splice(i,1);saveHabits();renderHabits()}
-};
+window.addHabit=function(){var name=prompt('Название:');if(!name)return;var desc=prompt('Описание:')||'';habits.push({name:name,desc:desc});saveHabits();renderHabits()};
+window.editHabit=function(i){var h=habits[i];var name=prompt('Название:',h.name);if(!name)return;var desc=prompt('Описание:',h.desc);if(desc===null)return;h.name=name;h.desc=desc;saveHabits();renderHabits()};
+window.delHabit=function(i){if(confirm('Удалить "'+habits[i].name+'"?')){habits.splice(i,1);saveHabits();renderHabits()}};
 renderHabits();
 var selectedDay=todayD;
-window.pickDay=function(day){
-selectedDay=day;
-var dk=todayY+'-'+todayM+'-'+day;
-renderHabits(dk);
-var dayLabel=$('dayLabel');if(dayLabel)dayLabel.textContent=day+'.'+todayM+'.'+todayY+(day===todayD?' (сегодня)':'');
-};
+window.pickDay=function(day){selectedDay=day;renderHabits(todayY+'-'+todayM+'-'+day);var dl=$('dayLabel');if(dl)dl.textContent=day+'.'+todayM+'.'+todayY+(day===todayD?' (сегодня)':'')};
 
 /* Check-in */
 var ciState={mood:3,tension:3,energy:3};
 var ciLog=JSON.parse(localStorage.getItem(K+'_ci')||'[]');
-function ciBuild(id,key){
-var el=$(id);if(!el)return;el.innerHTML='';
-for(var i=1;i<=5;i++){
-var b=document.createElement('div');
-b.style.cssText='width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--tx2)';
-b.textContent=i;
-if(ciState[key]===i){b.style.background='var(--pr)';b.style.borderColor='var(--pr)';b.style.color='#0B1020'}
-b.onclick=function(){ciState[key]=parseInt(this.textContent);ciBuild(id,key)};
-el.appendChild(b);
-}}
+function ciBuild(id,key){var el=$(id);if(!el)return;el.innerHTML='';for(var i=1;i<=5;i++){var b=document.createElement('div');b.style.cssText='width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;color:var(--tx2)';b.textContent=i;if(ciState[key]===i){b.style.background='var(--pr)';b.style.borderColor='var(--pr)';b.style.color='#0B1020'}b.onclick=function(){ciState[key]=parseInt(this.textContent);ciBuild(id,key)};el.appendChild(b)}}
 ciBuild('ciMood','mood');ciBuild('ciTens','tension');ciBuild('ciEn','energy');
-window.ciSave=function(){
-var note=$('ciNote');
-var entry={date:new Date().toISOString(),mood:ciState.mood,tension:ciState.tension,energy:ciState.energy,note:note?note.value:''};
-ciLog.push(entry);
-try{localStorage.setItem(K+'_ci',JSON.stringify(ciLog))}catch(e){}
-if(note)note.value='';
-var btn=document.getElementById('ciBtn');if(btn){btn.textContent='✓ Сохранено';btn.style.background='var(--ac)';setTimeout(function(){btn.textContent='Готово';btn.style.background='var(--pr)'},1500)}
-updateCiChart();
-};
-function updateCiChart(){
-var el=$('ciChart');if(!el)return;
-if(!ciLog.length){el.innerHTML='<div style="font-size:12px;color:var(--tx2);text-align:center;padding:12px">Пока нет данных. Сделай первый check-in!</div>';return}
-var last=ciLog[ciLog.length-1];
-var dt=new Date(last.date);
-var timeStr=dt.getHours()+':'+(dt.getMinutes()<10?'0':'')+dt.getMinutes();
-el.innerHTML='<div style="padding:12px;border-radius:12px;background:var(--sf);margin-bottom:8px">'
-+'<div style="font-size:11px;color:var(--mu);margin-bottom:8px">📅 '+dt.toLocaleDateString('ru')+' в '+timeStr+'</div>'
-+'<div style="display:flex;gap:8px">'
-+'<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Настроение</div><div style="font-size:20px;font-weight:700;color:var(--pr)">'+last.mood+'</div></div>'
-+'<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Напряжение</div><div style="font-size:20px;font-weight:700;color:var(--wn)">'+last.tension+'</div></div>'
-+'<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Энергия</div><div style="font-size:20px;font-weight:700;color:var(--ac)">'+last.energy+'</div></div>'
-+'</div>'
-+(last.note?'<div style="font-size:12px;color:var(--tx2);margin-top:8px;padding:6px 8px;border-radius:8px;background:var(--bg)">📝 '+last.note+'</div>':'')
-+'</div>';}
+window.ciSave=function(){var note=$('ciNote');var entry={date:new Date().toISOString(),mood:ciState.mood,tension:ciState.tension,energy:ciState.energy,note:note?note.value:''};ciLog.push(entry);try{localStorage.setItem(K+'_ci',JSON.stringify(ciLog))}catch(e){}if(note)note.value='';var btn=$('ciBtn');if(btn){btn.textContent='✓ Сохранено';btn.style.background='var(--ac)';setTimeout(function(){btn.textContent='Готово';btn.style.background='var(--pr)'},1500)}updateCiChart()};
+function updateCiChart(){var el=$('ciChart');if(!el)return;if(!ciLog.length){el.innerHTML='<div style="font-size:12px;color:var(--tx2);text-align:center;padding:12px">Нет данных. Сделай check-in!</div>';return}var last=ciLog[ciLog.length-1];var dt=new Date(last.date);var timeStr=dt.getHours()+':'+(dt.getMinutes()<10?'0':'')+dt.getMinutes();el.innerHTML='<div style="padding:12px;border-radius:12px;background:var(--sf);margin-bottom:8px"><div style="font-size:11px;color:var(--mu);margin-bottom:8px">📅 '+dt.toLocaleDateString('ru')+' в '+timeStr+'</div><div style="display:flex;gap:8px"><div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Настроение</div><div style="font-size:20px;font-weight:700;color:var(--pr)">'+last.mood+'</div></div><div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Напряжение</div><div style="font-size:20px;font-weight:700;color:var(--wn)">'+last.tension+'</div></div><div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--tx2)">Энергия</div><div style="font-size:20px;font-weight:700;color:var(--ac)">'+last.energy+'</div></div></div>'+(last.note?'<div style="font-size:12px;color:var(--tx2);margin-top:8px;padding:6px 8px;border-radius:8px;background:var(--bg)">📝 '+last.note+'</div>':'')+'</div>';}
 setTimeout(updateCiChart,100);
 
 /* Chat */
 var aiResp=['Я тебя слышу. Расскажи подробнее.','Спасибо, что делишься.','Это нормально чувствовать так.','Я здесь рядом.','Хочешь попробовать заземление?','Как давно ты так себя чувствуешь?','Это смело — говорить об этом.','Давай сделаем вдох вместе.','Что бы ты хотела сделать сейчас?'];
 var chatStarted=false;
-window.mSend=function(){
-var inp=$('mInp');if(!inp)return;var msg=inp.value.trim();if(!msg)return;
-if(!chatStarted){var e=$('mMsgs');if(e)e.innerHTML='';chatStarted=true}
-var box=$('mMsgs');
-box.insertAdjacentHTML('beforeend','<div class="m u">'+esc(msg)+'</div>');
-inp.value='';
-box.insertAdjacentHTML('beforeend','<div class="tp" id="mtyp"><span></span><span></span><span></span></div>');
-box.scrollTop=box.scrollHeight;
-setTimeout(function(){var t=$('mtyp');if(t)t.remove();var r=aiResp[Math.floor(Math.random()*aiResp.length)];box.insertAdjacentHTML('beforeend','<div class="m a"><div style="font-size:9px;color:var(--pr);font-weight:700;text-transform:uppercase;margin-bottom:3px">listen</div>'+r+'</div>');box.scrollTop=box.scrollHeight},1200);
-};
+window.mSend=function(){var inp=$('mInp');if(!inp)return;var msg=inp.value.trim();if(!msg)return;if(!chatStarted){var e=$('mMsgs');if(e)e.innerHTML='';chatStarted=true}var box=$('mMsgs');box.insertAdjacentHTML('beforeend','<div class="m u">'+esc(msg)+'</div>');inp.value='';box.insertAdjacentHTML('beforeend','<div class="tp" id="mtyp"><span></span><span></span><span></span></div>');box.scrollTop=box.scrollHeight;setTimeout(function(){var t=$('mtyp');if(t)t.remove();var r=aiResp[Math.floor(Math.random()*aiResp.length)];box.insertAdjacentHTML('beforeend','<div class="m a"><div style="font-size:9px;color:var(--pr);font-weight:700;text-transform:uppercase;margin-bottom:3px">listen</div>'+r+'</div>');box.scrollTop=box.scrollHeight},1200)};
 if($('mInp'))$('mInp').onkeypress=function(e){if(e.key==='Enter')mSend()};
 
 /* Tab switching */
-window.mSw=function(id){
-var tabs=['home','chat','tech','calm','prog','set'];
-tabs.forEach(function(t){var el=$('mt-'+t);if(el)el.style.display=(t===id)?'block':'none'});
-var bis=bn.querySelectorAll('[data-tab]');
-for(var i=0;i<bis.length;i++){
-var active=bis[i].dataset.tab===id;
-bis[i].children[0].style.opacity=active?'1':'.4';
-bis[i].children[1].style.color=active?'var(--pr)':'var(--mu)';
-bis[i].children[1].style.fontWeight=active?'600':'500';
-}
-if(id==='prog')updateCiChart();
-};
+window.mSw=function(id){var tabs=['home','chat','tech','calm','prog','set'];tabs.forEach(function(t){var el=$('mt-'+t);if(el)el.style.display=(t===id)?'block':'none'});var bis=bn.querySelectorAll('[data-tab]');for(var i=0;i<bis.length;i++){var active=bis[i].dataset.tab===id;bis[i].children[0].style.opacity=active?'1':'.4';bis[i].children[1].style.color=active?'var(--pr)':'var(--mu)';bis[i].children[1].style.fontWeight=active?'600':'500'}if(id==='prog'){updateCiChart();renderHabits(todayY+'-'+todayM+'-'+selectedDay)}if(id==='set')renderSet()};
 }
 
-/* Technique detail */
+/* Tech detail */
 var techLookup={};
-function openDetail(name){
-var t=techLookup[name];if(!t)return;
-var overlay=document.createElement('div');
-overlay.className='det';
-overlay.id='detOverlay';
-var hdr=document.createElement('div');
-hdr.style.cssText='padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04);flex-shrink:0';
-hdr.innerHTML='<button id="detBack" style="background:none;border:none;color:var(--tx);font-size:22px;cursor:pointer;padding:4px">←</button><h2 style="font-size:16px;font-weight:600;flex:1">'+t.icon+' '+name+'</h2>';
-overlay.appendChild(hdr);
-var body=document.createElement('div');
-body.style.cssText='flex:1;overflow-y:auto;padding:16px';
-var html='<div style="font-size:12px;color:var(--tx2);margin-bottom:12px">⏱ '+t.dur+'</div><p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:14px">'+t.desc+'</p>';
-if(t.caution)html+='<div style="padding:12px;border-radius:12px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin:12px 0;font-size:12px;color:var(--dn);line-height:1.5">⚠ '+t.caution+'</div>';
-t.steps.forEach(function(s,i){html+='<div style="padding:12px;border-radius:12px;background:var(--sf);margin-bottom:8px;display:flex;gap:10px"><div style="width:26px;height:26px;border-radius:50%;background:var(--pr);color:#0B1020;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">'+(i+1)+'</div><div style="font-size:13px;line-height:1.5">'+s+'</div></div>'});
-html+='<div style="margin-top:16px"><button class="btn b1" id="detDone">Завершить практику</button></div>';
-body.innerHTML=html;
-overlay.appendChild(body);
-A.appendChild(overlay);
-$('detBack').onclick=function(){overlay.remove()};
-$('detDone').onclick=function(){
-overlay.remove();
-var q=document.createElement('div');
-q.id='surveyQ';
-q.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';
-var box=document.createElement('div');
-box.style.cssText='background:var(--sf);border-radius:16px;padding:24px 20px;max-width:340px;width:90%;text-align:center';
-box.innerHTML='<div style="font-size:28px;margin-bottom:12px">💭</div><div style="font-size:16px;font-weight:600;margin-bottom:16px">Стало легче, так же или хуже?</div>'
-+'<div style="display:flex;gap:8px"><button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--pr);color:#0B1020;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Легче</button>'
-+'<button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--tx);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Так же</button>'
-+'<button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--dn);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Хуже</button></div>';
-q.appendChild(box);
-q.onclick=function(e){if(e.target===q)q.remove()};
-document.body.appendChild(q);
-};
-/* Favorite button */
-var favBtn=document.createElement('button');
-favBtn.style.cssText='background:none;border:none;color:var(--tx2);font-size:20px;cursor:pointer;padding:4px;margin-left:8px';
-favBtn.textContent='☆';
-favBtn.onclick=function(){this.textContent=this.textContent==='☆'?'★':'☆';this.style.color=this.textContent==='★'?'var(--wn)':'var(--tx2)'};
-hdr.appendChild(favBtn);
-}
+function openDetail(name){var t=techLookup[name];if(!t)return;var ov=document.createElement('div');ov.className='det';ov.id='detOverlay';var hdr=document.createElement('div');hdr.style.cssText='padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04);flex-shrink:0';hdr.innerHTML='<button id="detBack" style="background:none;border:none;color:var(--tx);font-size:22px;cursor:pointer;padding:4px">←</button><h2 style="font-size:16px;font-weight:600;flex:1">'+t.icon+' '+name+'</h2>';ov.appendChild(hdr);var body=document.createElement('div');body.style.cssText='flex:1;overflow-y:auto;padding:16px';var html='<div style="font-size:12px;color:var(--tx2);margin-bottom:12px">⏱ '+t.dur+'</div><p style="font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:14px">'+t.desc+'</p>';if(t.caution)html+='<div style="padding:12px;border-radius:12px;background:rgba(226,124,136,.08);border:1px solid rgba(226,124,136,.2);margin:12px 0;font-size:12px;color:var(--dn);line-height:1.5">⚠ '+t.caution+'</div>';t.steps.forEach(function(s,i){html+='<div style="padding:12px;border-radius:12px;background:var(--sf);margin-bottom:8px;display:flex;gap:10px"><div style="width:26px;height:26px;border-radius:50%;background:var(--pr);color:#0B1020;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">'+(i+1)+'</div><div style="font-size:13px;line-height:1.5">'+s+'</div></div>'});html+='<div style="margin-top:16px"><button class="btn b1" id="detDone">Завершить практику</button></div>';body.innerHTML=html;ov.appendChild(body);A.appendChild(ov);$('detBack').onclick=function(){ov.remove()};$('detDone').onclick=function(){ov.remove();var q=document.createElement('div');q.id='surveyQ';q.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';var box=document.createElement('div');box.style.cssText='background:var(--sf);border-radius:16px;padding:24px 20px;max-width:340px;width:90%;text-align:center';box.innerHTML='<div style="font-size:28px;margin-bottom:12px">💭</div><div style="font-size:16px;font-weight:600;margin-bottom:16px">Стало легче?</div><div style="display:flex;gap:8px"><button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--pr);color:#0B1020;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Легче</button><button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--tx);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Так же</button><button onclick="document.getElementById(\'surveyQ\').remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--dn);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Хуже</button></div>';q.appendChild(box);q.onclick=function(e){if(e.target===q)q.remove()};document.body.appendChild(q)};var favBtn=document.createElement('button');favBtn.style.cssText='background:none;border:none;color:var(--tx2);font-size:20px;cursor:pointer;padding:4px;margin-left:8px';favBtn.textContent='☆';favBtn.onclick=function(){this.textContent=this.textContent==='☆'?'★':'☆';this.style.color=this.textContent==='★'?'var(--wn)':'var(--tx2)'};hdr.appendChild(favBtn)}
 window.openDetail=openDetail;
 
 /* Calm Room */
 var calmSec=300,calmIv=null,breathIv=null,calmRunning=false;
-window.mDur=function(el,m){
-var p=el.parentElement;for(var i=0;i<p.children.length;i++){if(p.children[i].tagName==='BUTTON')p.children[i].classList.remove('sel')}
-el.classList.add('sel');calmSec=m*60;uTimer();
-var ci=$('mCustom');if(ci)ci.value='';
-};
-window.mCustomDur=function(v){
-var n=parseInt(v);if(n>0&&n<=120){calmSec=n*60;uTimer();
-var btns=$('mt-calm').querySelectorAll('.cBtn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('sel');
-}};
+window.mDur=function(el,m){var p=el.parentElement;for(var i=0;i<p.children.length;i++){if(p.children[i].tagName==='BUTTON')p.children[i].classList.remove('sel')};el.classList.add('sel');calmSec=m*60;uTimer();var ci=$('mCustom');if(ci)ci.value=''};
+window.mCustomDur=function(v){var n=parseInt(v);if(n>0&&n<=120){calmSec=n*60;uTimer();var btns=$('mt-calm').querySelectorAll('.cBtn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('sel')}};
 function uTimer(){var m=Math.floor(calmSec/60),s=calmSec%60;var el=$('mTimer');if(el)el.textContent=m+':'+(s<10?'0':'')+s}
-window.mStartCalm=function(){
-if(calmRunning)return;calmRunning=true;
-var ms=$('mStart'),msp=$('mStop'),mrs=$('mReset');
-if(ms)ms.style.display='none';if(msp)msp.style.display='';if(mrs)mrs.style.display='';
-breathIv=setInterval(function(){var b=$('mBreath'),t=$('mBrT');if(!b)return;if(b.style.transform==='scale(1.3)'){b.style.transform='scale(1)';if(t)t.textContent='Выдох...'}else{b.style.transform='scale(1.3)';if(t)t.textContent='Вдох...'}},4000);
-calmIv=setInterval(function(){if(calmSec<=0){mStopCalm();return}calmSec--;uTimer()},1000);
-};
-window.mStopCalm=function(){
-clearInterval(calmIv);clearInterval(breathIv);calmRunning=false;
-var ms=$('mStart'),msp=$('mStop'),mrs=$('mReset'),b=$('mBreath'),t=$('mBrT');
-if(ms)ms.style.display='';if(msp)msp.style.display='none';if(mrs)mrs.style.display='';
-if(b)b.style.transform='scale(1)';if(t)t.textContent='Готов';
-};
-window.mResetCalm=function(){
-mStopCalm();calmSec=300;uTimer();
-var btns=$('mt-calm').querySelectorAll('.cBtn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('sel');
-if(btns[2])btns[2].classList.add('sel');
-var ci=$('mCustom');if(ci)ci.value='';
-};
+window.mStartCalm=function(){if(calmRunning)return;calmRunning=true;var ms=$('mStart'),msp=$('mStop'),mrs=$('mReset');if(ms)ms.style.display='none';if(msp)msp.style.display='';if(mrs)mrs.style.display='';breathIv=setInterval(function(){var b=$('mBreath'),t=$('mBrT');if(!b)return;if(b.style.transform==='scale(1.3)'){b.style.transform='scale(1)';if(t)t.textContent='Выдох...'}else{b.style.transform='scale(1.3)';if(t)t.textContent='Вдох...'}},4000);calmIv=setInterval(function(){if(calmSec<=0){mStopCalm();return}calmSec--;uTimer()},1000)};
+window.mStopCalm=function(){clearInterval(calmIv);clearInterval(breathIv);calmRunning=false;var ms=$('mStart'),msp=$('mStop'),mrs=$('mReset'),b=$('mBreath'),t=$('mBrT');if(ms)ms.style.display='';if(msp)msp.style.display='none';if(mrs)mrs.style.display='';if(b)b.style.transform='scale(1)';if(t)t.textContent='Готов';uTimer()};
+window.mResetCalm=function(){mStopCalm();calmSec=300;uTimer();var btns=$('mt-calm').querySelectorAll('.cBtn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('sel');if(btns[2])btns[2].classList.add('sel');var ci=$('mCustom');if(ci)ci.value=''};
 
-/* Store tech lookup for openDetail */
-(function(){
-var techData2=[
-{icon:'🧊',name:'5-4-3-2-1 Заземление',dur:'3-5 мин',desc:'Вернись в момент через органы чувств.',caution:'Не закрывай глаза если это усиливает тревогу.',steps:['Назови 5 вещей которые ВИДИШЬ','Назови 4 вещи которые можешь ПОТРОГАТЬ','Назови 3 вещи которые СЛЫШИШЬ','Назови 2 вещи которые можешь ЗАПАХНУТЬ','Назови 1 вещь на ВКУС']},
-{icon:'📝',name:'Факты и предположения',dur:'5-7 мин',desc:'Отдели известное от предположений.',caution:null,steps:['Запиши ситуацию одним предложением','Что знаешь НАВЕРНЯКА?','Что ПРЕДПОЛАГАЕШЬ?','Есть ли альтернативы?']},
-{icon:'🎯',name:'Зона контроля',dur:'3-5 мин',desc:'Что зависит от тебя, а что нет.',caution:null,steps:['Напиши ситуацию','Раздели: МОЁ / НЕ МОЁ','Для МОЁ - одно действие','Для НЕ МОЁ - принять']},
-{icon:'🫁',name:'Мягкое дыхание',dur:'2-3 мин',desc:'Плавно замедли дыхание.',caution:'Не задерживай дыхание принудительно.',steps:['Сядь удобно','Дыши обычно 30 сек','Удлиняй выдох на 1-2 счёта','Продолжай 2-3 минуты']},
-{icon:'📦',name:'Следующий шаг',dur:'2-5 мин',desc:'Самое маленькое действие сейчас.',caution:null,steps:['Что можно за 2 минуты?','Это реалистично?','Готов? Сделай.']},
-{icon:'💛',name:'Маленький шаг',dur:'2-5 мин',desc:'Минимальное действие.',caution:null,steps:['Что полезно?','Мало энергии?','Сделай.']},
-{icon:'🤝',name:'Самосострадание',dur:'3-5 мин',desc:'Доброта к себе как к другу.',caution:null,steps:['Что бы сказал другу?','Скажи себе.']},
-{icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Быстрая помощь при панике.',caution:'При реальной опасности звони 112.',steps:['Скажи: это паника, она пройдёт','Возьми холодный предмет','Назови где ты, какой день','Не помогает? Звони 8-800-2000-122']},
-{icon:'🧭',name:'Ориентация в пространстве',dur:'1-2 мин',desc:'Вернись в реальность через факты.',caution:null,steps:['Где ты находишься? Назови место.','Какой сегодня день и дата?','Какое время года?','Назови 3 предмета рядом.']},
-{icon:'🔍',name:'Проверка катастрофы',dur:'5-10 мин',desc:'Проверь тревожную мысль на реальность.',caution:null,steps:['Напиши тревожную мысль','Худшая реалистичная возможность?','Наиболее вероятная?','Что бы сказал другу?','Сформулируй реалистичную мысль']},
-{icon:'💌',name:'Благодарность',dur:'3-5 мин',desc:'3 вещи за которые благодарен сегодня.',caution:null,steps:['Назови 3 вещи','Для каждой: ПОЧЕМУ','Какое чувство это вызывает?']},
-{icon:'🌅',name:'Визуализация',dur:'5 мин',desc:'Представь безопасное спокойное место.',caution:null,steps:['3 глубоких вдоха','Представь безопасное место','Заметь детали','Побудь минуту','Открой глаза']}
+/* Tech lookup */
+var techLookup2=[
+{icon:'🧊',name:'5-4-3-2-1 Заземление',dur:'3-5 мин',desc:'Вернись в момент.',caution:'Не закрывай глаза если усиливает тревогу.',steps:['5 вещей ВИДИШЬ','4 ПОТРОГАТЬ','3 СЛЫШИШЬ','2 ЗАПАХНУТЬ','1 ВКУС']},
+{icon:'📝',name:'Факты и предположения',dur:'5-7 мин',desc:'Отдели известное от предположений.',caution:null,steps:['Ситуация одним предложением','Что НАВЕРНЯКА?','Что ПРЕДПОЛАГАЕШЬ?','Есть ли альтернативы?']},
+{icon:'🎯',name:'Зона контроля',dur:'3-5 мин',desc:'Что зависит от тебя.',caution:null,steps:['Напиши ситуацию','МОЁ / НЕ МОЁ','Для МОЁ - действие','Для НЕ МОЁ - принять']},
+{icon:'🫁',name:'Мягкое дыхание',dur:'2-3 мин',desc:'Плавно замедли.',caution:'Не задерживай дыхание.',steps:['Сядь удобно','Дыши 30 сек','Удлиняй выдох','2-3 минуты']},
+{icon:'📦',name:'Следующий шаг',dur:'2-5 мин',desc:'Маленькое действие.',caution:null,steps:['Что за 2 мин?','Реалистично?','Сделай.']},
+{icon:'💛',name:'Маленький шаг',dur:'2-5 мин',desc:'Минимум.',caution:null,steps:['Что полезно?','Мало энергии?','Сделай.']},
+{icon:'🤝',name:'Самосострадание',dur:'3-5 мин',desc:'Доброта к себе.',caution:null,steps:['Что другу?','Скажи себе.']},
+{icon:'🆘',name:'Crisis Grounding',dur:'3-5 мин',desc:'Помощь при панике.',caution:'Звони 112.',steps:['Это паника, пройдёт','Холодный предмет','Где ты, какой день','8-800-2000-122']},
+{icon:'🧭',name:'Ориентация',dur:'1-2 мин',desc:'Факты.',caution:null,steps:['Где?','Какой день?','Время года?','3 предмета']},
+{icon:'🔍',name:'Проверка катастрофы',dur:'5-10 мин',desc:'Проверь мысль.',caution:null,steps:['Мысль','Худшая?','Вероятная?','Другу?']},
+{icon:'💌',name:'Благодарность',dur:'3-5 мин',desc:'3 вещи.',caution:null,steps:['3 вещи','ПОЧЕМУ','Чувство?']},
+{icon:'🌅',name:'Визуализация',dur:'5 мин',desc:'Безопасное место.',caution:null,steps:['3 вдоха','Место','Детали','Минуту']}
 ];
-techData2.forEach(function(t){techLookup[t.name]=t});
-})();
+techLookup2.forEach(function(t){techLookup[t.name]=t});
+
+/* Settings */
+var setValsDefault={lang:'Русский',country:'Россия',len:'Средне',tone:'Мягко',addr:'На вы',offer:'Да',mode:'Listen',mem:'Вкл',notif:'Вкл',notifPr:'Вкл',quiet:'22:00-08:00',theme:'Системная',motion:'Выкл',textSize:'Средний',hist:'Вкл'};
+var setVals={};
+try{var saved=JSON.parse(localStorage.getItem(K+'_settings'));if(saved)for(var k in setValsDefault)setVals[k]=saved[k]||setValsDefault[k];else setVals=JSON.parse(JSON.stringify(setValsDefault))}catch(e){setVals=JSON.parse(JSON.stringify(setValsDefault))}
+function saveSettings(){try{localStorage.setItem(K+'_settings',JSON.stringify(setVals))}catch(e){}}
+function showPicker(key,label,opts,cur){var ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center';var sheet=document.createElement('div');sheet.style.cssText='width:100%;max-width:480px;background:var(--sf);border-radius:16px 16px 0 0;padding:20px 16px 32px;max-height:70vh;overflow-y:auto';sheet.innerHTML='<div style="display:flex;align-items:center;margin-bottom:16px"><h3 style="font-size:16px;font-weight:600;flex:1">'+label+'</h3><button onclick="this.closest(\'div[style]\').parentElement.remove()" style="background:none;border:none;color:var(--tx2);font-size:20px;cursor:pointer">✕</button></div>';opts.forEach(function(opt){var row=document.createElement('div');row.style.cssText='padding:14px;border-radius:12px;cursor:pointer;margin-bottom:4px;font-size:15px;display:flex;align-items:center;justify-content:space-between';if(opt===cur){row.style.background='var(--sf2)';row.style.border='1px solid var(--pr)'}row.innerHTML=opt+(opt===cur?'<span style="color:var(--pr);font-weight:700">✓</span>':'');row.onclick=function(){setVals[key]=opt;saveSettings();renderSet();ov.remove()};sheet.appendChild(row)});ov.appendChild(sheet);ov.onclick=function(e){if(e.target===ov)ov.remove()};document.body.appendChild(ov)}
+function renderSet(){var tS=$('mt-set');if(!tS)return;tS.innerHTML='';var groups=[{title:'Общие',items:[{icon:'🌍',key:'lang',label:'Язык',opts:['Русский','English']},{icon:'🏳',key:'country',label:'Страна',opts:['Россия','Украина','Казахстан','Беларусь','Грузия','США','Германия','Франция','Израиль','Корея','Япония']},{icon:'💬',key:'len',label:'Длина ответа',opts:['Коротко','Средне','Подробно']},{icon:'🎭',key:'tone',label:'Тон ответа',opts:['Мягко','Нейтрально']},{icon:'💬',key:'addr',label:'Обращение',opts:['На вы','На ты']},{icon:'❓',key:'offer',label:'Предлагать практики',opts:['Да','Нет']}]},{title:'AI',items:[{icon:'🤖',key:'mode',label:'Режим',opts:['Listen','Calm','Sort','Next step']},{icon:'🧠',key:'mem',label:'Память',opts:['Вкл','Выкл']},{icon:'📋',label:'Memory Center',action:'memory'},{icon:'💡',label:'Сохранённые выводы',action:'insights'}]},{title:'Уведомления',items:[{icon:'🔔',key:'notif',label:'Check-in',opts:['Вкл','Выкл']},{icon:'🧘',key:'notifPr',label:'Практика',opts:['Вкл','Выкл']},{icon:'🕐',key:'quiet',label:'Тихие часы',timePicker:true}]},{title:'Внешний вид',items:[{icon:'🎨',key:'theme',label:'Тема',opts:['Системная','Тёмная','Светлая']},{icon:'✨',key:'motion',label:'Reduced motion',opts:['Вкл','Выкл']},{icon:'🔤',key:'textSize',label:'Размер текста',opts:['Маленький','Средний','Большой']}]},{title:'Данные',items:[{icon:'💬',key:'hist',label:'История чатов',opts:['Вкл','Выкл']},{icon:'💾',label:'Экспорт',action:'export'},{icon:'🔄',label:'Повторить онбординг',action:'reset'}]},{title:'Безопасность',items:[{icon:'🆘',label:'Кризисные контакты',action:'crisis'},{icon:'📖',label:'Что Loiva может',action:'limits'}]},{title:'О приложении',items:[{icon:'📱',label:'Версия',val:'0.1.0'}]}];
+groups.forEach(function(g){var hd=document.createElement('div');hd.style.cssText='font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px';hd.textContent=g.title;tS.appendChild(hd);g.items.forEach(function(item){var d=document.createElement('div');d.className='si';if(item.action){d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">›</span>';if(item.action==='reset')d.onclick=function(){localStorage.removeItem(K);location.reload()};else d.onclick=function(){alert(item.label+': скоро')}}else if(item.val){d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+item.val+'</span>'}else if(item.timePicker){var cur=setVals[item.key]||'22:00-08:00';d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+cur+' ›</span>';d.onclick=function(){var ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';var box=document.createElement('div');box.style.cssText='background:var(--sf);border-radius:16px;padding:24px 20px;max-width:340px;width:90%;text-align:center';var parts=cur.split('-');var sH=parts[0]||'22:00';var eH=parts[1]||'08:00';box.innerHTML='<h3 style="font-size:16px;font-weight:600;margin-bottom:16px">Тихие часы</h3><div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px"><div><div style="font-size:11px;color:var(--tx2);margin-bottom:4px">С</div><input id="qStart" type="time" value="'+sH+'" style="padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:14px;font-family:inherit"></div><div style="font-size:18px;color:var(--tx2)">—</div><div><div style="font-size:11px;color:var(--tx2);margin-bottom:4px">До</div><input id="qEnd" type="time" value="'+eH+'" style="padding:8px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);font-size:14px;font-family:inherit"></div></div><div style="display:flex;gap:8px"><button onclick="var s=document.getElementById(\'qStart\').value;var e=document.getElementById(\'qEnd\').value;setVals[\''+item.key+'\']=s+\'-\'+e;saveSettings();document.getElementById(\'sv-'+item.key+'\').textContent=s+\'-\'+e+\' ›\';this.closest(\'div[style]\').parentElement.remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--pr);color:#0B1020;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Готово</button><button onclick="setVals[\''+item.key+'\']=\'Выкл\';saveSettings();document.getElementById(\'sv-'+item.key+'\').textContent=\'Выкл ›\';this.closest(\'div[style]\').parentElement.remove()" style="flex:1;padding:12px;border-radius:12px;background:var(--sf2);color:var(--tx);border:1px solid var(--bd);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Выкл</button></div>';ov.appendChild(box);ov.onclick=function(e){if(e.target===ov)ov.remove()};document.body.appendChild(ov)}}else{var cur=setVals[item.key]||item.opts[0];d.innerHTML=item.icon+' '+item.label+' <span style="color:var(--mu);margin-left:auto">'+cur+' ›</span>';d.onclick=function(){showPicker(item.key,item.label,item.opts,cur)}}tS.appendChild(d)})})}
 
 /* INIT */
 try{localStorage.removeItem('loiva_done')}catch(e){}
-try{
-if(localStorage.getItem(K)){buildMain();mSw('home')}else{buildOnboard()}
-}catch(e){
-A.innerHTML='<div style="padding:20px;color:white"><h2>Error</h2><pre>'+esc(e.message)+'</pre></div>';
-}
-})();
+try{if(localStorage.getItem(K)){buildMain();mSw('home')}else{buildOnboard()}}catch(e){A.innerHTML='<div style="padding:20px;color:white"><h2>Error</h2><pre>'+esc(e.message)+'</pre></div>'}
 
 function buildOnboard(){
-var A=document.getElementById('A');
 A.innerHTML='';
 var screens=[
-{id:'s0',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🧠</div><h1>LOIVA</h1><p>Поддержка в вашем темпе.<br>AI-гид по эмоциональной самопомощи.</p><button class="btn b1" onclick="goScreen(\'s1\')">Начать</button><div class="dt"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>'},
-{id:'s1',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🎂</div><h2>Возраст</h2><p>Loiva предназначена только для 18+.</p><div class="ab"><button onclick="goScreen(\'s2\')"><span class="e">✅</span>Мне есть 18</button><button onclick="alert(\'Loiva 18+\')"><span class="e">🚫</span>Мне нет 18</button></div><div class="dt"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s0'},
-{id:'s2',html:'<div class="w"><h2>Выбери язык</h2><div class="lg"><button class="sel" onclick="sel(this)"><span class="f">🇷🇺</span><span style="font-size:13px;font-weight:500">Русский</span></button><button onclick="sel(this)"><span class="f">🇬🇧</span><span style="font-size:13px;font-weight:500">English</span></button></div><button class="btn b1" onclick="goScreen(\'s3\')">Далее</button><div class="dt"><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s1'},
-{id:'s3',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🌍</div><h2>Страна</h2><p>Для кризисных контактов</p><div class="cl" id="mCl"></div><button class="btn b1" onclick="goScreen(\'s4\')">Далее</button><div class="dt"><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s2'},
-{id:'s4',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">ℹ️</div><h2>Что такое Loiva</h2><p>ИИ-инструмент самопомощи.<br><br>✅ Помогает остановиться, выразить чувства<br>❌ Не заменяет психолога<br>❌ Не является кризисной службой</p><button class="btn b1" onclick="goScreen(\'s5\')" style="margin-bottom:8px">Я понимаю</button><button class="btn b2" onclick="goScreen(\'s5\')">Пропустить</button><div class="dt"><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i></div></div>',back:'s3'},
-{id:'s5',html:'<div class="w"><h2>Приватность</h2><div style="width:100%"><div class="tr"><span>Хранить историю</span><div class="tg on" onclick="tgl(this)"></div></div><div class="tr"><span>AI-память</span><div class="tg on" onclick="tgl(this)"></div></div><div class="tr"><span>Аналитика</span><div class="tg" onclick="tgl(this)"></div></div><div class="tr"><span>Уведомления</span><div class="tg" onclick="tgl(this)"></div></div></div><button class="btn b1" onclick="goScreen(\'s6\')" style="margin-top:16px">Далее</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i></div></div>',back:'s4'},
+{id:'s0',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🧠</div><h1>LOIVA</h1><p>Поддержка в вашем темпе.</p><button class="btn b1" onclick="goScreen(\'s1\')">Начать</button><div class="dt"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>'},
+{id:'s1',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🎂</div><h2>Возраст</h2><p>Только для 18+.</p><div class="ab"><button onclick="goScreen(\'s2\')"><span class="e">✅</span>Мне есть 18</button><button onclick="alert(\'Loiva 18+\')"><span class="e">🚫</span>Мне нет 18</button></div><div class="dt"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s0'},
+{id:'s2',html:'<div class="w"><h2>Язык</h2><div class="lg"><button class="sel" onclick="sel(this)"><span class="f">🇷🇺</span><span style="font-size:13px;font-weight:500">Русский</span></button><button onclick="sel(this)"><span class="f">🇬🇧</span><span style="font-size:13px;font-weight:500">English</span></button></div><button class="btn b1" onclick="goScreen(\'s3\')">Далее</button><div class="dt"><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s1'},
+{id:'s3',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🌍</div><h2>Страна</h2><div class="cl" id="mCl"></div><button class="btn b1" onclick="goScreen(\'s4\')">Далее</button><div class="dt"><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div>',back:'s2'},
+{id:'s4',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">ℹ️</div><h2>Что такое Loiva</h2><p>ИИ-инструмент самопомощи.<br><br>✅ Помогает остановиться<br>❌ Не заменяет психолога<br>❌ Не кризисная служба</p><button class="btn b1" onclick="goScreen(\'s5\')" style="margin-bottom:8px">Я понимаю</button><button class="btn b2" onclick="goScreen(\'s5\')">Пропустить</button><div class="dt"><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i></div></div>',back:'s3'},
+{id:'s5',html:'<div class="w"><h2>Приватность</h2><div style="width:100%"><div class="tr"><span>История</span><div class="tg on" onclick="tgl(this)"></div></div><div class="tr"><span>AI-память</span><div class="tg on" onclick="tgl(this)"></div></div><div class="tr"><span>Аналитика</span><div class="tg" onclick="tgl(this)"></div></div><div class="tr"><span>Уведомления</span><div class="tg" onclick="tgl(this)"></div></div></div><button class="btn b1" onclick="goScreen(\'s6\')" style="margin-top:16px">Далее</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i></div></div>',back:'s4'},
 {id:'s6',html:'<div class="w"><h2>Стиль общения</h2><div style="width:100%"><div style="margin-bottom:14px"><div style="font-size:12px;color:var(--tx2);margin-bottom:6px">Длина ответа</div><div class="chips"><button onclick="sel(this)">Коротко</button><button class="sel" onclick="sel(this)">Средне</button><button onclick="sel(this)">Подробно</button></div></div><div style="margin-bottom:14px"><div style="font-size:12px;color:var(--tx2);margin-bottom:6px">Тон</div><div class="chips"><button class="sel" onclick="sel(this)">Мягко</button><button onclick="sel(this)">Нейтрально</button></div></div><div><div style="font-size:12px;color:var(--tx2);margin-bottom:6px">Обращение</div><div class="chips"><button class="sel" onclick="sel(this)">На вы</button><button onclick="sel(this)">На ты</button></div></div></div><button class="btn b1" onclick="goScreen(\'s7\')" style="margin-top:16px">Далее</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i></div></div>',back:'s5'},
-{id:'s7',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🛡️</div><h2>Безопасность</h2><p>Loiva не контролируется человеком и не может вызвать помощь за вас.</p><button class="btn b1" onclick="goScreen(\'s8\')">Понятно</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i></div></div>',back:'s6'},
+{id:'s7',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🛡️</div><h2>Безопасность</h2><p>Loiva не контролируется человеком.</p><button class="btn b1" onclick="goScreen(\'s8\')">Понятно</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i></div></div>',back:'s6'},
 {id:'s8',html:'<div class="w"><div style="font-size:48px;margin-bottom:12px">🎯</div><h2>Что привело?</h2><div class="ab"><button onclick="enterApp()"><span class="e">😰</span>Стресс</button><button onclick="enterApp()"><span class="e">💭</span>Тревога</button><button onclick="enterApp()"><span class="e">😔</span>Настроение</button><button onclick="enterApp()"><span class="e">🗣</span>Выговориться</button><button onclick="enterApp()"><span class="e">🧘</span>Практики</button><button onclick="enterApp()"><span class="e">🤷</span>Пока не знаю</button></div><button class="btn b1" onclick="enterApp()" style="margin-top:12px">Войти в Loiva</button><div class="dt"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i></div></div>',back:'s7'}
 ];
-screens.forEach(function(s){
-var el=document.createElement('div');el.className='scr ob';el.id=s.id;el.innerHTML=s.html;
-if(s.back){var bk=document.createElement('button');bk.className='bk';bk.textContent='←';bk.onclick=function(){goScreen(s.back)};el.appendChild(bk)}
-A.appendChild(el);
-});
+screens.forEach(function(s){var el=document.createElement('div');el.className='scr ob';el.id=s.id;el.innerHTML=s.html;if(s.back){var bk=document.createElement('button');bk.className='bk';bk.textContent='←';bk.onclick=function(){goScreen(s.back)};el.appendChild(bk)}A.appendChild(el)});
 var countries=['🇷🇺 Россия','🇺🇦 Украина','🇰🇿 Казахстан','🇧🇾 Беларусь','🇬🇪 Грузия','🇺🇸 США','🇬🇧 Великобритания','🇩🇪 Германия','🇫🇷 Франция','🇮🇱 Израиль','🇰🇷 Южная Корея','🇯🇵 Япония'];
 var cl=document.getElementById('mCl');
 if(cl)countries.forEach(function(c){var d=document.createElement('div');d.textContent=c;d.onclick=function(){var items=cl.children;for(var i=0;i<items.length;i++)items[i].classList.remove('sel');d.classList.add('sel')};cl.appendChild(d)});
