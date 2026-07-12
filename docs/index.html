@@ -50,9 +50,11 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .chips button.sel{border-color:var(--pr);background:var(--sf2)}
 .ac{padding:14px 12px;border-radius:14px;background:var(--sf);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
 .ac:active{border-color:var(--pr)}
-.tc{padding:14px;border-radius:14px;background:var(--sf);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
-<script>
-window.onerror=function(m,s,l,c,e){document.getElementById('A').innerHTML='<div style="padding:20px;color:white;font-size:14px"><h2>Ошибка</h2><p>'+m+'</p><p style="font-size:12px;color:#aaa">Строка '+l+':'+c+'</p><pre style="font-size:11px;color:#aaa;white-space:pre-wrap">'+(e&&e.stack?e.stack.split('\n').slice(0,3).join('\n'):'')+'</pre></div>';return true};
+.tc{padding:14px;border-radius:14px;background:var(--sf);cursor:pointer;border:1px solid transparent;transition:border-color .15s}.hi.dn{opacity:.45;text-decoration:line-through}</style>
+</head>
+<body>
+<div id="A"></div>
+<script>window.onerror=function(m,s,l,c,e){document.getElementById('A').innerHTML='<div style="padding:20px;color:white;font-size:14px"><h2>Ошибка</h2><p>'+m+'</p><p style="font-size:12px;color:#aaa">Строка '+l+':'+c+'</p><pre style="font-size:11px;color:#aaa;white-space:pre-wrap">'+(e&&e.stack?e.stack.split('\n').slice(0,3).join('\n'):'')+'</pre></div>';return true};
 var A=document.getElementById('A');
 var K='loiva_v5';
 var busy=0;
@@ -224,7 +226,7 @@ var habEl=$('mHab');if(!habEl)return;habEl.innerHTML='';
 habits.forEach(function(h,i){
 var isDone=done.indexOf(i)>=0;
 var d=document.createElement('div');d.className='hi'+(isDone?' dn':'');
-d.innerHTML='<div class="ck"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">'+h.name+'</div><div style="font-size:11px;color:var(--tx2)">'+h.desc+'</div></div><div style="display:flex;gap:8px"><button onclick="event.stopPropagation();editHabit('+i+')" style="background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;padding:4px">✏️</button><button onclick="event.stopPropagation();delHabit('+i+')" style="background:none;border:none;color:var(--dn);font-size:14px;cursor:pointer;padding:4px">🗑</button></div>';
+d.innerHTML='<div class="ck"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">'+esc(h.name)+'</div><div style="font-size:11px;color:var(--tx2)">'+esc(h.desc)+'</div></div><div style="display:flex;gap:8px"><button onclick="event.stopPropagation();editHabit('+i+')" style="background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;padding:4px">✏️</button><button onclick="event.stopPropagation();delHabit('+i+')" style="background:none;border:none;color:var(--dn);font-size:14px;cursor:pointer;padding:4px">🗑</button></div>';
 d.onclick=function(){if(!habLog[dayKey])habLog[dayKey]=[];var arr=habLog[dayKey];var idx=arr.indexOf(i);if(idx>=0)arr.splice(idx,1);else arr.push(i);saveHabLog();renderHabits(dayKey)};
 habEl.appendChild(d);
 });
